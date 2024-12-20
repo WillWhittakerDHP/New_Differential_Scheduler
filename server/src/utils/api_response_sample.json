@@ -1,0 +1,237 @@
+{
+"kind": "calendar#events",
+"etag": "\"p32k81lndmi58k0o\"",
+"summary": "mattd23998@gmail.com",
+"description": "",
+"updated": "2024-12-03T01:08:31.401Z",
+"timeZone": "America/New_York",
+"accessRole": "owner",
+"defaultReminders": [
+ {
+  "method": "popup",
+  "minutes": 30
+ }
+],
+"nextSyncToken": "CKiA1u20iooDEKiA1u20iooDGAUggtmOzgIogtmOzgI=",
+"items": [
+ {
+  "kind": "calendar#event",
+  "etag": "\"3039006059430000\"",
+  "id": "71j3ap9nc4o3gb9i6os6ab9k64q3cbb16pgj0bb165i68pb16gs6cp33cg",
+  "status": "tentative",
+  "htmlLink": "https://www.google.com/calendar/event?eid=NzFqM2FwOW5jNG8zZ2I5aTZvczZhYjlrNjRxM2NiYjE2cGdqMGJiMTY1aTY4cGIxNmdzNmNwMzNjZyBtYXR0ZDIzOTk4QG0",
+  "created": "2018-02-24T20:10:29.000Z",
+  "updated": "2018-02-24T20:10:29.715Z",
+  "creator": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "organizer": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "start": {
+   "dateTime": "2018-02-24T16:00:00-05:00",
+   "timeZone": "America/New_York"
+  },
+  "end": {
+   "dateTime": "2018-02-24T17:00:00-05:00",
+   "timeZone": "America/New_York"
+  },
+  "iCalUID": "71j3ap9nc4o3gb9i6os6ab9k64q3cbb16pgj0bb165i68pb16gs6cp33cg@google.com",
+  "sequence": 1,
+  "reminders": {
+   "useDefault": true
+  },
+  "eventType": "default"
+ },
+ {
+  "kind": "calendar#event",
+  "etag": "\"3083218440766000\"",
+  "id": "clijap9gckq3cb9pc9hj6b9k6oo30b9o6hhjibb5coqj8c9p6gr36dr568",
+  "status": "tentative",
+  "htmlLink": "https://www.google.com/calendar/event?eid=Y2xpamFwOWdja3EzY2I5cGM5aGo2YjlrNm9vMzBiOW82aGhqaWJiNWNvcWo4YzlwNmdyMzZkcjU2OCBtYXR0ZDIzOTk4QG0",
+  "created": "2018-11-07T16:47:00.000Z",
+  "updated": "2018-11-07T16:47:00.383Z",
+  "summary": "Reminder: Ultrasound tomorrow",
+  "creator": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "organizer": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "start": {
+   "dateTime": "2018-11-12T13:00:00-05:00",
+   "timeZone": "America/New_York"
+  },
+  "end": {
+   "dateTime": "2018-11-12T14:00:00-05:00",
+   "timeZone": "America/New_York"
+  },
+  "iCalUID": "clijap9gckq3cb9pc9hj6b9k6oo30b9o6hhjibb5coqj8c9p6gr36dr568@google.com",
+  "sequence": 1,
+  "reminders": {
+   "useDefault": true
+  },
+  "eventType": "default"
+ },
+ {
+  "kind": "calendar#event",
+  "etag": "\"3083218442580000\"",
+  "id": "64omacpoccsmabb564ojcb9k70p3gb9o6or34b9k6kp36chn6op68dr164",
+  "status": "tentative",
+  "htmlLink": "https://www.google.com/calendar/event?eid=NjRvbWFjcG9jY3NtYWJiNTY0b2pjYjlrNzBwM2diOW82b3IzNGI5azZrcDM2Y2huNm9wNjhkcjE2NCBtYXR0ZDIzOTk4QG0",
+  "created": "2018-11-07T16:47:00.000Z",
+  "updated": "2018-11-07T16:47:01.290Z",
+  "summary": "Ultrasound at 1, Alexandria office",
+  "creator": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "organizer": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "start": {
+   "dateTime": "2018-11-13T08:00:00-05:00",
+   "timeZone": "America/New_York"
+  },
+  "end": {
+   "dateTime": "2018-11-13T09:00:00-05:00",
+   "timeZone": "America/New_York"
+  },
+  "iCalUID": "64omacpoccsmabb564ojcb9k70p3gb9o6or34b9k6kp36chn6op68dr164@google.com",
+  "sequence": 1,
+  "reminders": {
+   "useDefault": true
+  },
+  "eventType": "default"
+ },
+ {
+  "kind": "calendar#event",
+  "etag": "\"3457097039686000\"",
+  "id": "_6tlnaqrle5p6cpb4dhmj4phpegr3ir1hcor6mdr175mj0opo61hn2rbfc9ljeqb46hpmmrrid4r3aqhodtnm6q1oe4omoppn71pm2q3ee9jme",
+  "status": "confirmed",
+  "htmlLink": "https://www.google.com/calendar/event?eid=XzZ0bG5hcXJsZTVwNmNwYjRkaG1qNHBocGVncjNpcjFoY29yNm1kcjE3NW1qMG9wbzYxaG4ycmJmYzlsamVxYjQ2aHBtbXJyaWQ0cjNhcWhvZHRubTZxMW9lNG9tb3BwbjcxcG0ycTNlZTlqbWUgbWF0dGQyMzk5OEBt",
+  "created": "2023-06-28T18:24:23.000Z",
+  "updated": "2024-10-10T08:21:59.843Z",
+  "summary": "ELECTROLYSIS CONSULTATION $0",
+  "description": "To see detailed information for automatically created events like this one, use the official Google Calendar app. https://g.co/calendar",
+  "location": "La Moda Electrolysis and Skin Care, 2230 George C. Marshall Dr. Suite C, Falls Church, virginia, 22043, usa",
+  "creator": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "organizer": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "start": {
+   "dateTime": "2023-06-29T13:00:00-04:00",
+   "timeZone": "America/New_York"
+  },
+  "end": {
+   "dateTime": "2023-06-29T13:30:00-04:00",
+   "timeZone": "America/New_York"
+  },
+  "transparency": "transparent",
+  "visibility": "private",
+  "iCalUID": "7kukuqrfedlm2f9t69l1f6k7a9m0c80cqmobk7id4skori65j8ooch8q1lg78sahnrgg",
+  "sequence": 0,
+  "attendees": [
+   {
+    "email": "mattd23998@gmail.com",
+    "organizer": true,
+    "self": true,
+    "responseStatus": "accepted"
+   }
+  ],
+  "guestsCanInviteOthers": false,
+  "reminders": {
+   "useDefault": true
+  },
+  "eventType": "fromGmail"
+ },
+ {
+  "kind": "calendar#event",
+  "etag": "\"3466370182964000\"",
+  "id": "kpbpfqrbs66q2vsohj8tav1g3o",
+  "status": "confirmed",
+  "htmlLink": "https://www.google.com/calendar/event?eid=a3BicGZxcmJzNjZxMnZzb2hqOHRhdjFnM28gbWF0dGQyMzk5OEBt",
+  "created": "2024-12-03T00:18:11.000Z",
+  "updated": "2024-12-03T00:18:11.482Z",
+  "summary": "Test 2 (Matt Davis)",
+  "description": "\u003cb\u003eBooked by\u003c/b\u003e\nMatt Davis\nmattd23998@gmail.com",
+  "creator": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "organizer": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "start": {
+   "dateTime": "2024-12-04T10:00:00-05:00",
+   "timeZone": "America/New_York"
+  },
+  "end": {
+   "dateTime": "2024-12-04T11:00:00-05:00",
+   "timeZone": "America/New_York"
+  },
+  "iCalUID": "kpbpfqrbs66q2vsohj8tav1g3o@google.com",
+  "sequence": 0,
+  "attendees": [
+   {
+    "email": "mattd23998@gmail.com",
+    "organizer": true,
+    "self": true,
+    "responseStatus": "accepted"
+   }
+  ],
+  "extendedProperties": {
+   "shared": {
+    "goo.createdByAvailId": "21cl39bmg595esivmtajbjrm0e",
+    "goo.createdBySet": "default_cita"
+   }
+  },
+  "reminders": {
+   "useDefault": true
+  },
+  "eventType": "default"
+ },
+ {
+  "kind": "calendar#event",
+  "etag": "\"3466374560304000\"",
+  "id": "0muv9irdo51iqifjmfu5j51e47",
+  "status": "confirmed",
+  "htmlLink": "https://www.google.com/calendar/event?eid=MG11djlpcmRvNTFpcWlmam1mdTVqNTFlNDcgbWF0dGQyMzk5OEBt",
+  "created": "2024-12-03T00:54:40.000Z",
+  "updated": "2024-12-03T00:54:40.152Z",
+  "summary": "Lets try again",
+  "creator": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "organizer": {
+   "email": "mattd23998@gmail.com",
+   "self": true
+  },
+  "start": {
+   "dateTime": "2024-12-02T20:00:00-05:00",
+   "timeZone": "America/New_York"
+  },
+  "end": {
+   "dateTime": "2024-12-02T21:00:00-05:00",
+   "timeZone": "America/New_York"
+  },
+  "iCalUID": "0muv9irdo51iqifjmfu5j51e47@google.com",
+  "sequence": 0,
+  "reminders": {
+   "useDefault": true
+  },
+  "eventType": "default"
+ }
+]
+}
