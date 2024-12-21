@@ -1,3 +1,14 @@
+export interface UserTypeData {
+  user_type_id: number | null;
+  user_type: string | null;
+  user_description: string | null;
+  visibility: boolean | null;
+  available_service_1: number | null;
+  available_service_2: number | null;
+  available_service_3: number | null;
+  available_service_4: number | null;
+}
+
 export interface ServiceData {
   service_id: number | null;
   title: string | null;

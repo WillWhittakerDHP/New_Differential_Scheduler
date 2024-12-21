@@ -5,20 +5,7 @@ import { UIDescription } from '../../../../models/appointmentModels/structureMod
 // import { TimeBlockSet } from '../../models/index.js';
 // import { AppointmentPart } from '../../models/index.js';
 
-// GET all Services
-// export const getAllServices = async (_req: Request, res: Response): Promise<(typeof Service)[]> => {
-//   try {
-//     const Services: typeof Service[] = await Service.findAll({
-//       // include: [{ model: UIDescription }, { model: TimeBlockSet }, { model: AppointmentPart }],
-//     });
-//     res.status(200).json(Services);
-    // console.log(Services);
-//   } catch (error: any) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
 export const getAllServices = async (_req: Request, res: Response) => {
-  console.log('Im HERE!');
   try {
     const Services = await Service.findAll({
       // include: [{ model: UIDescription }, { model: TimeBlockSet }, { model: AppointmentPart }],
@@ -31,21 +18,8 @@ export const getAllServices = async (_req: Request, res: Response) => {
     res.status(500).json({ message: error.message });
   }
 };
-// const easyTasks = await project.getTasks({
-//   where: {
-//     difficulty: {
-//       [Op.lte]: 5,
-//     },
-//   },
-// });
-// const taskTitles = (
-//   await project.getTasks({
-//     attributes: ['title'],
-//     raw: true,
-//   })
-// ).map(task => task.title);
-// GET a single Service
-export const getServiceById = async (req: Request, res: Response) => {
+
+export const getServiceByUserType = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const ServiceData = await Service.findByPk(id, {
@@ -182,7 +156,7 @@ router.get('/available', getAllAvailableServices);
 router.get('/differential', getAllDifferentialServices);
 
 // GET a single Services
-router.get('/:id', getServiceById);
+router.get('/:id', getServiceByUserType);
 
 router.post('/', createService);
 

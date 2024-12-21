@@ -1,22 +1,20 @@
 import React from 'react';
 
-import type { UIDescriptionsData } from '../interfaces/appointmentInterfaces';
+import type { ServiceData } from '../interfaces/appointmentInterfaces';
 
 // Define the props for the component
-interface UIDescriptionsListProps {
-    UIDescriptions: UIDescriptionsData[] | null; 
+interface ServicesListProps {
+    Services: ServiceData[] | null; 
 }
 
-const UIDescriptionsList: React.FC<UIDescriptionsListProps> = ({ UIDescriptions }) => {
+const ServicesList: React.FC<ServicesListProps> = ({ Services }) => {
     return (
     <>
-        {UIDescriptions && UIDescriptions.map((UIDescriptions) => (
-            <div className="card mb-3" key={UIDescriptions.ui_description_set_id}>
-                <h4 className="card-header bg-primary text-light p-2 m-0">{UIDescriptions.buyer_description}</h4>
-                <h4 className="card-header bg-primary text-light p-2 m-0">{UIDescriptions.agent_description}</h4>
-                <h4 className="card-header bg-primary text-light p-2 m-0">{UIDescriptions.owner_description}</h4>
+        {Services && Services.map((Services) => (
+            <div className="card mb-3" key={Services.service_id}>
+                <h4 className="card-header bg-primary text-light p-2 m-0">{Services.title}</h4>
                 <div className="card-body bg-light p-2">
-                    <p>{UIDescriptions.ui_description_set_id}</p>
+                    <p>{Services.service_id}</p>
                 </div>
             </div>
         ))}
@@ -24,4 +22,4 @@ const UIDescriptionsList: React.FC<UIDescriptionsListProps> = ({ UIDescriptions 
     );
 };
 
-export default UIDescriptionsList;
+export default ServicesList;

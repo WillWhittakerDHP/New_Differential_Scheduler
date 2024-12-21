@@ -9,4 +9,4 @@ router.use('/content', ContentApiRouter);
 router.use('/structure', StructureApiRouter);
 
 
-export { router as AppointmentApiRouter };
+export { router as AppointmentRouter };

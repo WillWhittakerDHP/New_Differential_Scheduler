@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { AppointmentApiRouter } from './appointmentRoutes/index.js';
-import { ParticipantApiRouter } from './participantRoutes/index.js';
+import { AppointmentRouter } from './appointmentRoutes/index.js';
+import { ParticipantRouter } from './participantRoutes/index.js';
 
 const router = Router();
 
-router.use('/appointment', AppointmentApiRouter);
-router.use('/participants', ParticipantApiRouter);
+router.use('/appointment', AppointmentRouter);
+router.use('/participants', ParticipantRouter);
 
 export { router as InternalRouter} ;
 

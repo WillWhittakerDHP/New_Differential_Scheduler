@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { AppointmentApiRouter } from './appointmentRoutes/index.js';
-import { ParticipantApiRouter } from './participantRoutes/index.js';
+import { AppointmentApiRouter } from './appointmentAPI/index.js';
+import { ParticipantApiRouter } from './participantAPI/index.js';
 
 const router = Router();
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { ContentApiRouter } from "./contentRoutes";
-import { StructureApiRouter } from "./structureRoutes";
+import { ContentApiRouter } from "./contentAPI";
+import { StructureApiRouter } from "./structureAPI";
 
 
 const router = Router();

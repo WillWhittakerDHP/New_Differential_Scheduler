@@ -1,7 +1,7 @@
 import { sequelize } from '../config/connection.js';
 
 // Participants
-import { ParticipantTypeFactory } from './participantModels/participantTypes.js';
+import { UserTypeFactory } from './participantModels/userTypes.js';
 import { UserFactory } from './participantModels/Users.js';
 import { LoginFactory } from './participantModels/Logins.js';
 // Appointment Structure
@@ -17,8 +17,8 @@ import { AvailabilityOptionFactory } from './appointmentModels/contentModels/ava
 import { DwellingAdjustmentFactory } from './appointmentModels/contentModels/dwellingAdjustments.js';
 
 // Participants
+const UserType = UserTypeFactory(sequelize);
 const Login = LoginFactory(sequelize);
-const ParticipantType = ParticipantTypeFactory(sequelize);
 const User = UserFactory(sequelize);
 // Appointment Structure
 const AppointmentPart = AppointmentPartFactory(sequelize);
@@ -31,6 +31,19 @@ const Service = ServiceFactory(sequelize);
 const AdditionalService = AdditionalServiceFactory(sequelize);
 const AvailabilityOption = AvailabilityOptionFactory(sequelize);
 const DwellingAdjustment = DwellingAdjustmentFactory(sequelize);
+
+
+//USERTYPE RELATIONSHIPS
+//FROM Services m2m
+UserType.belongsToMany(Service, {
+  through: 'UserTypeService',
+});
+
+//TO Services m2m
+Service.belongsToMany(UserType, {
+  through: 'UserTypeService',
+});
+
 
 
 //PART RELATIONSHIPS
@@ -115,7 +128,8 @@ DwellingType.belongsTo(DwellingAdjustment);
 // });
   
   
-//SERVICE RELATIONSHIPS: UIDescription, AppointmentPart
+//SERVICE RELATIONSHIPS: UserType, UIDescription, AppointmentPart
+
 //TO Desc 121
 Service.hasOne(UIDescription, {
   onDelete: 'CASCADE',
@@ -195,4 +209,4 @@ AppointmentPart.belongsToMany(AdditionalService, {
   through: 'AdditionalServiceAppointmentPart',
 });
 
-export { AdditionalService, AppointmentPartType, AppointmentPart, AvailabilityOption, DwellingType, DwellingAdjustment, Service, TimeBlockSet, UIDescription, ParticipantType, User, Login };
+export { AdditionalService, AppointmentPartType, AppointmentPart, AvailabilityOption, DwellingType, DwellingAdjustment, Service, TimeBlockSet, UIDescription, UserType, User, Login };
