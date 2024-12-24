@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 // import type { UIDescriptionsData } from '../interfaces/appointmentInterfaces';
 // import UIDescriptionList from '../components/ServicesList';
 import { retrieveAllVisibleUserTypes } from '../api/internalAPI/participantAPI/userTypeAPI';
-import { retrieveServiceByID } from '../api/internalAPI/appointmentAPI/contentAPI/serviceAPI';
+// import { retrieveServiceByID } from '../api/internalAPI/appointmentAPI/contentAPI/serviceAPI';
 import type { ServiceData, UserTypeData } from '../interfaces/appointmentInterfaces';
 
 const ServicesPage: React.FC = () => {
@@ -36,21 +36,21 @@ const ServicesPage: React.FC = () => {
   //Populate the services based on the Selected User Type
   const [serviceTypes, setServiceTypes] = useState<ServiceData[]>([]);
   
-  const userToServiceArrayConverter = async (thisUserType: UserTypeData) => {
-    const servicesArray: ServiceData[] = [];
-    const data1 = await retrieveServiceByID(thisUserType.available_service_1);
-    servicesArray.push(data1);
-    const data2 = await retrieveServiceByID(thisUserType.available_service_1);
-    servicesArray.push(data2);
-    const data3 = await retrieveServiceByID(thisUserType.available_service_1);
-    servicesArray.push(data3);
-    const data4 = await retrieveServiceByID(thisUserType.available_service_1);
-    servicesArray.push(data4);
-    setServiceTypes(servicesArray);
-    };
+  // const userToServiceArrayConverter = async (thisUserType: UserTypeData) => {
+  //   const servicesArray: ServiceData[] = [];
+  //   const data1 = await retrieveServiceByID(thisUserType.available_service_1);
+  //   servicesArray.push(data1);
+  //   const data2 = await retrieveServiceByID(thisUserType.available_service_1);
+  //   servicesArray.push(data2);
+  //   const data3 = await retrieveServiceByID(thisUserType.available_service_1);
+  //   servicesArray.push(data3);
+  //   const data4 = await retrieveServiceByID(thisUserType.available_service_1);
+  //   servicesArray.push(data4);
+  //   setServiceTypes(servicesArray);
+  //   };
   
-    useEffect (() => {
-      userToServiceArrayConverter(thisUserType as UserTypeData);}, [thisUserType]);
+    // useEffect (() => {
+    //   userToServiceArrayConverter(thisUserType as UserTypeData);}, [thisUserType]);
 
       const [thisService, setThisService] = useState<ServiceData | null>(null);
       
@@ -147,14 +147,14 @@ return (
       <h4 className="mt-4">Select Your Role</h4>
       <Row>
         {userTypes.map((user) => (
-            <Card key={user.user_type_id}
+            <Card key={user.id}
               onClick={() => handleUserTypeSelect(user)}
               style={{ cursor: 'pointer' }}
               >
               <Card.Body>
                 {/* <div style={{ fontSize: '2rem' }}>{user.icon}</div> */}
-                <Card.Title>{user.user_type}</Card.Title>
-                <Card.Text>{user.user_description}</Card.Text>
+                <Card.Title>{user.type}</Card.Title>
+                <Card.Text>{user.description}</Card.Text>
               </Card.Body>
             </Card>
         ))}
@@ -169,12 +169,12 @@ return (
           </h4>
           <Row>
             {serviceTypes.map((service) => (
-                <Card key={service.service_id}
+                <Card key={service.id}
                   onClick={() => handleServiceTypeSelect(service)}
                   style={{ cursor: 'pointer' }}
                   >
                   <Card.Body>
-                    <Card.Title>{service.title}</Card.Title>
+                    <Card.Title>{service.name}</Card.Title>
                     {/* <Card.Text>{service.description}</Card.Text> */}
                   </Card.Body>
                 </Card>

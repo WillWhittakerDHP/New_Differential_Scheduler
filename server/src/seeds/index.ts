@@ -1,17 +1,14 @@
 import { sequelize } from '../config/connection.js';
-import { seedUserTypes } from './participantSeeds/userTypesSeedData.js';
-import { seedServices } from './appointmentSeeds/contentSeeds/ServicesSeedData.js';
-import { seedUIDescriptions } from './appointmentSeeds/structureSeeds/UIDescriptionSeedData.js';
-import { seedDwellingTypes } from './appointmentSeeds/structureSeeds/DwellingTypesSeedData.js';
-import { seedTimeBlockSets } from './appointmentSeeds/structureSeeds/TimeBlockSetsSeedData.js';
-import { seedAppointmentPartTypes } from './appointmentSeeds/structureSeeds/AppointmentPartTypeSeedData.js';
-import { seedAppointmentParts } from './appointmentSeeds/structureSeeds/AppointmentPartsSeedData.js';
-import { seedDwellingAdjustments } from './appointmentSeeds/contentSeeds/DwellingAdjustmentsSeedData.js';
-import { seedAdditionalServices } from './appointmentSeeds/contentSeeds/AdditionalServicesSeedData.js';
-import { seedAvailabilityOptions } from './appointmentSeeds/contentSeeds/AvailabilityOptionsSeedData.js';
+import { seedUserTypesandServices } from './participantSeeds/userTypesSeedData.js';
+// import { seedUIDescriptions } from './appointmentSeeds/structureSeeds/UIDescriptionSeedData.js';
+// import { seedDwellingTypes } from './appointmentSeeds/structureSeeds/DwellingTypesSeedData.js';
+// import { seedTimeBlockSets } from './appointmentSeeds/structureSeeds/TimeBlockSetsSeedData.js';
+// import { seedAppointmentPartTypes } from './appointmentSeeds/structureSeeds/AppointmentPartTypeSeedData.js';
+// import { seedAppointmentParts } from './appointmentSeeds/structureSeeds/AppointmentPartsSeedData.js';
+// import { seedDwellingAdjustments } from './appointmentSeeds/contentSeeds/DwellingAdjustmentsSeedData.js';
+// import { seedAdditionalServices } from './appointmentSeeds/contentSeeds/AdditionalServicesSeedData.js';
+// import { seedAvailabilityOptions } from './appointmentSeeds/contentSeeds/AvailabilityOptionsSeedData.js';
 
-
-// export const seedDatabase = async () => {
   
   const seedAll = async (): Promise<void> => {
     
@@ -21,16 +18,15 @@ import { seedAvailabilityOptions } from './appointmentSeeds/contentSeeds/Availab
       console.log('\n----- DATABASE SYNCED -----\n');
       
       console.log('\n----- Seeding database ... -----\n');
-      await seedUserTypes();
-      await seedServices();
-      await seedUIDescriptions();
-      await seedDwellingTypes();
-      await seedTimeBlockSets();
-      await seedAppointmentPartTypes();
-      await seedAppointmentParts();
-      await seedDwellingAdjustments();
-      await seedAdditionalServices();
-      await seedAvailabilityOptions();
+      await seedUserTypesandServices();
+      // await seedUIDescriptions();
+      // await seedDwellingTypes();
+      // await seedTimeBlockSets();
+      // await seedAppointmentPartTypes();
+      // await seedAppointmentParts();
+      // await seedDwellingAdjustments();
+      // await seedAdditionalServices();
+      // await seedAvailabilityOptions();
       console.log('\n----- DATABASE SEEDED -----\n');
       
       process.exit(0);
@@ -41,4 +37,3 @@ import { seedAvailabilityOptions } from './appointmentSeeds/contentSeeds/Availab
   };
   
   seedAll();
-// };

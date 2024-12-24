@@ -1,7 +1,7 @@
 import express from 'express';
-import routes from './routes/index.js';
-import dotenv from 'dotenv';
 import { sequelize } from './config/connection.js';
+import dotenv from 'dotenv';
+import routes from './routes/index.js';
 
 dotenv.config();
 
@@ -10,8 +10,8 @@ const PORT = process.env.PORT || 3001;
 const forceDatabaseRefresh = true;
 
 // Use the calendarRouter for routes starting with '/calendar'
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 // Serves static files in the entire client's dist folder
 app.use(express.static('../client/dist'));

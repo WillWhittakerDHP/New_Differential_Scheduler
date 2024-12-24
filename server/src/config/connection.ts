@@ -15,7 +15,11 @@ console.log(process.env.DB_NAME);
 // Otherwise, use individual environment variables for database name, user, and password.
 const sequelize = process.env.DB_URL
   ? new Sequelize(process.env.DB_URL)
-  : new Sequelize(process.env.DB_NAME || '', process.env.DB_USER || '', process.env.DB_PASSWORD, {
+  : new Sequelize(
+    process.env.DB_NAME || '', 
+    process.env.DB_USER || '', 
+    process.env.DB_PASSWORD, 
+    {
       host: 'localhost',       // Database host
       // port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3001,
       dialect: 'postgres',     // Database dialect (PostgreSQL)
