@@ -20,7 +20,7 @@ const retrieveAllVisibleUserTypes = async () => {
   }
 }
 
-const retrieveUserTypeByID = async (id: number | null): Promise<UserTypeData> => {
+const retrieveUserTypeDataByID = async (id: number | null): Promise<UserTypeData> => {
   try {
     const response = await fetch(`internal/participants/userTypes/${id}`, {
       headers: {
@@ -31,9 +31,7 @@ const retrieveUserTypeByID = async (id: number | null): Promise<UserTypeData> =>
     if (!response.ok) {
       throw new Error('Invalid user API response, check network tab!');
     }
-
     return data;
-
   } catch (err) { 
     console.log('Error from data retrieval:', err);
     return {} as UserTypeData;
@@ -43,5 +41,5 @@ const retrieveUserTypeByID = async (id: number | null): Promise<UserTypeData> =>
 export { 
   // retrieveAllUserTypes, 
   retrieveAllVisibleUserTypes
-  , retrieveUserTypeByID 
+  , retrieveUserTypeDataByID 
 };

@@ -1,0 +1,22 @@
+[
+  { "name": "Blue Tape", 
+    "visibility": true, 
+    "description": "stuff about Blue Tape",
+    "differential_scheduling": true
+  },
+  { "name": "Radon", 
+    "visibility": true, 
+    "description": "stuff about Radon",
+    "differential_scheduling": true
+  },
+  { "name": "Reinspection", 
+    "visibility": true, 
+    "description": "stuff about Reinspections",
+    "differential_scheduling": true
+  },
+  { "name": "Accessory Dwelling Units", 
+    "visibility": true, 
+    "description": "ADUs",
+    "differential_scheduling": true
+  }
+]

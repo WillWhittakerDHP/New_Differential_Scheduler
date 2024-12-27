@@ -15,7 +15,6 @@ export const getAllServices = async (_req: Request, res: Response) => {
       raw: true,
     });
     res.status(200).json(Services);
-    console.table(Services);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -86,14 +85,11 @@ export const getAllDifferentialServices = async (_req: Request, res: Response) =
 // POST /
 export const createService = async (req: Request, res: Response) => {
   const { id, name, visibility, differential_scheduling, description
-    // , ui_description_set_id, appointment_part_1, appointment_part_2, appointment_part_3, appointment_part_4 
   } = req.body;
   try {
     const newService = await Service.create({ id, name, visibility, differential_scheduling, description,
-      // , ui_description_set_id, appointment_part_1, appointment_part_2, appointment_part_3, appointment_part_4 
     });
     res.status(201).json(newService);
-    // console.log(newService);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }

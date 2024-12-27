@@ -11,7 +11,6 @@ export const seedUserTypesandServices = async () => {
     });
   
     const userTypes = await UserType.bulkCreate(userTypeSeedData, {
-      // returning: true,
       validate: true,
     });
     console.log(userTypes);

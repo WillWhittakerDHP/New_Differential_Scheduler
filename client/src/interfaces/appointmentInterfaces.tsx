@@ -14,6 +14,14 @@ export interface ServiceData {
   description: string | null;
 }
 
+export interface AdditionalServiceData {
+  id: number | null;
+  name: string | null;
+  differential_scheduling: boolean | null;
+  visibility: boolean | null;
+  description: string | null;
+}
+
 export interface UIDescriptionsData {
   ui_description_set_id: number | null;
   buyer_description: string | null;
