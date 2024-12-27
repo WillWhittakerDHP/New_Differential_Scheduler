@@ -1,7 +1,7 @@
 export interface UserTypeData {
   id: number | null;
   type: string | null;
-  incon: string | null;
+  icon: string | null;
   description: string | null;
   visibility: boolean | null;
 }
@@ -9,8 +9,9 @@ export interface UserTypeData {
 export interface ServiceData {
   id: number | null;
   name: string | null;
-  can_be_scheduled: boolean | null;
   differential_scheduling: boolean | null;
+  visibility: boolean | null;
+  description: string | null;
 }
 
 export interface UIDescriptionsData {

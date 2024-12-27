@@ -57,7 +57,7 @@ export function UserTypeFactory(sequelize: Sequelize) {
       sequelize,
       timestamps: false,
       underscored: true,
-      modelName: 'UserType',
+      modelName: 'user_types',
     }
   );
 

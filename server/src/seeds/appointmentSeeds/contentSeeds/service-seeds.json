@@ -1,31 +1,38 @@
 
 [ 
   { "name" :"Buyers Inspection", 
-    "can_be_scheduled": true, 
+    "visibility": true,
+    "description": "stuff about this service", 
     "differential_scheduling": true
   },
   { "name" :"Investors Inspection", 
-    "can_be_scheduled": true, 
+    "visibility": true,
+    "description": "stuff about this service", 
     "differential_scheduling": true
   },
   { "name" :"Walk and Talk", 
-    "can_be_scheduled": true, 
+    "visibility": true,
+    "description": "stuff about this service", 
     "differential_scheduling": false
   },
   { "name" :"Home Check-up and Maintenance Planning", 
-    "can_be_scheduled": true, 
+    "visibility": true,
+    "description": "stuff about this service", 
     "differential_scheduling": true
   },
   { "name" :"Pre-sale Walkthrough", 
-    "can_be_scheduled": true, 
+    "visibility": true,
+    "description": "stuff about this service", 
     "differential_scheduling": false
   },
   { "name" :"Developers Warranty Inspection", 
-    "can_be_scheduled": true, 
+    "visibility": true,
+    "description": "stuff about this service", 
     "differential_scheduling": false
   },
   { "name" :"Reinspection", 
-    "can_be_scheduled": true, 
+    "visibility": true,
+    "description": "stuff about this service", 
     "differential_scheduling": false
   }
 ]

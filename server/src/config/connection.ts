@@ -4,12 +4,6 @@ import { Sequelize } from 'sequelize';
 
 dotenv.config({ path: '.env' }); // Load environment variables from a .env file into process.env
 
-const oauth2Client = new OAuth2Client(
-  process.env.GOOGLE_CLIENT_ID!,
-  process.env.GOOGLE_CLIENT_SECRET!,
-  process.env.GOOGLE_REDIRECT_URI!
-);
-console.log(process.env.DB_NAME);
 // Initialize a Sequelize instance to connect to the PostgreSQL database.
 // If DB_URL is provided in the environment variables, use it directly.
 // Otherwise, use individual environment variables for database name, user, and password.
@@ -21,13 +15,17 @@ const sequelize = process.env.DB_URL
     process.env.DB_PASSWORD, 
     {
       host: 'localhost',       // Database host
-      // port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3001,
       dialect: 'postgres',     // Database dialect (PostgreSQL)
       dialectOptions: {
         decimalNumbers: true,  // Ensure decimal numbers are handled correctly
       },
     });
 
+const oauth2Client = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID!,
+  process.env.GOOGLE_CLIENT_SECRET!,
+  process.env.GOOGLE_REDIRECT_URI!
+);  
 
 // Function to get the authorization URL
 export function getAuthUrl() {
@@ -52,5 +50,7 @@ export async function getTokens(code: string) {
 
 const calendarOAuth = oauth2Client;
 
-export { sequelize, calendarOAuth };
+export { sequelize
+  , calendarOAuth 
+};
 

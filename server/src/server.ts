@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const forceDatabaseRefresh = true;
+const forceDatabaseRefresh = false;
 
 // Use the calendarRouter for routes starting with '/calendar'
 app.use(express.json());

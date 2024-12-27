@@ -9,7 +9,7 @@ export const getAllServices = async (_req: Request, res: Response) => {
   try {
     const Services = await Service.findAll({
       // include: [{ model: UIDescription }, { model: TimeBlockSet }, { model: AppointmentPart }],
-      attributes: [ 'id', 'name', 'can_be_scheduled', 'differential_scheduling'
+      attributes: [ 'id', 'name', 'visibility', 'description', 'differential_scheduling'
         // ,'ui_description_set_id', 'appointment_part_1', 'appointment_part_2', 'appointment_part_3', 'appointment_part_4' 
       ],
       raw: true,
@@ -48,11 +48,11 @@ export const getAllAvailableServices = async (_req: Request, res: Response) => {
       order: ['name'],
       where: {
         // Only get that have this boolean set to TRUE
-        can_be_scheduled: true
+        visibility: true
       },
       attributes: {
         // Don't include these fields in the returned data
-        exclude: ['can_be_scheduled']
+        exclude: ['visibility']
       }
     });
     res.json(AvailableServices);
@@ -85,11 +85,11 @@ export const getAllDifferentialServices = async (_req: Request, res: Response) =
 
 // POST /
 export const createService = async (req: Request, res: Response) => {
-  const { id, name, can_be_scheduled, differential_scheduling
+  const { id, name, visibility, differential_scheduling, description
     // , ui_description_set_id, appointment_part_1, appointment_part_2, appointment_part_3, appointment_part_4 
   } = req.body;
   try {
-    const newService = await Service.create({ id, name, can_be_scheduled, differential_scheduling
+    const newService = await Service.create({ id, name, visibility, differential_scheduling, description,
       // , ui_description_set_id, appointment_part_1, appointment_part_2, appointment_part_3, appointment_part_4 
     });
     res.status(201).json(newService);
@@ -102,7 +102,7 @@ export const createService = async (req: Request, res: Response) => {
 // // PUT //:id
 // export const updateService = async (req: Request, res: Response) => {
 //   const { id } = req.params;
-//   const { id, name, can_be_scheduled, differential_scheduling, ui_description_set_id
+//   const { id, name, visibility, differential_scheduling, ui_description_set_id
 //     // , appointment_part_1, appointment_part_2, appointment_part_3, appointment_part_4 
 //   } = req.body;
 //   try {
@@ -110,7 +110,7 @@ export const createService = async (req: Request, res: Response) => {
 //     if (updatedService) {
 //       updatedService.id = id;
 //       updatedService.name = name;
-//       updatedService.can_be_scheduled = can_be_scheduled;
+//       updatedService.visibility = visibility;
 //       updatedService.differential_scheduling = differential_scheduling;
 //       updatedService.ui_description_set_id = ui_description_set_id;
 //       // updatedService.appointment_part_1 = appointment_part_1;

@@ -10,6 +10,7 @@ import {
 } from 'sequelize';
 
 import { UserType } from '../../participantModels/userTypes';
+// import { UIDescription } from '../structureModels/uIDescriptions';
 
 export class Service extends Model<
   InferAttributes<Service>,
@@ -18,12 +19,8 @@ export class Service extends Model<
   declare id: CreationOptional<number>;
   declare name: string;
   declare differential_scheduling: boolean;
-  declare can_be_scheduled: boolean;
-  // declare ui_description_set_id: ForeignKey<UIDescription['ui_description_set_id']>;
-  // declare appointment_part_1: ForeignKey<TimeBlockSet['time_block_set_id']>;
-  // declare appointment_part_2: ForeignKey<TimeBlockSet['time_block_set_id']>;
-  // declare appointment_part_3: ForeignKey<TimeBlockSet['time_block_set_id']>;
-  // declare appointment_part_4: ForeignKey<TimeBlockSet['time_block_set_id']>;
+  declare visibility: boolean;
+  declare description: string;
 
   declare addUserType: BelongsToManyAddAssociationMixin<UserType, UserType['id']>;
   declare addUserTypes: BelongsToManyAddAssociationMixin<
@@ -48,25 +45,13 @@ export function ServiceFactory(sequelize: Sequelize) {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
-      can_be_scheduled: {
+      visibility: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
-      // ui_description_set_id: {
-      //   type: DataTypes.INTEGER,
-      // },
-      // appointment_part_1: {
-      //   type: DataTypes.INTEGER,
-      // },
-      // appointment_part_2: {
-      //   type: DataTypes.INTEGER,
-      // },
-      // appointment_part_3: {
-      //   type: DataTypes.INTEGER,
-      // },
-      // appointment_part_4: {
-      //   type: DataTypes.INTEGER,
-      // },
+      description: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,
