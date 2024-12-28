@@ -10,8 +10,6 @@ import {
 } from 'sequelize';
 
 import type { Service } from './service';
-// import type { TimeBlockSet } from '../structureModels/timeBlockSets';
-// import { UIDescription } from '../structureModels/uIDescriptions';
 
 export class AdditionalService extends Model<
   InferAttributes<AdditionalService>,
@@ -22,14 +20,15 @@ export class AdditionalService extends Model<
   declare differential_scheduling: boolean;
   declare visibility: boolean;
   declare description: string;
-  declare Service: BelongsToManyAddAssociationMixin<Service, Service['id']>;
-    declare addServiceTypes: BelongsToManyAddAssociationMixin<
-      Service [],
-      Service['id'][]
-    >;
+
+  declare addService: BelongsToManyAddAssociationMixin<Service, Service['id']>;
+  declare addServices: BelongsToManyAddAssociationMixin<
+    Service[],
+    Service['id'][]
+  >;
 }
 
-export function AdditionalServiceFactory(sequelize: Sequelize): typeof AdditionalService {
+export function AdditionalServiceFactory(sequelize: Sequelize) {
   AdditionalService.init(
     {
       id: {
@@ -45,19 +44,20 @@ export function AdditionalServiceFactory(sequelize: Sequelize): typeof Additiona
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       visibility: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-      },
-      description: {
-        type: DataTypes.STRING,
       },
     },
     {
       sequelize,
       timestamps: false,
       underscored: true,
-      modelName: 'AdditionalServices',
+      modelName: 'additional_services',
     }
   );
 

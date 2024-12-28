@@ -10,7 +10,8 @@ import {
 } from 'sequelize';
 
 import { UserType } from '../../participantModels/userTypes';
-// import { UIDescription } from '../structureModels/uIDescriptions';
+import { AdditionalService } from './additionalServices';
+import { AvailabilityOption } from './availabilityOptions';
 
 export class Service extends Model<
   InferAttributes<Service>,
@@ -24,6 +25,18 @@ export class Service extends Model<
 
   declare addUserType: BelongsToManyAddAssociationMixin<UserType, UserType['id']>;
   declare addUserTypes: BelongsToManyAddAssociationMixin<
+    UserType[],
+    UserType['id'][]
+  >;
+
+  declare addAdditionalService: BelongsToManyAddAssociationMixin<AdditionalService, AdditionalService['id']>;
+  declare addAdditionalServices: BelongsToManyAddAssociationMixin<
+    UserType[],
+    UserType['id'][]
+  >;
+
+  declare addAvailabilityOption: BelongsToManyAddAssociationMixin<AvailabilityOption, AvailabilityOption['id']>;
+  declare addAvailabilityOptions: BelongsToManyAddAssociationMixin<
     UserType[],
     UserType['id'][]
   >;
@@ -57,7 +70,7 @@ export function ServiceFactory(sequelize: Sequelize) {
       sequelize,
       timestamps: false,
       underscored: true,
-      modelName: 'Services',
+      modelName: 'services',
     }
   );
 

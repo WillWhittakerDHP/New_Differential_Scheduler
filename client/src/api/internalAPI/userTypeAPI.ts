@@ -1,4 +1,4 @@
-import { ServiceData, UserTypeData } from "../../interfaces/appointmentInterfaces";
+import { UserTypeData } from "../../interfaces/appointmentInterfaces";
 
 const retrieveAllVisibleUserTypes = async () => {
   try {
@@ -20,7 +20,7 @@ const retrieveAllVisibleUserTypes = async () => {
   }
 }
 
-const retrieveUserTypeDataByID = async (id: number | null): Promise<UserTypeData> => {
+const retrieveUserTypeDataByIDForAssociatedServices = async (id: number | null): Promise<UserTypeData> => {
   try {
     const response = await fetch(`internal/participants/userTypes/${id}`, {
       headers: {
@@ -38,8 +38,4 @@ const retrieveUserTypeDataByID = async (id: number | null): Promise<UserTypeData
   }
 }
 
-export { 
-  // retrieveAllUserTypes, 
-  retrieveAllVisibleUserTypes
-  , retrieveUserTypeDataByID 
-};
+export { retrieveAllVisibleUserTypes, retrieveUserTypeDataByIDForAssociatedServices };

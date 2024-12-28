@@ -1,69 +1,58 @@
-import { Model, DataTypes, 
-  // Optional,
+import {
+  Model,
+  DataTypes,
   type InferAttributes,
   type InferCreationAttributes,
   type CreationOptional,
-  type ForeignKey,
-  // type BelongsToManyAddAssociationMixin,
-  type Sequelize } from 'sequelize';
-  
+  // type ForeignKey,
+  type BelongsToManyAddAssociationMixin,
+  type Sequelize,
+} from 'sequelize';
 
-  import type { TimeBlockSet } from '../structureModels/timeBlockSets';
-import { DwellingType } from '../structureModels/dwellingTypes.js';
-
+import type { Service } from './service';
 
 export class DwellingAdjustment extends Model<
   InferAttributes<DwellingAdjustment>,
   InferCreationAttributes<DwellingAdjustment>
 > {
-  declare dwelling_adjustment_id: CreationOptional<number>;
-  declare dwelling_type_id: ForeignKey<DwellingType['dwelling_type_id']>;
-  declare appointment_part_1: ForeignKey<TimeBlockSet['time_block_set_id']>;
-  declare appointment_part_2: ForeignKey<TimeBlockSet['time_block_set_id']>;
-  declare appointment_part_3: ForeignKey<TimeBlockSet['time_block_set_id']>;
-  declare appointment_part_4: ForeignKey<TimeBlockSet['time_block_set_id']>;
+  declare id: CreationOptional<number>;
+  declare name: string;
+  declare visibility: boolean;
+  declare description: string;
 
-  // TODO What's this?
-  // //  Since TS cannot determine model associations at compile time, we need to declare the association methods here. These will not exist until `Model.init` was called.
-  //   declare addReaders: BelongsToManyAddAssociationMixin<
-  //   Reader[],
-  //   Reader['id'][]
-  // >;
-  // declare addReader: BelongsToManyAddAssociationMixin<Reader, Reader['id']>;
+  declare addService: BelongsToManyAddAssociationMixin<Service, Service['id']>;
+  declare addServices: BelongsToManyAddAssociationMixin<
+    Service[],
+    Service['id'][]
+  >;
 }
 
-export function DwellingAdjustmentFactory(sequelize: Sequelize): typeof DwellingAdjustment {
+export function DwellingAdjustmentFactory(sequelize: Sequelize) {
   DwellingAdjustment.init(
     {
-      dwelling_adjustment_id: {
+      id: {
         type: DataTypes.INTEGER,
-        autoIncrement: true,
         primaryKey: true,
+        autoIncrement: true,
       },
-      // dwelling_type_id: {
-      //   type: DataTypes.STRING,
-      // },
-      // appointment_part_1: {
-      //   type: DataTypes.INTEGER,
-      // },
-      // appointment_part_2: {
-      //   type: DataTypes.INTEGER,
-      // },
-      // appointment_part_3: {
-      //   type: DataTypes.INTEGER,
-      // },
-      // appointment_part_4: {
-      //   type: DataTypes.INTEGER,
-      // },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      visibility: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
     },
     {
       sequelize,
-      // Manually define the table name
-      tableName: 'dwelling_adjustments',
-      // Set to false to remove the `created_at` and `updated_at` columns
       timestamps: false,
       underscored: true,
-      freezeTableName: true,
+      modelName: 'dwelling_adjustments',
     }
   );
 

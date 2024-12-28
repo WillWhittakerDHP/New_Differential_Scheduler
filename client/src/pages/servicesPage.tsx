@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Form, ProgressBar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'; 
 
-import { retrieveAllVisibleUserTypes, retrieveUserTypeDataByID } from '../api/internalAPI/userTypeAPI';
-import { retrieveServiceTypeDataByID } from '../api/internalAPI/serviceAPI';
-import type { UserTypeData, ServiceData, AdditionalServiceData } from '../interfaces/appointmentInterfaces';
+import type { UserTypeData, ServiceData, AdditionalServiceData, AvailabilityOptionData, DwellingAdjustmentData } from '../interfaces/appointmentInterfaces';
+import { retrieveAllVisibleUserTypes, retrieveUserTypeDataByIDForAssociatedServices } from '../api/internalAPI/userTypeAPI';
+import { retrieveServiceDataByIDForAssociatedAdditionalServices, retrieveServiceDataByIDForAssociatedAvailabilityOptions, retrieveServiceDataByIDForAssociatedDwellingAdjustments, retrieveServiceDataByID, retrieveAdditionalServiceDataByID, retrieveAvailabilityOptionDataByID, retrieveDwellingAdjustmentDataByID } from '../api/internalAPI/contentAPI';
 
 const ServicesPage: React.FC = () => {
   
@@ -20,19 +20,20 @@ const ServicesPage: React.FC = () => {
     fetchAllVisibleUserTypes();
   }, []);
   
-  //Populate the services based on the Selected User Type
   const [thisUserType, setThisUserType] = useState<UserTypeData | undefined>();
-    const handleUserTypeSelect = (selectedUserType: UserTypeData) => {
-      setThisUserType(selectedUserType);
-    };
+  const handleUserTypeSelect = (selectedUserType: UserTypeData) => {
+    setThisUserType(selectedUserType);
+  };
+  
 
-    const [serviceTypes, setServiceTypes] = useState<ServiceData[]>([]);
+  //Populate the services based on the Selected User Type
+    const [services, setServices] = useState<ServiceData[]>([]);
     
     const fetchUserTypeData = async () => {
       if (thisUserType !== undefined) {
-        const data = await retrieveUserTypeDataByID(thisUserType.id);
+        const data = await retrieveUserTypeDataByIDForAssociatedServices(thisUserType.id);
         const availableServices: ServiceData[] = JSON.parse(JSON.stringify(data.Services));
-        setServiceTypes(availableServices);
+        setServices(availableServices);
       }
     }    
     
@@ -42,32 +43,75 @@ const ServicesPage: React.FC = () => {
     }}, [thisUserType]);
   
     
-    //Populate the additionalServices based on the Selected ServiceType
-    const [thisServiceType, setThisServiceType] = useState<ServiceData | undefined>();
-      const handleServiceTypeSelect = (selectedAdditionalServiceType: ServiceData) => {
-        setThisServiceType(selectedAdditionalServiceType);
-      };
+    const [thisService, setThisService] = useState<ServiceData | undefined>();
+    const handleServiceSelect = (selectedAdditionalService: ServiceData) => {
+      setThisService(selectedAdditionalService);
+    };
+    
 
-  const [additionalServiceTypes, setAdditionalServiceTypes] = useState<AdditionalServiceData[]>([]);
+  //Populate the additionalServices based on the Selected Service
+  const [additionalServices, setAdditionalServices] = useState<AdditionalServiceData[]>([]);
   
-  const fetchServiceTypeData = async () => {
-    if (thisServiceType !== undefined) {
-      const data = await retrieveServiceTypeDataByID(thisServiceType.id);
+  const fetchServiceDataByIDForAssociatedAdditionalServices = async () => {
+    if (thisService !== undefined) {
+      const data = await retrieveServiceDataByIDForAssociatedAdditionalServices(thisService.id);
       const availableAdditionalServices: AdditionalServiceData[] = JSON.parse(JSON.stringify(data.AdditionalServices));
-      setAdditionalServiceTypes(availableAdditionalServices);
+      setAdditionalServices(availableAdditionalServices);
     }
   }    
 
   useEffect (() => { 
-    if (thisServiceType){
-      fetchServiceTypeData();
-    }}, [thisServiceType]);
+    if (thisService){
+      fetchServiceDataByIDForAssociatedAdditionalServices();
+    }}, [thisService]);
 
-    const [thisAdditionalServiceType, setThisAdditionalServiceType] = useState<AdditionalServiceData | undefined>();
-      const handleAdditionalServiceTypeSelect = (selectedAdditionalServiceType: AdditionalServiceData) => {
-        setThisAdditionalServiceType(selectedAdditionalServiceType);
+    const [thisAdditionalService, setThisAdditionalService] = useState<AdditionalServiceData | undefined>();
+      const handleAdditionalServiceSelect = (selectedAdditionalService: AdditionalServiceData) => {
+        setThisAdditionalService(selectedAdditionalService);
       };
   
+  //Populate the availabilityOptions based on the Selected Service
+  const [availabilityOptions, setAvailabilityOptions] = useState<AvailabilityOptionData[]>([]);
+  
+  const fetchServiceDataByIDForAssociatedAvailabilityOptions = async () => {
+    if (thisService !== undefined) {
+      const data = await retrieveServiceDataByIDForAssociatedAvailabilityOptions(thisService.id);
+      const availableAvailabilityOptions: AvailabilityOptionData[] = JSON.parse(JSON.stringify(data.AvailabilityOptions));
+      setAvailabilityOptions(availableAvailabilityOptions);
+    }
+  }    
+
+  useEffect (() => { 
+    if (thisService){
+      fetchServiceDataByIDForAssociatedAvailabilityOptions();
+    }}, [thisService]);
+
+    const [thisAvailabilityOption, setThisAvailabilityOption] = useState<AvailabilityOptionData | undefined>();
+      const handleAvailabilityOptionSelect = (selectedAvailabilityOption: AvailabilityOptionData) => {
+        setThisAvailabilityOption(selectedAvailabilityOption);
+      };
+  
+
+        //Populate the DwellingAdjustments based on the Selected Service
+  const [dwellingAdjustments, setDwellingAdjustments] = useState<DwellingAdjustmentData[]>([]);
+  
+  const fetchServiceDataByIDForAssociatedDwellingAdjustments = async () => {
+    if (thisService !== undefined) {
+      const data = await retrieveServiceDataByIDForAssociatedDwellingAdjustments(thisService.id);
+      const availableDwellingAdjustments: DwellingAdjustmentData[] = JSON.parse(JSON.stringify(data.DwellingAdjustments));
+      setDwellingAdjustments(availableDwellingAdjustments);
+    }
+  }    
+
+  useEffect (() => { 
+    if (thisService){
+      fetchServiceDataByIDForAssociatedDwellingAdjustments();
+    }}, [thisService]);
+
+    const [thisDwellingAdjustment, setThisDwellingAdjustment] = useState<DwellingAdjustmentData | undefined>();
+      const handleDwellingAdjustmentSelect = (selectedDwellingAdjustment: DwellingAdjustmentData) => {
+        setThisDwellingAdjustment(selectedDwellingAdjustment);
+      };
 
 
   const [progress, setProgress] = useState(20);
@@ -107,9 +151,9 @@ return (
       {/* User Type Selection */}
       <h4 className="mt-4">Select Your Service</h4>
       <Row>
-        {serviceTypes.map((service) => (
+        {services.map((service) => (
           <Card key={service.id}
-              onClick={() => handleServiceTypeSelect(service)}
+              onClick={() => handleServiceSelect(service)}
               style={{ cursor: 'pointer' }}
           >
               <Card.Title>{service.name}</Card.Title>
@@ -122,13 +166,42 @@ return (
       {/* User Type Selection */}
       <h4 className="mt-4">Select Your Additional Service</h4>
       <Row>
-        {additionalServiceTypes.map((additionalService) => (
+        {additionalServices.map((additionalService) => (
           <Card key={additionalService.id}
-              onClick={() => handleAdditionalServiceTypeSelect(additionalService)}
+              onClick={() => handleAdditionalServiceSelect(additionalService)}
               style={{ cursor: 'pointer' }}
           >
               <Card.Title>{additionalService.name}</Card.Title>
               <Card.Text>{additionalService.description}</Card.Text>
+          </Card>
+        ))}
+      </Row>
+    </Container>
+    <Container className="mt-4">
+      {/* User Type Selection */}
+      <h4 className="mt-4">Select Your Availability Option</h4>
+      <Row>
+        {availabilityOptions.map((availabilityOption) => (
+          <Card key={availabilityOption.id}
+              onClick={() => handleAvailabilityOptionSelect(availabilityOption)}
+              style={{ cursor: 'pointer' }}
+          >
+              <Card.Title>{availabilityOption.name}</Card.Title>
+              <Card.Text>{availabilityOption.description}</Card.Text>
+          </Card>
+        ))}
+      </Row>
+    </Container>
+    <Container className="mt-4">
+      {/* User Type Selection */}
+      <h4 className="mt-4">Select Your Dwelling Adjustment</h4>
+      <Row>
+        {dwellingAdjustments.map((dwellingAdjustment) => (
+          <Card key={dwellingAdjustment.id}
+              onClick={() => handleDwellingAdjustmentSelect(dwellingAdjustment)}
+              style={{ cursor: 'pointer' }}
+          >
+              <Card.Title>{dwellingAdjustment.name}</Card.Title>
           </Card>
         ))}
       </Row>

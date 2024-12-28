@@ -33,12 +33,37 @@ const AvailabilityOption = AvailabilityOptionFactory(sequelize);
 const DwellingAdjustment = DwellingAdjustmentFactory(sequelize);
 
 
-//USERTYPE RELATIONSHIPS
+//USERTYPE Parent-Child RELATIONSHIPS
 //FROM Services m2m
 UserType.belongsToMany(Service, { through: 'UserTypeService' });
 
 //TO Services m2m
 Service.belongsToMany(UserType, { through: 'UserTypeService' });
+
+
+//Service Parent-Child RELATIONSHIPS
+//TO AdditionalServices m2m
+Service.belongsToMany(AdditionalService, { through: 'ServiceAdditionalService' });
+
+//FROM AdditionalServices m2m
+AdditionalService.belongsToMany(Service, { through: 'ServiceAdditionalService' });
+
+//TO AvailabilityOptions m2m
+Service.belongsToMany(AvailabilityOption, { through: 'ServiceAvailabilityOption' });
+
+//FROM AvailabilityOptions m2m
+AvailabilityOption.belongsToMany(Service, { through: 'ServiceAvailabilityOption' });
+
+//TO AdditionalServices m2m
+Service.belongsToMany(DwellingAdjustment, { through: 'ServiceDwellingAdjustment' });
+
+//FROM DwellingAdjustments m2m
+DwellingAdjustment.belongsToMany(Service, { through: 'ServiceDwellingAdjustment' });
+
+
+
+
+
 
 
 
