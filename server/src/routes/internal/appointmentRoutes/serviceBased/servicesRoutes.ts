@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { Service } from '../../../../models/appointmentModels/contentModels/services.js';
+import { Service } from '../../../../models/serviceBasedModels/services.js';
 
 // GET Services available to Services through the UI
 export const getAllVisibleServices = async (_req: Request, res: Response) => {
@@ -108,4 +108,4 @@ router.get('/ao/:id', getAvailabilityOptionsbyServiceId);
 // GET associated DwellingAdjustmentss
 router.get('/da/:id', getDwellingAdjustmentsbyServiceId);
 
-export { router as ServicesRouter };
+export { router as ServiceTypesRouter };

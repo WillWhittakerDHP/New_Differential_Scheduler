@@ -1,64 +1,163 @@
 import { sequelize } from '../config/connection.js';
 
+// Appointment Content
+import { ServiceFactory } from './serviceBasedModels/services.js';
+import { ServiceableFactory } from './serviceBasedModels/serviceables.js';
+import { UserTypeFactory } from './serviceBasedModels/userTypes.js';
+import { DwellingAdjustmentFactory } from './serviceBasedModels/dwellingAdjustments.js';
+import { AdditionalServiceFactory } from './serviceBasedModels/additionalServices.js';
+import { AvailabilityOptionFactory } from './serviceBasedModels/availabilityOptions.js';
 // Participants
-import { UserTypeFactory } from './participantModels/userTypes.js';
 import { UserFactory } from './participantModels/Users.js';
 import { LoginFactory } from './participantModels/Logins.js';
-// Appointment Structure
+// Appointment Parts
 import { AppointmentPartTypeFactory } from './appointmentModels/structureModels/appointmentPartTypes.js';
 import { AppointmentPartFactory } from './appointmentModels/structureModels/appointmentParts.js';
 import { DwellingTypeFactory } from './appointmentModels/structureModels/dwellingTypes.js';
 import { TimeBlockSetFactory } from './appointmentModels/structureModels/timeBlockSets.js';
 import { UIDescriptionFactory } from './appointmentModels/structureModels/uIDescriptions.js';
-// Appointment Content
-import { ServiceFactory } from './appointmentModels/contentModels/services.js';
-import { AdditionalServiceFactory } from './appointmentModels/contentModels/additionalServices.js';
-import { AvailabilityOptionFactory } from './appointmentModels/contentModels/availabilityOptions.js';
-import { DwellingAdjustmentFactory } from './appointmentModels/contentModels/dwellingAdjustments.js';
 
-// Participants
+// Appointment Content
+const Service = ServiceFactory(sequelize);
+const Serviceable = ServiceableFactory(sequelize);
 const UserType = UserTypeFactory(sequelize);
+const DwellingAdjustment = DwellingAdjustmentFactory(sequelize);
+const AdditionalService = AdditionalServiceFactory(sequelize);
+const AvailabilityOption = AvailabilityOptionFactory(sequelize);
+// Participants
 const Login = LoginFactory(sequelize);
 const User = UserFactory(sequelize);
-// Appointment Structure
+// Appointment Parts
 const AppointmentPartType = AppointmentPartTypeFactory(sequelize);
 const AppointmentPart = AppointmentPartFactory(sequelize);
 const DwellingType = DwellingTypeFactory(sequelize);
 const TimeBlockSet = TimeBlockSetFactory(sequelize);
 const UIDescription = UIDescriptionFactory(sequelize);
-// Appointment Content
-const Service = ServiceFactory(sequelize);
-const AdditionalService = AdditionalServiceFactory(sequelize);
-const AvailabilityOption = AvailabilityOptionFactory(sequelize);
-const DwellingAdjustment = DwellingAdjustmentFactory(sequelize);
 
 
-//USERTYPE Parent-Child RELATIONSHIPS
-//FROM Services m2m
-UserType.belongsToMany(Service, { through: 'UserTypeService' });
+// //USERTYPE Parent-Child RELATIONSHIPS
+// //FROM Services m2m
+// UserType.belongsToMany(Service, { through: 'UserTypeService' });
 
-//TO Services m2m
-Service.belongsToMany(UserType, { through: 'UserTypeService' });
+// //TO Services m2m
+// Service.belongsToMany(UserType, { through: 'UserTypeService' });
 
 
-//Service Parent-Child RELATIONSHIPS
-//TO AdditionalServices m2m
-Service.belongsToMany(AdditionalService, { through: 'ServiceAdditionalService' });
+// //Service Parent-Child RELATIONSHIPS
+// //TO AdditionalServices m2m
+// Service.belongsToMany(AdditionalService, { through: 'ServiceAdditionalService' });
 
-//FROM AdditionalServices m2m
-AdditionalService.belongsToMany(Service, { through: 'ServiceAdditionalService' });
+// //FROM AdditionalServices m2m
+// AdditionalService.belongsToMany(Service, { through: 'ServiceAdditionalService' });
 
-//TO AvailabilityOptions m2m
-Service.belongsToMany(AvailabilityOption, { through: 'ServiceAvailabilityOption' });
+// //TO AvailabilityOptions m2m
+// Service.belongsToMany(AvailabilityOption, { through: 'ServiceAvailabilityOption' });
 
-//FROM AvailabilityOptions m2m
-AvailabilityOption.belongsToMany(Service, { through: 'ServiceAvailabilityOption' });
+// //FROM AvailabilityOptions m2m
+// AvailabilityOption.belongsToMany(Service, { through: 'ServiceAvailabilityOption' });
 
-//TO AdditionalServices m2m
-Service.belongsToMany(DwellingAdjustment, { through: 'ServiceDwellingAdjustment' });
+// //TO AdditionalServices m2m
+// Service.belongsToMany(DwellingAdjustment, { through: 'ServiceDwellingAdjustment' });
 
-//FROM DwellingAdjustments m2m
-DwellingAdjustment.belongsToMany(Service, { through: 'ServiceDwellingAdjustment' });
+// //FROM DwellingAdjustments m2m
+// DwellingAdjustment.belongsToMany(Service, { through: 'ServiceDwellingAdjustment' });
+
+// From the sequelize refence "applying scopes on the target model"
+//  UserType.belongsToMany(Service, {
+//   through: {
+//     model: Serviceable,
+//     unique: false,
+//     scope: {
+//       ServiceableType: 'UserType',
+//     },
+//   },
+//   scope: {
+//     status: 'pending',
+//   },
+//   as: 'pendingServices',
+//   foreignKey: 'ServiceableId',
+//   constraints: false,
+// });
+
+UserType.belongsToMany(Service, {
+  through: {
+    model: Serviceable,
+    unique: false,
+    scope: {
+      ServiceableType: 'userType',
+    },
+  },
+  foreignKey: 'ServiceableId',
+  constraints: false,
+});
+Service.belongsToMany(UserType, {
+  through: {
+    model: Serviceable,
+    unique: false,
+  },
+  foreignKey: 'ServiceId',
+  constraints: false,
+});
+
+AdditionalService.belongsToMany(Service, {
+  through: {
+    model: Serviceable,
+    unique: false,
+    scope: {
+      ServiceableType: 'additionalService',
+    },
+  },
+  foreignKey: 'ServiceableId',
+  constraints: false,
+});
+Service.belongsToMany(AdditionalService, {
+  through: {
+    model: Serviceable,
+    unique: false,
+  },
+  foreignKey: 'ServiceId',
+  constraints: false,
+});
+
+AvailabilityOption.belongsToMany(Service, {
+  through: {
+    model: Serviceable,
+    unique: false,
+    scope: {
+      ServiceableType: 'availabilityOption',
+    },
+  },
+  foreignKey: 'ServiceableId',
+  constraints: false,
+});
+Service.belongsToMany(AvailabilityOption, {
+  through: {
+    model: Serviceable,
+    unique: false,
+  },
+  foreignKey: 'ServiceId',
+  constraints: false,
+});
+
+DwellingAdjustment.belongsToMany(Service, {
+  through: {
+    model: Serviceable,
+    unique: false,
+    scope: {
+      ServiceableType: 'dwellingAdjustment',
+    },
+  },
+  foreignKey: 'ServiceableId',
+  constraints: false,
+});
+Service.belongsToMany(DwellingAdjustment, {
+  through: {
+    model: Serviceable,
+    unique: false,
+  },
+  foreignKey: 'ServiceId',
+  constraints: false,
+});
 
 
 
@@ -231,17 +330,17 @@ AppointmentPart.belongsToMany(AdditionalService, {
 });
 
 export { 
+  Service,
+  Serviceable,
+  UserType, 
+  DwellingAdjustment, 
   AdditionalService, 
+  AvailabilityOption, 
   AppointmentPartType, 
   AppointmentPart, 
-  AvailabilityOption, 
   DwellingType, 
-  DwellingAdjustment, 
-  Service, 
   TimeBlockSet, 
   UIDescription, 
-  UserType
-  , 
   User, 
   Login 
 };

@@ -1,15 +1,15 @@
 import {
   Model,
   DataTypes,
-  type InferAttributes,
-  type InferCreationAttributes,
-  type CreationOptional,
-  // type ForeignKey,
-  type BelongsToManyAddAssociationMixin,
-  type Sequelize,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+  // ForeignKey,
+  BelongsToManyAddAssociationMixin,
+  Sequelize,
 } from 'sequelize';
 
-import type { Service } from './services';
+import type { Service } from './services.js';
 
 export class DwellingAdjustment extends Model<
   InferAttributes<DwellingAdjustment>,

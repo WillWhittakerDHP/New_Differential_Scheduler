@@ -1,19 +1,19 @@
 import {
   Model,
   DataTypes,
-  type InferAttributes,
-  type InferCreationAttributes,
-  type CreationOptional,
-  // type ForeignKey,
-  type BelongsToManyAddAssociationMixin,
-  type Sequelize,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+  // ForeignKey,
+  BelongsToManyAddAssociationMixin,
+  Sequelize,
 } from 'sequelize';
 
-import type { Service } from './services';
+import { Service } from './services.js';
 
-export class AvailabilityOption extends Model<
-  InferAttributes<AvailabilityOption>,
-  InferCreationAttributes<AvailabilityOption>
+export class AdditionalService extends Model<
+  InferAttributes<AdditionalService>,
+  InferCreationAttributes<AdditionalService>
 > {
   declare id: CreationOptional<number>;
   declare name: string;
@@ -28,8 +28,8 @@ export class AvailabilityOption extends Model<
   >;
 }
 
-export function AvailabilityOptionFactory(sequelize: Sequelize) {
-  AvailabilityOption.init(
+export function AdditionalServiceFactory(sequelize: Sequelize) {
+  AdditionalService.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -57,9 +57,9 @@ export function AvailabilityOptionFactory(sequelize: Sequelize) {
       sequelize,
       timestamps: false,
       underscored: true,
-      modelName: 'availability_options',
+      modelName: 'additional_services',
     }
   );
 
-  return AvailabilityOption;
+  return AdditionalService;
 }

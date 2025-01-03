@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { DwellingAdjustment } from '../../../../models/appointmentModels/contentModels/dwellingAdjustments.js';
+import { DwellingAdjustment } from '../../../../models/serviceBasedModels/dwellingAdjustments.js';
 
 // GET DwellingAdjustments available to DwellingAdjustments through the UI
 export const getAllVisibleDwellingAdjustments = async (_req: Request, res: Response) => {

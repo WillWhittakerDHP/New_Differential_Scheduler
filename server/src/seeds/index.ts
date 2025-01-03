@@ -1,5 +1,5 @@
 import { sequelize } from '../config/connection.js';
-import { seedUserTypesandServices } from './userTypeAndAppointmentContentSeeds.js';
+import { seedServices } from './SeedServices.js';
 // import { seedUIDescriptions } from './appointmentSeeds/structureSeeds/UIDescriptionSeedData.js';
 // import { seedDwellingTypes } from './appointmentSeeds/structureSeeds/DwellingTypesSeedData.js';
 // import { seedTimeBlockSets } from './appointmentSeeds/structureSeeds/TimeBlockSetsSeedData.js';
@@ -18,7 +18,7 @@ import { seedUserTypesandServices } from './userTypeAndAppointmentContentSeeds.j
       console.log('\n----- DATABASE SYNCED -----\n');
       
       console.log('\n----- Seeding database ... -----\n');
-      await seedUserTypesandServices();
+      await seedServices();
       // await seedUIDescriptions();
       // await seedDwellingTypes();
       // await seedTimeBlockSets();

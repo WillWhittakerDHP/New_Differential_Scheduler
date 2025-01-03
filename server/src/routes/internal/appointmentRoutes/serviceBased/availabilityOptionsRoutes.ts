@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { AvailabilityOption } from '../../../../models/appointmentModels/contentModels/availabilityOptions.js';
+import { AvailabilityOption } from '../../../../models/serviceBasedModels/availabilityOptions.js';
 
 // GET AvailabilityOptions available to AvailabilityOptions through the UI
 export const getAllVisibleAvailabilityOptions = async (_req: Request, res: Response) => {

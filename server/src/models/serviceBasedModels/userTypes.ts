@@ -9,17 +9,17 @@ import {
   type Sequelize,
 } from 'sequelize';
 
-import type { Service } from './services';
+import type { Service } from './services.js';
 
-export class AdditionalService extends Model<
-  InferAttributes<AdditionalService>,
-  InferCreationAttributes<AdditionalService>
+export class UserType extends Model<
+  InferAttributes<UserType>,
+  InferCreationAttributes<UserType>
 > {
   declare id: CreationOptional<number>;
   declare name: string;
-  declare differential_scheduling: boolean;
-  declare visibility: boolean;
+  declare icon: string;
   declare description: string;
+  declare visibility: boolean;
 
   declare addService: BelongsToManyAddAssociationMixin<Service, Service['id']>;
   declare addServices: BelongsToManyAddAssociationMixin<
@@ -28,8 +28,8 @@ export class AdditionalService extends Model<
   >;
 }
 
-export function AdditionalServiceFactory(sequelize: Sequelize) {
-  AdditionalService.init(
+export function UserTypeFactory(sequelize: Sequelize) {
+  UserType.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -40,8 +40,8 @@ export function AdditionalServiceFactory(sequelize: Sequelize) {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      differential_scheduling: {
-        type: DataTypes.BOOLEAN,
+      icon: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
       description: {
@@ -57,9 +57,9 @@ export function AdditionalServiceFactory(sequelize: Sequelize) {
       sequelize,
       timestamps: false,
       underscored: true,
-      modelName: 'additional_services',
+      modelName: 'user_types',
     }
   );
 
-  return AdditionalService;
+  return UserType;
 }

@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { ContentApiRouter } from './contentRoutes/index.js';
+import { ServiceApiRouter } from './serviceBased/index.js';
 import { StructureApiRouter } from './structureRoutes/index.js';
 
 
 const router = Router();
 
-router.use('/content', ContentApiRouter);
+router.use('/service', ServiceApiRouter);
 router.use('/structure', StructureApiRouter);
 
 

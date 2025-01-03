@@ -1,36 +1,35 @@
 import {
   Model,
   DataTypes,
-  type InferAttributes,
-  type InferCreationAttributes,
-  type CreationOptional,
-  // type ForeignKey,
-  type BelongsToManyAddAssociationMixin,
-  type Sequelize,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+  // ForeignKey,
+  BelongsToManyAddAssociationMixin,
+  Sequelize,
 } from 'sequelize';
 
-import type { Service } from '../appointmentModels/contentModels/services';
+import { Service } from './services.js';
 
-export class UserType extends Model<
-  InferAttributes<UserType>,
-  InferCreationAttributes<UserType>
+export class AvailabilityOption extends Model<
+  InferAttributes<AvailabilityOption>,
+  InferCreationAttributes<AvailabilityOption>
 > {
   declare id: CreationOptional<number>;
   declare name: string;
-  declare icon: string;
-  declare description: string;
+  declare differential_scheduling: boolean;
   declare visibility: boolean;
+  declare description: string;
 
   declare addService: BelongsToManyAddAssociationMixin<Service, Service['id']>;
   declare addServices: BelongsToManyAddAssociationMixin<
     Service[],
     Service['id'][]
   >;
-
 }
 
-export function UserTypeFactory(sequelize: Sequelize) {
-  UserType.init(
+export function AvailabilityOptionFactory(sequelize: Sequelize) {
+  AvailabilityOption.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -41,8 +40,8 @@ export function UserTypeFactory(sequelize: Sequelize) {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      icon: {
-        type: DataTypes.STRING,
+      differential_scheduling: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
       },
       description: {
@@ -58,9 +57,9 @@ export function UserTypeFactory(sequelize: Sequelize) {
       sequelize,
       timestamps: false,
       underscored: true,
-      modelName: 'user_types',
+      modelName: 'availability_options',
     }
   );
 
-  return UserType;
+  return AvailabilityOption;
 }
