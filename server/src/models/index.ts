@@ -11,7 +11,7 @@ import { DwellingTypeFactory } from './appointmentModels/structureModels/dwellin
 import { TimeBlockSetFactory } from './appointmentModels/structureModels/timeBlockSets.js';
 import { UIDescriptionFactory } from './appointmentModels/structureModels/uIDescriptions.js';
 // Appointment Content
-import { ServiceFactory } from './appointmentModels/contentModels/service.js';
+import { ServiceFactory } from './appointmentModels/contentModels/services.js';
 import { AdditionalServiceFactory } from './appointmentModels/contentModels/additionalServices.js';
 import { AvailabilityOptionFactory } from './appointmentModels/contentModels/availabilityOptions.js';
 import { DwellingAdjustmentFactory } from './appointmentModels/contentModels/dwellingAdjustments.js';

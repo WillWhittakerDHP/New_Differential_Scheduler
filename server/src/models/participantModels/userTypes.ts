@@ -9,14 +9,14 @@ import {
   type Sequelize,
 } from 'sequelize';
 
-import type { Service } from '../appointmentModels/contentModels/service';
+import type { Service } from '../appointmentModels/contentModels/services';
 
 export class UserType extends Model<
   InferAttributes<UserType>,
   InferCreationAttributes<UserType>
 > {
   declare id: CreationOptional<number>;
-  declare type: string;
+  declare name: string;
   declare icon: string;
   declare description: string;
   declare visibility: boolean;
@@ -26,6 +26,7 @@ export class UserType extends Model<
     Service[],
     Service['id'][]
   >;
+
 }
 
 export function UserTypeFactory(sequelize: Sequelize) {
@@ -36,7 +37,7 @@ export function UserTypeFactory(sequelize: Sequelize) {
         primaryKey: true,
         autoIncrement: true,
       },
-      type: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
       },

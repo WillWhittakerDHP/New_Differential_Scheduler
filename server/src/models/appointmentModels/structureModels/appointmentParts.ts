@@ -4,10 +4,10 @@ import { Model, DataTypes,
   type InferCreationAttributes,
   type CreationOptional,
   type ForeignKey,
-  type BelongsToManyAddAssociationMixin,
+  // type BelongsToManyAddAssociationMixin,
   type Sequelize } from 'sequelize';
   
-import { AvailabilityOption } from '../contentModels/availabilityOptions';
+// import { AvailabilityOption } from '../contentModels/availabilityOptions';
 import { TimeBlockSet } from './timeBlockSets';
 import { AppointmentPartType } from './appointmentPartTypes';
 
@@ -20,11 +20,11 @@ export class AppointmentPart extends Model<
   declare on_site: boolean;
   declare time_block_set_id: ForeignKey<TimeBlockSet['time_block_set_id']>;
   
-  declare addAvailabilityOption: BelongsToManyAddAssociationMixin<AvailabilityOption, AvailabilityOption['availability_option_id']>;
-  declare addAvailabilityOptions: BelongsToManyAddAssociationMixin<
-  AvailabilityOption[],
-  AvailabilityOption['availability_option_id'][]
-  >;
+  // declare addAvailabilityOption: BelongsToManyAddAssociationMixin<AvailabilityOption, AvailabilityOption['id']>;
+  // declare addAvailabilityOptions: BelongsToManyAddAssociationMixin<
+  // AvailabilityOption[],
+  // AvailabilityOption['id'][]
+  // >;
 }
 
 export function AppointmentPartFactory(sequelize: Sequelize): typeof AppointmentPart {

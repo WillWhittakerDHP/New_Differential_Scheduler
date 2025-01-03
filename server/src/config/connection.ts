@@ -19,7 +19,33 @@ const sequelize = process.env.DB_URL
       dialectOptions: {
         decimalNumbers: true,  // Ensure decimal numbers are handled correctly
       },
+      schema: 'public',
     });
+
+// async function testConnection() {
+//   try {
+//     await sequelize.authenticate();
+//     console.log('PostgreSQL connection successful');
+//   } catch (error) {
+//     console.error('Unable to connect to the database:', error);
+//   }
+// }
+
+// (async () => {
+//   try {
+    
+//     const dbName = await sequelize.getDatabaseName();
+//     const [results] = await sequelize.query(
+//       "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';"
+//     );
+//     console.log('Connected to', dbName, '. The following tables are public:', results);
+//   } catch (error) {
+//     console.error('Error:', error);
+//   }
+// })();
+
+// testConnection();
+
 
 const oauth2Client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID!,
@@ -50,7 +76,9 @@ export async function getTokens(code: string) {
 
 const calendarOAuth = oauth2Client;
 
-export { sequelize
-  , calendarOAuth 
+export { 
+  sequelize
+  ,
+  calendarOAuth 
 };
 

@@ -9,7 +9,7 @@ import {
   type Sequelize,
 } from 'sequelize';
 
-import type { Service } from './service';
+import type { Service } from './services';
 
 export class DwellingAdjustment extends Model<
   InferAttributes<DwellingAdjustment>,

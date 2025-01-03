@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { Service } from '../../../../models/appointmentModels/contentModels/service.js';
+import { Service } from '../../../../models/appointmentModels/contentModels/services.js';
 
 // GET Services available to Services through the UI
 export const getAllVisibleServices = async (_req: Request, res: Response) => {

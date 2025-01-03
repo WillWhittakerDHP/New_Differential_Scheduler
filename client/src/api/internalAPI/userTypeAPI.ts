@@ -2,7 +2,7 @@ import { UserTypeData } from "../../interfaces/appointmentInterfaces";
 
 const retrieveAllVisibleUserTypes = async () => {
   try {
-    const response = await fetch('/internal/participants/userTypes/visibleUsers', {
+    const response = await fetch('/internal/participants/userTypes/', {
       headers: {
         'Content-Type': 'application/json',
       }

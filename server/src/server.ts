@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const forceDatabaseRefresh = false;
+const forceDatabaseRefresh = true;
 
 // Use the calendarRouter for routes starting with '/calendar'
 app.use(express.json());
@@ -16,11 +16,6 @@ app.use(routes);
 // Serves static files in the entire client's dist folder
 app.use(express.static('../client/dist'));
 
-// Your server's listening port
-
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
 
 sequelize.sync({ force: forceDatabaseRefresh }).then(() => {
   app.listen(PORT, () => {

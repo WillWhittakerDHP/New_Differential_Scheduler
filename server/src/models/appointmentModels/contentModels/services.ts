@@ -12,6 +12,7 @@ import {
 import { UserType } from '../../participantModels/userTypes';
 import { AdditionalService } from './additionalServices';
 import { AvailabilityOption } from './availabilityOptions';
+import { DwellingAdjustment } from './dwellingAdjustments';
 
 export class Service extends Model<
   InferAttributes<Service>,
@@ -40,6 +41,12 @@ export class Service extends Model<
     UserType[],
     UserType['id'][]
   >;
+
+  declare addDwellingAdjustment: BelongsToManyAddAssociationMixin<DwellingAdjustment, DwellingAdjustment['id']>;
+  declare addDwellingAdjustments: BelongsToManyAddAssociationMixin<
+    UserType[],
+    UserType['id'][]
+  >;
 }
 
 export function ServiceFactory(sequelize: Sequelize) {
@@ -58,18 +65,20 @@ export function ServiceFactory(sequelize: Sequelize) {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       visibility: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-      },
-      description: {
-        type: DataTypes.STRING,
       },
     },
     {
       sequelize,
       timestamps: false,
       underscored: true,
+      schema: 'public',
       modelName: 'services',
     }
   );

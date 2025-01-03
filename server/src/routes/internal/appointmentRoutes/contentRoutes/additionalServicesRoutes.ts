@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { AdditionalService } from '../../../../models/appointmentModels/contentModels/additionalServices';
+import { AdditionalService } from '../../../../models/appointmentModels/contentModels/additionalServices.js';
 
 // GET AdditionalServices available to AdditionalServices through the UI
 export const getAllVisibleAdditionalServices = async (_req: Request, res: Response) => {

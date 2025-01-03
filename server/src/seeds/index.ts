@@ -1,5 +1,5 @@
 import { sequelize } from '../config/connection.js';
-import { seedUserTypesandServices } from './participantSeeds/userTypesSeedData.js';
+import { seedUserTypesandServices } from './userTypeAndAppointmentContentSeeds.js';
 // import { seedUIDescriptions } from './appointmentSeeds/structureSeeds/UIDescriptionSeedData.js';
 // import { seedDwellingTypes } from './appointmentSeeds/structureSeeds/DwellingTypesSeedData.js';
 // import { seedTimeBlockSets } from './appointmentSeeds/structureSeeds/TimeBlockSetsSeedData.js';

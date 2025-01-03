@@ -1,0 +1,22 @@
+[
+  { "name": "condo",
+    "visibility": true,
+    "description": "something about condos"
+  },
+  { "name": "co-op",
+    "visibility": true,
+    "description": "something about co-ops"
+  }, 
+  { "name": "town-house",
+    "visibility": true,
+    "description": "something about townhouses"
+  }, 
+  { "name": "single family home",
+    "visibility": true,
+    "description": "something about sfhs"
+  }, 
+  { "name": "multi-family home",
+    "visibility": true,
+    "description": "something about mfhs"
+  }
+]

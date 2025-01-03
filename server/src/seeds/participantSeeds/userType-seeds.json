@@ -1,24 +1,24 @@
 [
   { 
-    "type": "Buyer", 
+    "name": "Buyer", 
     "visibility": true, 
     "icon": "buyerIcon", 
     "description": "I need an inspection to help me understand a property that I am trying to buy"
   }, 
   {
-    "type": "Agent", 
+    "name": "Agent", 
     "visibility": true, 
     "icon": "agentIcon", 
     "description": "I am a real estate agent helping a buyer with their inspection needs"
   }, 
   {
-    "type": "Owner", 
+    "name": "Owner", 
     "visibility": true, 
     "icon": "ownerIcon", 
     "description": "I already own a property but need to understand it better"
   },
   {
-    "type": "Inspector", 
+    "name": "Inspector", 
     "visibility": false, 
     "icon": "inspectorIcon", 
     "description": "This is me!"

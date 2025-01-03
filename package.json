@@ -20,9 +20,12 @@
     "render-build": "npm install && npm run build"
   },
   "dependencies": {
+    "@sequelize/core": "^7.0.0-alpha.43",
     "gapi-script": "^1.2.0",
     "googleapis": "^144.0.0",
-    "nvm": "^0.0.4"
+    "nvm": "^0.0.4",
+    "pg": "^8.13.1",
+    "pg-hstore": "^2.3.4"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

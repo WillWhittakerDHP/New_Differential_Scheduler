@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Minimize Time On-site", 
+    "visibility": true,
+    "description": "stuff about this service", 
+    "differential_scheduling": true
+  },
+  {
+    "name": "Additional Client Time",
+    "visibility": true,
+    "description": "stuff about this service", 
+    "differential_scheduling": true
+  },
+  {
+    "name": "Client will not be present", 
+    "visibility": true,
+    "description": "stuff about this service", 
+    "differential_scheduling": true
+  },
+  {
+    "name": "First-time buyers", 
+    "visibility": true,
+    "description": "stuff about this service", 
+    "differential_scheduling": true
+  }
+]
