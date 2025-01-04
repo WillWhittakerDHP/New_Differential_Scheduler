@@ -14,4 +14,4 @@ router.use('/timeBlockSets', TimeBlockSetsRouter);
 router.use('/uiDescriptions', UIDescriptionsRouter);
 
 
-export { router as StructureApiRouter };
+export { router as DetailsRouter };

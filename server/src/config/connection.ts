@@ -1,4 +1,4 @@
-import { OAuth2Client } from 'google-auth-library';
+// import { OAuth2Client } from 'google-auth-library';
 import dotenv from 'dotenv';
 import { Sequelize } from 'sequelize';
 
@@ -20,65 +20,42 @@ const sequelize = process.env.DB_URL
         decimalNumbers: true,  // Ensure decimal numbers are handled correctly
       },
       schema: 'public',
+      logging: console.log
     });
 
-// async function testConnection() {
-//   try {
-//     await sequelize.authenticate();
-//     console.log('PostgreSQL connection successful');
-//   } catch (error) {
-//     console.error('Unable to connect to the database:', error);
-//   }
+
+// const oauth2Client = new OAuth2Client(
+//   process.env.GOOGLE_CLIENT_ID!,
+//   process.env.GOOGLE_CLIENT_SECRET!,
+//   process.env.GOOGLE_REDIRECT_URI!
+// );  
+
+// // Function to get the authorization URL
+// export function getAuthUrl() {
+//   return oauth2Client.generateAuthUrl({
+//     access_type: 'offline',
+//     scope: 'https://www.googleapis.com/auth/calendar',
+//   });
 // }
 
-// (async () => {
-//   try {
-    
-//     const dbName = await sequelize.getDatabaseName();
-//     const [results] = await sequelize.query(
-//       "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';"
-//     );
-//     console.log('Connected to', dbName, '. The following tables are public:', results);
-//   } catch (error) {
-//     console.error('Error:', error);
-//   }
-// })();
+// // Function to set credentials (after obtaining them from OAuth flow)
+// export function setCredentials(tokens: any) {
+//   oauth2Client.setCredentials(tokens);
+// }
 
-// testConnection();
+// // Function to exchange the authorization code for tokens
+// export async function getTokens(code: string) {
+//   const { tokens } = await oauth2Client.getToken(code);
+//   setCredentials(tokens);
+//   console.log(tokens);
+//   return tokens;
+// }
 
-
-const oauth2Client = new OAuth2Client(
-  process.env.GOOGLE_CLIENT_ID!,
-  process.env.GOOGLE_CLIENT_SECRET!,
-  process.env.GOOGLE_REDIRECT_URI!
-);  
-
-// Function to get the authorization URL
-export function getAuthUrl() {
-  return oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: 'https://www.googleapis.com/auth/calendar',
-  });
-}
-
-// Function to set credentials (after obtaining them from OAuth flow)
-export function setCredentials(tokens: any) {
-  oauth2Client.setCredentials(tokens);
-}
-
-// Function to exchange the authorization code for tokens
-export async function getTokens(code: string) {
-  const { tokens } = await oauth2Client.getToken(code);
-  setCredentials(tokens);
-  console.log(tokens);
-  return tokens;
-}
-
-const calendarOAuth = oauth2Client;
+// const calendarOAuth = oauth2Client;
 
 export { 
   sequelize
-  ,
-  calendarOAuth 
+  // ,
+  // calendarOAuth 
 };
 

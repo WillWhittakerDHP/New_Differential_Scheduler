@@ -4,8 +4,8 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
-  // ForeignKey,
   BelongsToManyAddAssociationMixin,
+  // BelongsToManyGetAssociationsMixin,
   Sequelize,
 } from 'sequelize';
 
@@ -20,6 +20,9 @@ export class AvailabilityOption extends Model<
   declare differential_scheduling: boolean;
   declare visibility: boolean;
   declare description: string;
+
+  // declare getService: BelongsToManyGetAssociationsMixin<Service>;
+  // declare getServices: BelongsToManyGetAssociationsMixin<Service[]>;
 
   declare addService: BelongsToManyAddAssociationMixin<Service, Service['id']>;
   declare addServices: BelongsToManyAddAssociationMixin<
@@ -57,7 +60,10 @@ export function AvailabilityOptionFactory(sequelize: Sequelize) {
       sequelize,
       timestamps: false,
       underscored: true,
+      schema: 'public',
       modelName: 'availability_options',
+      tableName: 'availability_options',
+      freezeTableName: true,
     }
   );
 

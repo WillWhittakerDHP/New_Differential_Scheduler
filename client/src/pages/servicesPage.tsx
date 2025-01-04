@@ -2,22 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Form, ProgressBar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'; 
 
-import type { UserTypeData, ServiceData, AdditionalServiceData, AvailabilityOptionData, DwellingAdjustmentData } from '../interfaces/appointmentInterfaces';
-import { retrieveAllVisibleUserTypes, retrieveUserTypeDataByIDForAssociatedServices } from '../api/internalAPI/userTypeAPI';
-import { retrieveServiceDataByIDForAssociatedAdditionalServices, retrieveServiceDataByIDForAssociatedAvailabilityOptions, retrieveServiceDataByIDForAssociatedDwellingAdjustments, retrieveServiceDataByID, retrieveAdditionalServiceDataByID, retrieveAvailabilityOptionDataByID, retrieveDwellingAdjustmentDataByID } from '../api/internalAPI/contentAPI';
+import type { UserTypeData, ServiceData, AdditionalServiceData, AvailabilityOptionData, DwellingAdjustmentData } from '../interfaces/serviceInterfaces';
+import { retrieveAllVisibleUserTypes, 
+  retrieveServicesForUserTypeByID, 
+  // retrieveServiceByID, 
+  retrieveDwellingAdjustmentsForServiceByID, 
+  // retrieveDwellingAdjustmentDataByID, 
+  retrieveAdditionalServicesForServiceByID, 
+  // retrieveAdditionalServiceDataByID, 
+  retrieveAvailabilityOptionsForServiceByID, 
+  // retrieveAvailabilityOptionDataByID 
+} from '../api/internalAPI/structureAPI';
 
 const ServicesPage: React.FC = () => {
   
   // Prompt Users to Select their type
   const [userTypes, setUserTypes] = useState<UserTypeData[]>([]);
   
-  const fetchAllVisibleUserTypes = async () => {
+  const fetchAllVisibleUserTypeServices = async () => {
     const data = await retrieveAllVisibleUserTypes();
     setUserTypes(data);
   }
   
   useEffect (() => {
-    fetchAllVisibleUserTypes();
+    fetchAllVisibleUserTypeServices();
   }, []);
   
   const [thisUserType, setThisUserType] = useState<UserTypeData | undefined>();
@@ -29,17 +37,17 @@ const ServicesPage: React.FC = () => {
   //Populate the services based on the Selected User Type
     const [services, setServices] = useState<ServiceData[]>([]);
     
-    const fetchUserTypeData = async () => {
+    const fetchUserTypeServicesByID = async () => {
       if (thisUserType !== undefined) {
-        const data = await retrieveUserTypeDataByIDForAssociatedServices(thisUserType.id);
-        const availableServices: ServiceData[] = JSON.parse(JSON.stringify(data.Services));
+        const data = await retrieveServicesForUserTypeByID(thisUserType.id);
+        const availableServices: ServiceData[] = JSON.parse(JSON.stringify(data));
         setServices(availableServices);
       }
     }    
     
     useEffect (() => { 
     if (thisUserType){
-      fetchUserTypeData();
+      fetchUserTypeServicesByID();
     }}, [thisUserType]);
   
     
@@ -54,8 +62,8 @@ const ServicesPage: React.FC = () => {
   
   const fetchServiceDataByIDForAssociatedAdditionalServices = async () => {
     if (thisService !== undefined) {
-      const data = await retrieveServiceDataByIDForAssociatedAdditionalServices(thisService.id);
-      const availableAdditionalServices: AdditionalServiceData[] = JSON.parse(JSON.stringify(data.AdditionalServices));
+      const data = await retrieveAdditionalServicesForServiceByID(thisService.id);
+      const availableAdditionalServices: AdditionalServiceData[] = JSON.parse(JSON.stringify(data));
       setAdditionalServices(availableAdditionalServices);
     }
   }    
@@ -75,8 +83,8 @@ const ServicesPage: React.FC = () => {
   
   const fetchServiceDataByIDForAssociatedAvailabilityOptions = async () => {
     if (thisService !== undefined) {
-      const data = await retrieveServiceDataByIDForAssociatedAvailabilityOptions(thisService.id);
-      const availableAvailabilityOptions: AvailabilityOptionData[] = JSON.parse(JSON.stringify(data.AvailabilityOptions));
+      const data = await retrieveAvailabilityOptionsForServiceByID(thisService.id);
+      const availableAvailabilityOptions: AvailabilityOptionData[] = JSON.parse(JSON.stringify(data));
       setAvailabilityOptions(availableAvailabilityOptions);
     }
   }    
@@ -97,7 +105,7 @@ const ServicesPage: React.FC = () => {
   
   const fetchServiceDataByIDForAssociatedDwellingAdjustments = async () => {
     if (thisService !== undefined) {
-      const data = await retrieveServiceDataByIDForAssociatedDwellingAdjustments(thisService.id);
+      const data = await retrieveDwellingAdjustmentsForServiceByID(thisService.id);
       const availableDwellingAdjustments: DwellingAdjustmentData[] = JSON.parse(JSON.stringify(data.DwellingAdjustments));
       setDwellingAdjustments(availableDwellingAdjustments);
     }
@@ -140,7 +148,7 @@ return (
           >
             {/* <Card.Body> */}
               {/* <div style={{ fontSize: '2rem' }}>{user.icon}</div> */}
-              <Card.Title>{user.type}</Card.Title>
+              <Card.Title>{user.name}</Card.Title>
               <Card.Text>{user.description}</Card.Text>
             {/* </Card.Body> */}
           </Card>

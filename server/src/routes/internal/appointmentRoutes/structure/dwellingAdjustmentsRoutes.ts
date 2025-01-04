@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { DwellingAdjustment } from '../../../../models/serviceBasedModels/dwellingAdjustments.js';
+import { DwellingAdjustment } from '../../../../models/index.js';
 
 // GET DwellingAdjustments available to DwellingAdjustments through the UI
 export const getAllVisibleDwellingAdjustments = async (_req: Request, res: Response) => {
@@ -26,7 +26,7 @@ export const getDwellingAdjustmentbyId = async (req: Request, res: Response) => 
   try {
     const DwellingAdjustmentData = await DwellingAdjustment.findByPk(id,{
       include: [{ 
-        association: 'dwelling_adjustments',
+        // association: 'DwellingAdjustments',
         order: ['id'],
         where: {
           visibility: true,

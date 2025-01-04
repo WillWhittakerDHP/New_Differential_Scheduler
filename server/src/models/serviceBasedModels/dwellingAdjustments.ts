@@ -4,8 +4,8 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
-  // ForeignKey,
   BelongsToManyAddAssociationMixin,
+  // BelongsToManyGetAssociationsMixin,
   Sequelize,
 } from 'sequelize';
 
@@ -19,6 +19,9 @@ export class DwellingAdjustment extends Model<
   declare name: string;
   declare visibility: boolean;
   declare description: string;
+
+  // declare getService: BelongsToManyGetAssociationsMixin<Service>;
+  // declare getServices: BelongsToManyGetAssociationsMixin<Service[]>;
 
   declare addService: BelongsToManyAddAssociationMixin<Service, Service['id']>;
   declare addServices: BelongsToManyAddAssociationMixin<
@@ -52,7 +55,10 @@ export function DwellingAdjustmentFactory(sequelize: Sequelize) {
       sequelize,
       timestamps: false,
       underscored: true,
+      schema: 'public',
       modelName: 'dwelling_adjustments',
+      tableName: 'dwelling_adjustments',
+      freezeTableName: true,
     }
   );
 

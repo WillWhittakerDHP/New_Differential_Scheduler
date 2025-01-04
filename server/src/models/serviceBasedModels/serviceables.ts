@@ -1,34 +1,58 @@
 import {
   Model,
   DataTypes,
-  type InferAttributes,
-  type InferCreationAttributes,
-  // type CreationOptional,
-  type Sequelize,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+  // ForeignKey,
+  // BelongsToManyAddAssociationMixin,
+  // BelongsToManyGetAssociationsMixin,
+  // BelongsToManyGetAssociationsMixinOptions,
+  Sequelize,
 } from 'sequelize';
 
 export class Serviceable extends Model<
 InferAttributes<Serviceable>,
 InferCreationAttributes<Serviceable>
 >  {
-  declare ServiceId: number;
-  declare ServiceableId: number;
-  declare ServiceableType: string;
+  declare id: CreationOptional<number>;
+  declare service_id: number;
+  declare serviceable_type: string;
+
+  // declare getPrimaryServiceable: BelongsToManyGetAssociationsMixin<Serviceable>;
+  // declare getPrimaryServiceables: BelongsToManyGetAssociationsMixin<Serviceable[]>;
+  
+  // declare addPrimaryServiceable: BelongsToManyAddAssociationMixin<Serviceable, Serviceable['id']>;
+  // declare addPrimaryServiceables: BelongsToManyAddAssociationMixin<
+  // Serviceable[],
+  // Serviceable['id'][]
+  // >;
+
+  // declare getSecondaryServiceable: BelongsToManyGetAssociationsMixin<Serviceable>;
+  // declare getSecondaryServiceables: BelongsToManyGetAssociationsMixin<Serviceable[]>;
+  
+  // declare addSecondaryServiceable: BelongsToManyAddAssociationMixin<Serviceable, Serviceable['id']>;
+  // declare addSecondaryServiceables: BelongsToManyAddAssociationMixin<
+  // Serviceable[],
+  // Serviceable['id'][]
+  // >;
   }
 
 export function ServiceableFactory(sequelize: Sequelize) {
   Serviceable.init(
     {
-      ServiceId: {
+      id: {
         type: DataTypes.INTEGER,
         unique: 'ss_unique_constraint',
-      },
-      ServiceableId: {
-        type: DataTypes.INTEGER,
-        unique: 'ss_unique_constraint',
+        primaryKey: true,
+        autoIncrement: true,
         // references: null,
       },
-      ServiceableType: {
+      service_id: {
+        type: DataTypes.INTEGER,
+        unique: 'ss_unique_constraint',
+      },
+      serviceable_type: {
         type: DataTypes.STRING,
         unique: 'ss_unique_constraint',
       },
@@ -38,7 +62,9 @@ export function ServiceableFactory(sequelize: Sequelize) {
       timestamps: false,
       underscored: true,
       schema: 'public',
-      modelName: 'Serviceable',
+      modelName: 'serviceables',
+      tableName: 'serviceables',
+      freezeTableName: true,
     }
   );
 

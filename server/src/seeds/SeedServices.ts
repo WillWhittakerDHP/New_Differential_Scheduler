@@ -1,10 +1,12 @@
+import { sequelize } from "../config/connection.js";
+
 import { UserType , Service, AdditionalService, AvailabilityOption, DwellingAdjustment } from "../models/index.js";
 
-import userTypeSeedData from './participantSeeds/userType-seeds.json' with { type: 'json' };
-import serviceSeedData from './appointmentSeeds/contentSeeds/service-seeds.json' with { type: 'json' };
-import additionalServiceSeedData from './appointmentSeeds/contentSeeds/additionalService-seeds.json' with { type: 'json' };
-import availabilityOptionSeedData from './appointmentSeeds/contentSeeds/availabilityOption-seeds.json' with { type: 'json' };
-import dwellingAdjustmentSeedData from './appointmentSeeds/contentSeeds/dwellingAdjustment-seeds.json' with { type: 'json' };
+import userTypeSeedData from './appointmentSeeds/structureSeeds/userType-seeds.json' with { type: 'json' };
+import serviceSeedData from './appointmentSeeds/structureSeeds/service-seeds.json' with { type: 'json' };
+import additionalServiceSeedData from './appointmentSeeds/structureSeeds/additionalService-seeds.json' with { type: 'json' };
+import availabilityOptionSeedData from './appointmentSeeds/structureSeeds/availabilityOption-seeds.json' with { type: 'json' };
+import dwellingAdjustmentSeedData from './appointmentSeeds/structureSeeds/dwellingAdjustment-seeds.json' with { type: 'json' };
 
 export const seedServices = async () => {
 
@@ -18,6 +20,8 @@ export const seedServices = async () => {
     
     console.log('\n----- Seeding UserTypes ... -----\n');
     const userTypes = await UserType.bulkCreate(userTypeSeedData, {
+      individualHooks: true,
+      returning: true,
       validate: true,
     });
     
@@ -73,4 +77,7 @@ export const seedServices = async () => {
       console.log('\n----- AvailabilityOptions Seeding COMPLETE ... -----\n');
     
   } catch (error) { console.log('UserTypeService Seed error:', error)};
+
+  console.log('Sequelize Models:', sequelize.models);
+
 };

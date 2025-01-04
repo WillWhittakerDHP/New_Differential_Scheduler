@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { UserTypeData } from '../interfaces/appointmentInterfaces';
+import type { UserTypeData } from '../interfaces/serviceInterfaces';
 
 // Define the props for the component
 interface UserTypesListProps {

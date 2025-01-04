@@ -1,6 +1,6 @@
 export interface UserTypeData {
   id: number | null;
-  type: string | null;
+  name: string | null;
   icon: string | null;
   description: string | null;
   visibility: boolean | null;

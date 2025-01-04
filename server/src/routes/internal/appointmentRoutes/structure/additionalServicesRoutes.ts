@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { AdditionalService } from '../../../../models/serviceBasedModels/additionalServices.js';
+import { AdditionalService } from '../../../../models/index.js';
 
 // GET AdditionalServices available to AdditionalServices through the UI
 export const getAllVisibleAdditionalServices = async (_req: Request, res: Response) => {
@@ -26,7 +26,7 @@ export const getAdditionalServicebyId = async (req: Request, res: Response) => {
   try {
     const AdditionalServiceData = await AdditionalService.findByPk(id,{
       include: [{ 
-        association: 'additional_services',
+        // association: 'AdditionalServices',
         order: ['id'],
         where: {
           visibility: true,

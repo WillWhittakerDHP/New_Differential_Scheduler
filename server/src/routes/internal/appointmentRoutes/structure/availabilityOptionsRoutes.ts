@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { AvailabilityOption } from '../../../../models/serviceBasedModels/availabilityOptions.js';
+import { AvailabilityOption } from '../../../../models/index.js';
 
 // GET AvailabilityOptions available to AvailabilityOptions through the UI
 export const getAllVisibleAvailabilityOptions = async (_req: Request, res: Response) => {
@@ -26,7 +26,7 @@ export const getAvailabilityOptionbyId = async (req: Request, res: Response) => 
   try {
     const AvailabilityOptionData = await AvailabilityOption.findByPk(id,{
       include: [{ 
-        association: 'availability_options',
+        // association: 'AvailabilityOptions',
         order: ['id'],
         where: {
           visibility: true,

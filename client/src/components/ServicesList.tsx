@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { ServiceData } from '../interfaces/appointmentInterfaces';
+import type { ServiceData } from '../interfaces/serviceInterfaces';
 
 // Define the props for the component
 interface ServicesListProps {

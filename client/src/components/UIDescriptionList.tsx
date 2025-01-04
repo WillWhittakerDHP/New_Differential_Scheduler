@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { UIDescriptionsData } from '../interfaces/appointmentInterfaces';
+import type { UIDescriptionsData } from '../interfaces/serviceInterfaces';
 
 // Define the props for the component
 interface UIDescriptionsListProps {

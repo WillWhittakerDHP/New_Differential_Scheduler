@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { ServiceApiRouter } from './serviceBased/index.js';
-import { StructureApiRouter } from './structureRoutes/index.js';
+import { ServiceRouter } from './structure/index.js';
+import { DetailsRouter } from './details/index.js';
 
 
 const router = Router();
 
-router.use('/service', ServiceApiRouter);
-router.use('/structure', StructureApiRouter);
+router.use('/service', ServiceRouter);
+router.use('/details', DetailsRouter);
 
 
 export { router as AppointmentRouter };
