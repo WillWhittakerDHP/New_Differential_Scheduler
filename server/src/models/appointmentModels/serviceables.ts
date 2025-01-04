@@ -4,10 +4,6 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
-  // ForeignKey,
-  // BelongsToManyAddAssociationMixin,
-  // BelongsToManyGetAssociationsMixin,
-  // BelongsToManyGetAssociationsMixinOptions,
   Sequelize,
 } from 'sequelize';
 
@@ -19,23 +15,6 @@ InferCreationAttributes<Serviceable>
   declare service_id: number;
   declare serviceable_type: string;
 
-  // declare getPrimaryServiceable: BelongsToManyGetAssociationsMixin<Serviceable>;
-  // declare getPrimaryServiceables: BelongsToManyGetAssociationsMixin<Serviceable[]>;
-  
-  // declare addPrimaryServiceable: BelongsToManyAddAssociationMixin<Serviceable, Serviceable['id']>;
-  // declare addPrimaryServiceables: BelongsToManyAddAssociationMixin<
-  // Serviceable[],
-  // Serviceable['id'][]
-  // >;
-
-  // declare getSecondaryServiceable: BelongsToManyGetAssociationsMixin<Serviceable>;
-  // declare getSecondaryServiceables: BelongsToManyGetAssociationsMixin<Serviceable[]>;
-  
-  // declare addSecondaryServiceable: BelongsToManyAddAssociationMixin<Serviceable, Serviceable['id']>;
-  // declare addSecondaryServiceables: BelongsToManyAddAssociationMixin<
-  // Serviceable[],
-  // Serviceable['id'][]
-  // >;
   }
 
 export function ServiceableFactory(sequelize: Sequelize) {

@@ -9,44 +9,29 @@ import {
   Sequelize,
 } from 'sequelize';
 
-import type { Service } from './services.js';
+import type { Service } from './serviceTypes.js';
 
-export class UserType extends Model<
-InferAttributes<UserType>,
-InferCreationAttributes<UserType>
+export class DwellingAdjustment extends Model<
+  InferAttributes<DwellingAdjustment>,
+  InferCreationAttributes<DwellingAdjustment>
 > {
   declare id: CreationOptional<number>;
   declare name: string;
-  declare icon: string;
-  declare description: string;
   declare visibility: boolean;
-  
+  declare description: string;
+
   declare getService: BelongsToManyGetAssociationsMixin<Service>;
   declare getServices: BelongsToManyGetAssociationsMixin<Service[]>;
-  Services?: Service[];
-  
+
   declare addService: BelongsToManyAddAssociationMixin<Service, Service['id']>;
   declare addServices: BelongsToManyAddAssociationMixin<
-  Service[],
-  Service['id'][]
+    Service[],
+    Service['id'][]
   >;
-  
-// async getServicesByUserTypeID(services: Service[]): Promise<Service[]> {
-//   const visibleServices: Service[] = services.map((service) => {
-//     return {
-//       id: service.id,
-//       name: service.name,
-//       description: service.description,
-//       visibility: service.visibility,
-//     };
-//   });
-//   return visibleServices;
-// }
-
 }
 
-export function UserTypeFactory(sequelize: Sequelize) {
-  UserType.init(
+export function DwellingAdjustmentFactory(sequelize: Sequelize) {
+  DwellingAdjustment.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -54,10 +39,6 @@ export function UserTypeFactory(sequelize: Sequelize) {
         autoIncrement: true,
       },
       name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      icon: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -75,11 +56,11 @@ export function UserTypeFactory(sequelize: Sequelize) {
       timestamps: false,
       underscored: true,
       schema: 'public',
-      modelName: 'user_types',
-      tableName: 'user_types',
+      modelName: 'dwelling_adjustments',
+      tableName: 'dwelling_adjustments',
       freezeTableName: true,
     }
   );
 
-  return UserType;
+  return DwellingAdjustment;
 }

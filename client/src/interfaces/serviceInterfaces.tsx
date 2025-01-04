@@ -7,7 +7,7 @@ export interface UserTypeData {
   Services?: string | null;
 }
 
-export interface ServiceData {
+export interface ServiceTypeData {
   id: number | null;
   name: string | null;
   differential_scheduling: boolean | null;

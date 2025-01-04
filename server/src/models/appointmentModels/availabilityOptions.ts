@@ -9,11 +9,11 @@ import {
   Sequelize,
 } from 'sequelize';
 
-import { Service } from './services.js';
+import { Service } from './serviceTypes.js';
 
-export class AdditionalService extends Model<
-  InferAttributes<AdditionalService>,
-  InferCreationAttributes<AdditionalService>
+export class AvailabilityOption extends Model<
+  InferAttributes<AvailabilityOption>,
+  InferCreationAttributes<AvailabilityOption>
 > {
   declare id: CreationOptional<number>;
   declare name: string;
@@ -31,8 +31,8 @@ export class AdditionalService extends Model<
   >;
 }
 
-export function AdditionalServiceFactory(sequelize: Sequelize) {
-  AdditionalService.init(
+export function AvailabilityOptionFactory(sequelize: Sequelize) {
+  AvailabilityOption.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -61,11 +61,11 @@ export function AdditionalServiceFactory(sequelize: Sequelize) {
       timestamps: false,
       underscored: true,
       schema: 'public',
-      modelName: 'additional_services',
-      tableName: 'additional_services',
+      modelName: 'availability_options',
+      tableName: 'availability_options',
       freezeTableName: true,
     }
   );
 
-  return AdditionalService;
+  return AvailabilityOption;
 }

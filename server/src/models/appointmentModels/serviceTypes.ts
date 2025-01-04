@@ -10,6 +10,9 @@ import {
 } from 'sequelize';
 
 import { Serviceable } from './serviceables.js';
+import { DwellingAdjustment } from './dwellingAdjustments.js';
+import { AdditionalService } from './additionalServices.js';
+import { AvailabilityOption } from './availabilityOptions.js';
 
 
 export class Service extends Model<
@@ -24,6 +27,9 @@ InferCreationAttributes<Service>
 
   declare getServiceable: BelongsToManyGetAssociationsMixin<Serviceable>;
   declare getServiceables: BelongsToManyGetAssociationsMixin<Serviceable[]>;
+  DwellingAdjustments?: DwellingAdjustment;
+  AdditionalServices?: AdditionalService;
+  AvailabilityOptions?: AvailabilityOption;
   
   declare addServiceable: BelongsToManyAddAssociationMixin<Serviceable, Serviceable['service_id']>;
   declare addServiceables: BelongsToManyAddAssociationMixin<

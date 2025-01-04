@@ -10,6 +10,7 @@ import LoginPage from './pages/loginPage.tsx';
 import PropertyPage from './pages/propertyPage.tsx';
 import ServicesPage from './pages/servicesPage.tsx';
 import SummaryPage from './pages/summaryPage.tsx';
+import { AppointmentProvider } from './components/AppointmentContext.tsx';
 // import AdminPage from '/pages/adminPage.tsx';
 
 const router = createBrowserRouter([
@@ -22,10 +23,6 @@ const router = createBrowserRouter([
         index: true,
         element: <ServicesPage />,
       }, 
-      // {
-      //   path: '/ServiceSelection',
-      //   element: <ServiceSelection />,
-      // }, 
       {
         path: '/PropertyDetails',
         element: <PropertyPage />,
@@ -65,5 +62,7 @@ const router = createBrowserRouter([
 
 const rootElement = document.getElementById('root');
 if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(<RouterProvider router={router} />);
+  ReactDOM.createRoot(rootElement).render(<AppointmentProvider>
+    <RouterProvider router={router} />
+    </AppointmentProvider>);
 }

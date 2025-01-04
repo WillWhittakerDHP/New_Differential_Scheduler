@@ -1,12 +1,12 @@
 import { sequelize } from '../config/connection.js';
 
 // Appointment Content
-import { ServiceFactory } from './serviceBasedModels/services.js';
-import { ServiceableFactory } from './serviceBasedModels/serviceables.js';
-import { UserTypeFactory } from './serviceBasedModels/userTypes.js';
-import { DwellingAdjustmentFactory } from './serviceBasedModels/dwellingAdjustments.js';
-import { AdditionalServiceFactory } from './serviceBasedModels/additionalServices.js';
-import { AvailabilityOptionFactory } from './serviceBasedModels/availabilityOptions.js';
+import { ServiceFactory } from './appointmentModels/serviceTypes.js';
+import { ServiceableFactory } from './appointmentModels/serviceables.js';
+import { UserTypeFactory } from './appointmentModels/userTypes.js';
+import { DwellingAdjustmentFactory } from './appointmentModels/dwellingAdjustments.js';
+import { AdditionalServiceFactory } from './appointmentModels/additionalServices.js';
+import { AvailabilityOptionFactory } from './appointmentModels/availabilityOptions.js';
 // Participants
 // import { UserFactory } from './participantModels/Users.js';
 // import { LoginFactory } from './participantModels/Logins.js';
@@ -22,24 +22,6 @@ const AvailabilityOption = AvailabilityOptionFactory(sequelize);
 // const Login = LoginFactory(sequelize);
 // const User = UserFactory(sequelize);
 
-// sequelize.addModels([UserType]);
-
-// From the sequelize refence "applying scopes on the target model"
-//  UserType.belongsToMany(Service, {
-//   through: {
-//     model: Serviceable,
-//     unique: false,
-//     scope: {
-//       serviceable_type: 'UserType',
-//     },
-//   },
-//   scope: {
-//     status: 'pending',
-//   },
-//   as: 'pendingServices',
-//   foreignKey: 'Serviceable_id',
-//   constraints: false,
-// });
 
 UserType.belongsToMany(Service, {
   through: {

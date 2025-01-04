@@ -1,8 +1,12 @@
 import { Router, Request, Response } from 'express';
 import { UserType, Service, AdditionalService, AvailabilityOption, DwellingAdjustment } from '../../../../models/index.js';
 
-// GET Visible UserTypes '/'
-export const getAllVisibleUserTypes = async (_req: Request, res: Response) => {
+
+const router = Router();
+
+
+// GET Visible UserTypes
+router.get('/', async (_req: Request, res: Response) => {
   try {
     console.log('Start VisibleUserTypes');
     const VisibleUserTypes = await UserType.findAll({
@@ -13,14 +17,14 @@ export const getAllVisibleUserTypes = async (_req: Request, res: Response) => {
     });  
     console.log('VisibleUserTypes result:', VisibleUserTypes);
     res.json(VisibleUserTypes);
-    } catch (err) {
-      console.error('Error in findAll:', err);
-    }  
-};    
+  } catch (err) {
+    console.error('Error in findAll:', err);
+  }  
+})    
 
 
-// GET ServicesForUserTypeByID '/:id'
-export const getUserTypeServices = async (req: Request, res: Response) => {
+// GET ServicesForUserTypeByID
+router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     console.log('Start UserTypeServices');
@@ -42,31 +46,11 @@ export const getUserTypeServices = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }  
-};  
+})  
 
-// GET ServiceDataByID '/se/:id'
-export const getServiceById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    console.log('Start ServicesByServiceTypeData');
-    const ServicesByServiceTypeData = await Service.findByPk(id,{
-      order: ['id'],
-      attributes: ['id', 'name', 'description'],
-      raw: true,
-    });
-    if (ServicesByServiceTypeData) {
-      console.log('ServicesByServiceTypeData result:', ServicesByServiceTypeData);
-      res.json(ServicesByServiceTypeData);
-    } else {
-      res.status(404).json({ message: 'Service not found' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-};
 
-// GET DwellingAdjustmentsForServiceByID '/da/:id'
-export const getDwellingAdjustmentsbyServiceId = async (req: Request, res: Response) => {
+// GET associated DwellingAdjustments
+router.get('/da/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     console.log( 'Start DwellingAdjustmentsByServiceTypeData');
@@ -74,10 +58,9 @@ export const getDwellingAdjustmentsbyServiceId = async (req: Request, res: Respo
       include: [{ 
         model: DwellingAdjustment,
         as: 'DwellingAdjustments',
-        // order: ['id'],
-        // where: {
-        //   visibility: true,
-        // },  
+        where: {
+            visibility: true,
+          },  
         attributes: ['id', 'name', 'description'],
         through: { attributes: [], }
       }],
@@ -91,10 +74,10 @@ export const getDwellingAdjustmentsbyServiceId = async (req: Request, res: Respo
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
-};
+})
 
-// GET AdditionalServicesForServiceByID '/as/:id'
-export const getAdditionalServicesbyServiceId = async (req: Request, res: Response) => {
+// GET associated AdditionalServices
+router.get('/as/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     console.log('Start AdditionalServicesByServiceTypeData');
@@ -102,6 +85,9 @@ export const getAdditionalServicesbyServiceId = async (req: Request, res: Respon
       include: [{ 
         model: AdditionalService,
         as: 'AdditionalServices',
+        where: {
+          visibility: true,
+        },  
         attributes: ['id', 'name', 'description'],
         through: { attributes: [], }
       }],
@@ -115,10 +101,10 @@ export const getAdditionalServicesbyServiceId = async (req: Request, res: Respon
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
-};
+})
 
-// GET associated AvailabilityOptions '/ao/:id'
-export const getAvailabilityOptionsbyServiceId = async (req: Request, res: Response) => {
+// GET associated AvailabilityOptions
+router.get('/ao/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     console.log('Start AvailabilityOptionsByServiceTypeData');
@@ -126,10 +112,9 @@ export const getAvailabilityOptionsbyServiceId = async (req: Request, res: Respo
       include: [{ 
         model: AvailabilityOption,
         as: 'AvailabilityOptions',
-        // order: ['id'],
-        // where: {
-        //   visibility: true,
-        // },  
+        where: {
+          visibility: true,
+        },  
         attributes: ['id', 'name', 'description'],
         through: { attributes: [], }
       }],
@@ -143,29 +128,6 @@ export const getAvailabilityOptionsbyServiceId = async (req: Request, res: Respo
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
-};
-
-
-const router = Router();
-
-
-// GET Visible UserTypes
-router.get('/', getAllVisibleUserTypes);
-
-// GET ServicesForUserTypeByID
-router.get('/:id', getUserTypeServices);
-
-// GET Visible UserType Services
-router.get('/se/:id', getServiceById)
-
-// GET associated AdditionalServices
-router.get('/as/:id', getAdditionalServicesbyServiceId);
-
-// GET associated AvailabilityOptions
-router.get('/ao/:id', getAvailabilityOptionsbyServiceId);
-
-// GET associated DwellingAdjustments
-router.get('/da/:id', getDwellingAdjustmentsbyServiceId);
-
+}) 
 
 export { router as StructureRouter };
