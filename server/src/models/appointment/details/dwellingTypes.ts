@@ -3,19 +3,19 @@ import { Model, DataTypes,
   type InferAttributes,
   type InferCreationAttributes,
   type CreationOptional,
-  // type ForeignKey,
+  type ForeignKey,
   // type BelongsToManyAddAssociationMixin,
   type Sequelize } from 'sequelize';
+import { Descriptions } from './descriptions.js';
   
 
-export class UIDescription extends Model<
-  InferAttributes<UIDescription>,
-  InferCreationAttributes<UIDescription>
+export class DwellingType extends Model<
+  InferAttributes<DwellingType>,
+  InferCreationAttributes<DwellingType>
 > {
-  declare ui_description_set_id: CreationOptional<number>;
-  declare buyer_description: string;
-  declare agent_description: string;
-  declare owner_description: string;
+  declare dwelling_type_id: CreationOptional<number>;
+  declare dwelling_type_name: string;
+  declare id: ForeignKey<Descriptions['id']>;
 
   // TODO What's this?
   // //  Since TS cannot determine model associations at compile time, we need to declare the association methods here. These will not exist until `Model.init` was called.
@@ -26,28 +26,25 @@ export class UIDescription extends Model<
   // declare addReader: BelongsToManyAddAssociationMixin<Reader, Reader['id']>;
 }
 
-export function UIDescriptionFactory(sequelize: Sequelize): typeof UIDescription {
-  UIDescription.init(
+export function DwellingTypeFactory(sequelize: Sequelize): typeof DwellingType {
+  DwellingType.init(
     {
-      ui_description_set_id: {
+      dwelling_type_id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
       },
-      buyer_description: {
+      dwelling_type_name: {
         type: DataTypes.STRING,
       },
-      agent_description: {
-        type: DataTypes.STRING,
-      },
-      owner_description: {
-        type: DataTypes.STRING,
-      },
+      // id: {
+      //   type: DataTypes.STRING,
+      // },
     },
     {
       sequelize,
       // Manually define the table name
-      modelName: 'ui_description_sets',
+      modelName: 'dwelling_types',
       // Set to false to remove the `created_at` and `updated_at` columns
       timestamps: false,
       underscored: true,
@@ -55,5 +52,5 @@ export function UIDescriptionFactory(sequelize: Sequelize): typeof UIDescription
     }
   );
 
-  return UIDescription;
+  return DwellingType;
 }

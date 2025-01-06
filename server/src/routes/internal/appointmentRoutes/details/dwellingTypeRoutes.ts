@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { DwellingType } from '../../../../models/appointmentModels/structureModels/dwellingTypes.js';
+import { DwellingType } from '../../../../models/appointment/details/dwellingTypes.js';
 
 export const getAllDwellingTypes = async (_req: Request, res: Response) => {
   try {
@@ -29,9 +29,9 @@ export const getDwellingTypeById = async (req: Request, res: Response) => {
 
 // POST /DwellingTypes
 export const createDwellingType = async (req: Request, res: Response) => {
-  const { dwelling_type_id, dwelling_type_name, ui_description_set_id } = req.body;
+  const { dwelling_type_id, dwelling_type_name, id } = req.body;
   try {
-    const newDwellingType = await DwellingType.create({ dwelling_type_id, dwelling_type_name, ui_description_set_id});
+    const newDwellingType = await DwellingType.create({ dwelling_type_id, dwelling_type_name, id});
     res.status(201).json(newDwellingType);
     // console.log(newDwellingType);
   } catch (error: any) {
@@ -48,7 +48,7 @@ export const updateDwellingType = async (req: Request, res: Response) => {
     if (UpdatedDwellingType) {
       UpdatedDwellingType.dwelling_type_id = dwelling_type_id;
       UpdatedDwellingType.dwelling_type_name = dwelling_type;
-      UpdatedDwellingType.ui_description_set_id = ui_description_set;
+      UpdatedDwellingType.id = ui_description_set;
       await UpdatedDwellingType.save();
       res.json(UpdatedDwellingType);
       // console.log(UpdatedDwellingType);

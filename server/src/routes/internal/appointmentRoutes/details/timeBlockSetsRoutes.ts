@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { TimeBlockSet } from '../../../../models/appointmentModels/structureModels/timeBlockSets.js';
+import { TimeBlockSet } from '../../../../models/appointment/details/timeBlockSets.js';
 
 export const getAllTimeBlockSets = async (_req: Request, res: Response) => {
   try {

@@ -30,18 +30,6 @@ InferCreationAttributes<UserType>
   Service[],
   Service['id'][]
   >;
-  
-// async getServicesByUserTypeID(services: Service[]): Promise<Service[]> {
-//   const visibleServices: Service[] = services.map((service) => {
-//     return {
-//       id: service.id,
-//       name: service.name,
-//       description: service.description,
-//       visibility: service.visibility,
-//     };
-//   });
-//   return visibleServices;
-// }
 
 }
 

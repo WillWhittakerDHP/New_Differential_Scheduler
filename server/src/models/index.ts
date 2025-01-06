@@ -1,12 +1,13 @@
 import { sequelize } from '../config/connection.js';
 
 // Appointment Content
-import { ServiceFactory } from './appointmentModels/serviceTypes.js';
-import { ServiceableFactory } from './appointmentModels/serviceables.js';
-import { UserTypeFactory } from './appointmentModels/userTypes.js';
-import { DwellingAdjustmentFactory } from './appointmentModels/dwellingAdjustments.js';
-import { AdditionalServiceFactory } from './appointmentModels/additionalServices.js';
-import { AvailabilityOptionFactory } from './appointmentModels/availabilityOptions.js';
+import { ServiceFactory } from './appointment/structure/serviceTypes.js';
+import { ServiceableFactory } from './appointment/structure/serviceables.js';
+import { UserTypeFactory } from './appointment/structure/userTypes.js';
+import { DwellingAdjustmentFactory } from './appointment/structure/dwellingAdjustments.js';
+import { AdditionalServiceFactory } from './appointment/structure/additionalServices.js';
+import { AvailabilityOptionFactory } from './appointment/structure/availabilityOptions.js';
+// import { DescriptionsFactory } from './appointment/details/descriptions.js';
 // Participants
 // import { UserFactory } from './participantModels/Users.js';
 // import { LoginFactory } from './participantModels/Logins.js';
@@ -18,9 +19,28 @@ const UserType = UserTypeFactory(sequelize);
 const DwellingAdjustment = DwellingAdjustmentFactory(sequelize);
 const AdditionalService = AdditionalServiceFactory(sequelize);
 const AvailabilityOption = AvailabilityOptionFactory(sequelize);
+// import { Descriptions } from './appointment/details/descriptions.js';
 // Participants
 // const Login = LoginFactory(sequelize);
 // const User = UserFactory(sequelize);
+
+
+// Descriptions.hasOne(Service, {
+//   onDelete: 'CASCADE',
+// });
+// Service.belongsTo(Descriptions);
+
+// Descriptions.hasOne(AdditionalService, {
+//   onDelete: 'CASCADE',
+// });
+// AdditionalService.belongsTo(Descriptions);
+
+// Descriptions.hasOne(AvailabilityOption, {
+//   onDelete: 'CASCADE',
+// });
+// AvailabilityOption.belongsTo(Descriptions);
+
+
 
 
 UserType.belongsToMany(Service, {
@@ -40,28 +60,6 @@ Service.belongsToMany(UserType, {
   },
   foreignKey: 'service_id', // Use snake_case
   as: 'Services',
-  constraints: false,
-});
-
-DwellingAdjustment.belongsToMany(Service, {
-  through: {
-    model: Serviceable,
-    unique: false,
-    scope: {
-      serviceable_type: 'dwelling_adjustment'
-    },
-  },
-  foreignKey: 'serviceable_id',
-  as: 'DwellingAdjustments',
-  constraints: false,
-});
-Service.belongsToMany(DwellingAdjustment, {
-  through: {
-    model: Serviceable,
-    unique: false,
-  },
-  foreignKey: 'service_id',
-  as: 'DwellingAdjustments',
   constraints: false,
 });
 
@@ -109,14 +107,37 @@ Service.belongsToMany(AvailabilityOption, {
   constraints: false,
 });
 
+DwellingAdjustment.belongsToMany(Service, {
+  through: {
+    model: Serviceable,
+    unique: false,
+    scope: {
+      serviceable_type: 'dwelling_adjustment'
+    },
+  },
+  foreignKey: 'serviceable_id',
+  as: 'DwellingAdjustments',
+  constraints: false,
+});
+Service.belongsToMany(DwellingAdjustment, {
+  through: {
+    model: Serviceable,
+    unique: false,
+  },
+  foreignKey: 'service_id',
+  as: 'DwellingAdjustments',
+  constraints: false,
+});
+
 export { 
   Service,
   Serviceable,
   UserType, 
   DwellingAdjustment, 
   AdditionalService, 
-  AvailabilityOption, 
+  AvailabilityOption
   // , 
+  // Descriptions
   // User, 
   // Login 
 };

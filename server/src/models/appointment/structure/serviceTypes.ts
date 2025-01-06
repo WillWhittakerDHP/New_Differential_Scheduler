@@ -14,7 +14,6 @@ import { DwellingAdjustment } from './dwellingAdjustments.js';
 import { AdditionalService } from './additionalServices.js';
 import { AvailabilityOption } from './availabilityOptions.js';
 
-
 export class Service extends Model<
 InferAttributes<Service>,
 InferCreationAttributes<Service>

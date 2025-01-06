@@ -8,7 +8,7 @@ import ErrorPage from './pages/errorPage.tsx';
 import ParticipantPage from './pages/participantPage.tsx';
 import LoginPage from './pages/loginPage.tsx';
 import PropertyPage from './pages/propertyPage.tsx';
-import ServicesPage from './pages/servicesPage.tsx';
+import ServiceSelectionPage from './pages/serviceSelectionPage.tsx';
 import SummaryPage from './pages/summaryPage.tsx';
 import { AppointmentProvider } from './components/AppointmentContext.tsx';
 // import AdminPage from '/pages/adminPage.tsx';
@@ -21,7 +21,8 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <ServicesPage />,
+        path: '/ServiceSelection',
+        element: <ServiceSelectionPage />,
       }, 
       {
         path: '/PropertyDetails',

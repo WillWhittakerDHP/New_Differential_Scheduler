@@ -38,7 +38,6 @@ const retrieveServicesForUserTypeByID = async (id: number | null): Promise<UserT
   }
 }
 
- // GET request to the Services endpoint to fetch Services data for the state UserType.
 const retrieveServiceByID = async (id: number | null): Promise<ServiceTypeData> => {
   try {
     const response = await fetch(`/internal/appointment/service/structure/se/${id}`, {
@@ -56,24 +55,6 @@ const retrieveServiceByID = async (id: number | null): Promise<ServiceTypeData> 
     return {} as ServiceTypeData;
   }
 };
-
-const retrieveDwellingAdjustmentsForServiceByID = async (id: number | null): Promise<ServiceTypeData> => {
-  try {
-    const response = await fetch(`/internal/appointment/appointmentContent/services/structure/da/${id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error('Invalid user API response, check network tab!');
-    }
-    return data;
-  } catch (err) { 
-    console.log('Error from data retrieval:', err);
-    return {} as ServiceTypeData;
-  }
-}
 
 
 const retrieveAdditionalServicesForServiceByID = async (id: number | null): Promise<ServiceTypeData> => {
@@ -113,6 +94,24 @@ const retrieveAvailabilityOptionsForServiceByID = async (id: number | null): Pro
   }
 }
 
+
+const retrieveDwellingAdjustmentsForServiceByID = async (id: number | null): Promise<ServiceTypeData> => {
+  try {
+    const response = await fetch(`/internal/appointment/service/structure/da/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error('Invalid user API response, check network tab!');
+    }
+    return data;
+  } catch (err) { 
+    console.log('Error from data retrieval:', err);
+    return {} as ServiceTypeData;
+  }
+}
 
 export { 
   retrieveAllVisibleUserTypes, 

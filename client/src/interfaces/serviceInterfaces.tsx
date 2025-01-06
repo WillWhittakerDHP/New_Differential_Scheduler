@@ -39,10 +39,3 @@ export interface DwellingAdjustmentData {
   name: string | null;
   visibility: boolean | null;
 }
-
-export interface UIDescriptionsData {
-  ui_description_set_id: number | null;
-  buyer_description: string | null;
-  agent_description: string | null;
-  owner_description: string | null;
-}

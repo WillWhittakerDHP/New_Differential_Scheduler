@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { AppointmentPart } from '../../../../models/appointmentModels/structureModels/appointmentParts.js';
+import { AppointmentPart } from '../../../../models/appointment/details/appointmentParts.js';
 
 export const getAllAppointmentParts = async (_req: Request, res: Response) => {
   try {

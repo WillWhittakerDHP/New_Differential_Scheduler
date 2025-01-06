@@ -20,7 +20,7 @@ const sequelize = process.env.DB_URL
         decimalNumbers: true,  // Ensure decimal numbers are handled correctly
       },
       schema: 'public',
-      logging: console.log
+      // logging: console.log
     });
 
 
