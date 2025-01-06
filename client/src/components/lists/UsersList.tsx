@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, Row, Card } from 'react-bootstrap';
-import { AppointmentContext } from './AppointmentContext';
-import { retrieveAllVisibleUserTypes } from '../api/internalAPI/appointmentAPI';
-import type { UserTypeData } from '../interfaces/serviceInterfaces';
+import { AppointmentContext } from '../AppointmentContext';
+import { retrieveAllVisibleUserTypes } from '../../api/internalAPI/adminAPI';
+import type { UserTypeData } from '../../interfaces/serviceInterfaces';
 
 // Define the props for the component
 interface UsersListProps {

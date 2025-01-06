@@ -5,3 +5,4 @@ export interface DescriptionsData {
   additionalServices: string[] | null;
   availabilityOptions: string[] | null;
 }
+

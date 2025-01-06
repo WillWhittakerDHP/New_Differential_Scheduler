@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { Service } from '../../../../../models/index.js';
+import { ClientPresentation, DataCollection, EarlyArrival, ReportWriting, Service } from '../../../../../models/index.js';
 
 const router = Router();
 
@@ -33,6 +33,73 @@ router.get('/:id', async (req: Request, res: Response) => {
     });  
   }  
 });  
+
+
+type EarlyArrivalInstance = InstanceType<typeof EarlyArrival>;
+type DataCollectionInstance = InstanceType<typeof DataCollection>;
+type ReportWritingInstance = InstanceType<typeof ReportWriting>;
+type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
+type ServiceWithTimesValues = InstanceType<typeof Service> & {
+  dataValues: {
+    EarlyArrival: EarlyArrivalInstance[],
+    DataCollection: DataCollectionInstance[],
+    ReportWriting: ReportWritingInstance[],
+    ClientPresentation: ClientPresentationInstance[];
+  };
+};
+
+router.get('/tc/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  console.log('Begin TimeContentFetch on serviceTypesToutes.ts');
+  try {
+    const TimesValuesByServiceID = (await Service.findByPk(id, {
+      include: [
+        {
+          model: EarlyArrival,
+          as: 'EarlyArrival',
+          where: { visibility: true },
+          attributes: ['on_site,', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          through: { attributes: [] },
+        },
+        {
+          model: DataCollection,
+          as: 'DataCollection',
+          where: { visibility: true },
+          attributes: ['on_site,', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          through: { attributes: [] },
+        },
+        {
+          model: ReportWriting,
+          as: 'ReportWriting',
+          where: { visibility: true },
+          attributes: ['on_site,', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          through: { attributes: [] },
+        },
+        {
+          model: ClientPresentation,
+          as: 'ClientPresentation',
+          where: { visibility: true },
+          attributes: ['on_site,', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          through: { attributes: [] },
+        },
+      ],
+    })) as ServiceWithTimesValues;
+    
+    if (TimesValuesByServiceID) {
+      // const rawTimesValues = TimesValuesByServiceID.dataValues.TimesValues
+      // const ServiceTimesValues = rawTimesValues.map(service =>
+      //   service.get({ plain: true })
+      // );
+      console.log('TimeContentFetch on serviceTypesRoutes.ts', TimesValuesByServiceID);
+      res.json(TimesValuesByServiceID);
+    } else {
+      res.status(404).json({ message: 'Service not found' });
+    }
+  } catch (error: any) {
+    console.error('Error fetching TimesValues:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // POST /Services - Create a new Service
 router.post('/', async (req: Request, res: Response) => {

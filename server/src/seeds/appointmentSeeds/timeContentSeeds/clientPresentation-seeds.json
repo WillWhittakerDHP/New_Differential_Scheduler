@@ -1,0 +1,68 @@
+[
+
+  {
+    "on_site": false,
+    "base_sq_ft": 0,
+    "base_time": 30,
+    "rate_over_base_time": 0,
+    "base_fee": 50,
+    "rate_over_base_fee": 0
+  
+  },
+  {
+    "on-site": false,
+    "base_sq_ft": 600,
+    "base_time": 0, 
+    "rate_over_base_time": 0, 
+    "base_fee": 0, 
+    "rate_over_base_fee": 0
+  },
+  {
+    "on-site": false,
+    "base_sq_ft": 600,
+    "base_time": 15, 
+    "rate_over_base_time": 100, 
+    "base_fee": 0, 
+    "rate_over_base_fee": 10
+  },
+  {
+    "on-site": true,
+    "base_sq_ft": 600,
+    "base_time": 30, 
+    "rate_over_base_time": 100, 
+    "base_fee": 50, 
+    "rate_over_base_fee": 10
+  },
+  {
+    "on-site": true,
+    "base_sq_ft": 600,
+    "base_time": 30, 
+    "rate_over_base_time": 100, 
+    "base_fee": 75, 
+    "rate_over_base_fee": 10
+  },
+  {
+    "on-site": true,
+    "base_sq_ft": 600,
+    "base_time": 15, 
+    "rate_over_base_time": 100, 
+    "base_fee": 50, 
+    "rate_over_base_fee": 10
+  },
+  {
+    "on-site": false,
+    "base_sq_ft": 600,
+    "base_time": 45, 
+    "rate_over_base_time": 100, 
+    "base_fee": 75, 
+    "rate_over_base_fee": 50
+  },
+  {
+    "on-site": false,
+    "base_sq_ft": 0,
+    "base_time": 0, 
+    "rate_over_base_time": 0, 
+    "base_fee": 50, 
+    "rate_over_base_fee": 0
+  }
+]

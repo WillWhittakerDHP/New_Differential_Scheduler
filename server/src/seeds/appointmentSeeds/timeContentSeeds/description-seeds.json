@@ -1,0 +1,92 @@
+[
+  {
+    "userType": "I need an inspection to help me understand a property that I am trying to buy",
+    "services":{
+      "buyersInspection": "Buyers Inspection for buyers", 
+      "investorsInspection": "Investors Inspection for buyers", 
+      "walkTalk": "Walk and Talk for buyers", 
+      "buyecheckUp": "Not for you", 
+      "preSaleWalkThrough": "Not for you", 
+      "developersWarranty": "Not for you" 
+    },
+    "additionalServices":{
+      "blue_tape": "Blue Tape for buyer", 
+      "radon": "Radon for buyer", 
+      "adus": "Accessory Dwelling Units for buyers", 
+      "re_inspection": "Reinspection for buyers"
+    },
+    "availabilityOptions":{
+      "minimize_time_on_site": "Minimize Time On-site for buyers", 
+      "long_on_site_present": "Additional Client Time for buyers", 
+      "no_on_site_present": "Client will not be present for buyers", 
+      "buyer": "First-time buyers for buyers"
+    },
+    "dwellingAdjustments":{
+      "condo": "condo for buyers", 
+      "co_op": "co-op for buyers", 
+      "townhouse": "townhouse for buyers", 
+      "single_family": "single family home for buyers", 
+      "multi_family": "multi-family home for buyers"
+    }
+  },
+  {
+    "userType":  "I am a real estate agent helping a buyer with their inspection needs",
+    "services":{
+      "buyersInspection":"Buyers Inspection for agents", 
+      "investorsInspection": "Investors Inspection for agents", 
+      "walkTalk": "Walk and Talk for agents", 
+      "checkUp": "Home Check-up and Maintenance Planning for agents", 
+      "preSaleWalkThrough": "Pre-sale Walkthrough for agents", 
+      "developersWarranty": "Developers Warranty Inspection for agents"
+    },
+    "additionalServices":{
+      "blue_tape": "Blue Tape for Agents", 
+      "radon": "Radon for Agents", 
+      "adus": "Accessory Dwelling Units for agents", 
+      "re_inspection": "Reinspection for agents"
+    },
+    "availabilityOptions":{
+      "first_time_buyers": "First-time buyers for agents",
+      "minimize_time_on_site": "Minimize Time On-site for agents", 
+      "long_on_site_present": "Additional Client Time for agents", 
+      "no_on_site_present": "Client will not be present for agents" 
+    },
+    "dwellingAdjustments":{
+      "condo": "condo for agents", 
+      "co_op": "co-op for agents", 
+      "townhouse": "townhouse for agents", 
+      "single_family": "single family home for agents", 
+      "multi_family": "multi-family home for agents"
+    }
+  },
+  {
+    "userType": "I already own a property but need to understand it better",
+    "services":{
+      "buyersInspection":"Not for you",
+      "investorsInspection": "Investors Inspection for owners",
+      "walkTalk": "Not for you",
+      "checkUp": "Home Check-up and Maintenance Planning for owners",
+      "preSaleWalkThrough": "Pre-sale Walkthrough for owners",
+      "developersWarranty": "Developers Warranty Inspection for owners"
+    },
+    "additionalServices":{
+      "blue_tape": "Not for you",
+      "radon": "Radon for owners",
+      "adus": "accessory Dwelling Units for owners",
+      "re_inspection": "Reinspection for owners"
+    },
+    "availabilityOptions":{
+      "first_time_buyers": "Not for you",
+      "minimize_time_on_site": "Minimize Time On-site for owners",
+      "long_on_site_present": "Additional Client Time for owners",
+      "no_on_site_present": "Client will not be present for owners"
+    },
+    "dwellingAdjustments":{
+      "condo": "condo for owners",
+      "co_op": "co-op for owners",
+      "townhouse": "townhouse for owners",
+      "single_family": "single family home for owners",
+      "multi_family": "multi-family home for owners"
+    }
+  } 
+]

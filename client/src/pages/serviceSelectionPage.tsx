@@ -4,11 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 import { AppointmentContext } from '../components/AppointmentContext';
 
-import UsersList from '../components/UsersList';
-import ServicesList from '../components/ServicesList';
-import AdditionalServicesList from '../components/AdditionalServicesList';
-import AvailabilityOptionsList from '../components/AvailabilityOptionsList';
-import DwellingAdjustmentsList from '../components/DwellingAdjustmentList';
+import UsersList from '../components/lists/UsersList';
+import ServicesList from '../components/lists/ServicesList';
+import AdditionalServicesList from '../components/lists/AdditionalServicesList';
+
 
 const ServicesPage: React.FC = () => {
   const context = useContext(AppointmentContext);
@@ -21,8 +20,6 @@ const ServicesPage: React.FC = () => {
     <UsersList />
     <ServicesList />
     <AdditionalServicesList />
-    <AvailabilityOptionsList />
-    <DwellingAdjustmentsList />
     </>
   );
 };

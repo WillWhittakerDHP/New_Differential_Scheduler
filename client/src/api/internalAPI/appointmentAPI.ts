@@ -1,4 +1,5 @@
 import { UserTypeData, ServiceTypeData } from "../../interfaces/serviceInterfaces";
+import { TimeContentData } from "../../interfaces/appointmentInterfaces";
 
 const retrieveAllVisibleUserTypes = async () => {
   try {
@@ -113,6 +114,24 @@ const retrieveDwellingAdjustmentsForServiceByID = async (id: number | null): Pro
   }
 }
 
+const retrieveServiceTimeContent = async (id: number | null): Promise<TimeContentData[]> => {
+  try {
+    const response = await fetch(`/internal/appointment/service/structure/tc/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error('Invalid user API response, check network tab!');
+    }
+    return data;
+  } catch (err) { 
+    console.log('Error from data retrieval:', err);
+    return {} as TimeContentData[];
+  }
+}
+
 export { 
   retrieveAllVisibleUserTypes, 
   retrieveServicesForUserTypeByID, 
@@ -120,4 +139,5 @@ export {
   retrieveDwellingAdjustmentsForServiceByID, 
   retrieveAdditionalServicesForServiceByID, 
   retrieveAvailabilityOptionsForServiceByID, 
+  retrieveServiceTimeContent,
 };

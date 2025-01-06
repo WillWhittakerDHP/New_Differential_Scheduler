@@ -1,0 +1,18 @@
+[
+  {
+    "on_site": true,
+    "base_sq_ft": 0,
+    "base_time": 30,
+    "rate_over_base_time": 200,
+    "base_fee": 50,
+    "rate_over_base_fee": 100
+  },
+  {
+    "on_site": false,
+    "base_sq_ft": 0,
+    "base_time": 0,
+    "rate_over_base_time": 0,
+    "base_fee": 0,
+    "rate_over_base_fee": 0
+  }
+]

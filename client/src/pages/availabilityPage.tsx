@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom'; 
-import Calendar from "../components/calendar.js";
-import {inspectorTimes, clientTimes} from "../data/timeData.js"
+import Calendar from '../utils/availability/calendar.js';
+import {inspectorTimes, clientTimes} from "../utils/availability/timeData.js"
+
+import AvailabilityOptionsList from '../components/lists/AvailabilityOptionsList.js';
 
 // import {getRandomData} from "../data/timeData.js"
 
@@ -19,7 +21,7 @@ const AvailabilityPage = () => {
 
     return (
       <>
-
+<AvailabilityOptionsList />
         <section>       
           <h1>Appointment Availability</h1>
           <Calendar

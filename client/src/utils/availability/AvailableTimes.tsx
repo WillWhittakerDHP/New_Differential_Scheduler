@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {DaysWithRanges} from "./calendar";
-import {formatClockTime, TimePeriod, durationTimePeriod} from "../../../server/src/utils/timeslots";
+import {formatClockTime, TimePeriod, durationTimePeriod} from "../../../../server/src/utils/timeslots";
 
 interface AvailableTimesProps {
   activeView: "Inspector" | "Client";

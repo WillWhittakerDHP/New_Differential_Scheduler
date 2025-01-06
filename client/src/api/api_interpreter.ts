@@ -1,5 +1,5 @@
 import { ClockTime, TimePeriod } from '../../../server/src/utils/timeslots';
-import { fetchCalendarEvents } from '../api/calendarCalls';
+import { fetchCalendarEvents } from './calendarCalls';
 
 
 const startDateArray: string[] = [];

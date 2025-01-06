@@ -1,4 +1,4 @@
-import { UserTypeData, ServiceData, AdditionalServiceData, AvailabilityOptionData, DwellingAdjustmentData } from "../../interfaces/serviceInterfaces";
+import { UserTypeData, ServiceTypeData, AdditionalServiceData, AvailabilityOptionData, DwellingAdjustmentData } from "../../interfaces/serviceInterfaces";
 
 const retrieveAllVisibleUserTypes = async () => {
   try {
@@ -39,7 +39,7 @@ const retrieveServicesForUserTypeByID = async (id: number | null): Promise<UserT
 }
 
  // GET request to the Services endpoint to fetch Services data for the state UserType.
-const retrieveServiceByID = async (id: number | null): Promise<ServiceData> => {
+const retrieveServiceByID = async (id: number | null): Promise<ServiceTypeData> => {
   try {
     const response = await fetch(`/internal/appointment/service/structure/se/${id}`, {
       headers: {
@@ -53,13 +53,13 @@ const retrieveServiceByID = async (id: number | null): Promise<ServiceData> => {
     return data;
   } catch (err) { 
     console.log('Error from data retrieval:', err);
-    return {} as ServiceData;
+    return {} as ServiceTypeData;
   }
 };
 
-const retrieveDwellingAdjustmentsForServiceByID = async (id: number | null): Promise<ServiceData> => {
+const retrieveDwellingAdjustmentsForServiceByID = async (id: number | null): Promise<ServiceTypeData> => {
   try {
-    const response = await fetch(`/internal/appointment/appointmentContent/services/structure/da/${id}`, {
+    const response = await fetch(`/internal/appointment/service/structure/da/${id}`, {
       headers: {
         'Content-Type': 'application/json',
       }
@@ -71,7 +71,7 @@ const retrieveDwellingAdjustmentsForServiceByID = async (id: number | null): Pro
     return data;
   } catch (err) { 
     console.log('Error from data retrieval:', err);
-    return {} as ServiceData;
+    return {} as ServiceTypeData;
   }
 }
 
@@ -94,7 +94,7 @@ const retrieveDwellingAdjustmentsForServiceByID = async (id: number | null): Pro
 //   }
 // };
 
-const retrieveAdditionalServicesForServiceByID = async (id: number | null): Promise<ServiceData> => {
+const retrieveAdditionalServicesForServiceByID = async (id: number | null): Promise<ServiceTypeData> => {
   try {
     const response = await fetch(`/internal/appointment/service/structure/as/${id}`, {
       headers: {
@@ -108,7 +108,7 @@ const retrieveAdditionalServicesForServiceByID = async (id: number | null): Prom
     return data;
   } catch (err) { 
     console.log('Error from data retrieval:', err);
-    return {} as ServiceData;
+    return {} as ServiceTypeData;
   }
 }
 
@@ -131,7 +131,7 @@ const retrieveAdditionalServicesForServiceByID = async (id: number | null): Prom
 //   }
 // };
 
-const retrieveAvailabilityOptionsForServiceByID = async (id: number | null): Promise<ServiceData> => {
+const retrieveAvailabilityOptionsForServiceByID = async (id: number | null): Promise<ServiceTypeData> => {
   try {
     const response = await fetch(`/internal/appointment/service/structure/ao/${id}`, {
       headers: {
@@ -145,7 +145,7 @@ const retrieveAvailabilityOptionsForServiceByID = async (id: number | null): Pro
     return data;
   } catch (err) { 
     console.log('Error from data retrieval:', err);
-    return {} as ServiceData;
+    return {} as ServiceTypeData;
   }
 }
 

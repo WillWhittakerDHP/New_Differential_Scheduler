@@ -1,5 +1,5 @@
-import {TimePeriod} from "../../../server/src/utils/timeslots";
-import {DaysWithRanges} from "../components/calendar"
+import {TimePeriod} from "../../../../server/src/utils/timeslots";
+import { DaysWithRanges } from "./calendar";
 export const getRandomData = () => {
     const days_keys : Date[] = []
     for(let x = 1; x<=31;x++){
