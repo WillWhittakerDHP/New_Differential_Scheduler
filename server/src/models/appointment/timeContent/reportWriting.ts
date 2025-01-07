@@ -1,11 +1,15 @@
-import { Model, DataTypes, 
-  type InferAttributes,
-  type InferCreationAttributes,
-  type CreationOptional,
-  type Sequelize, 
-  ForeignKey
+import { 
+  Model, 
+  DataTypes, 
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  Sequelize, 
 } from 'sequelize';
   
+import { Reportable } from './reportables';
 import { Service } from '../structure/serviceTypes';
 import { AdditionalService } from '../structure/additionalServices';
 import { AvailabilityOption } from '../structure/availabilityOptions';
@@ -22,12 +26,19 @@ export class ReportWriting extends Model<
   declare rate_over_base_time: number;
   declare base_fee: number;
   declare rate_over_base_fee: number;
-  declare service?: ForeignKey<Service['id']>
-  declare additionalService?: ForeignKey<AdditionalService['id']>
-  declare availabilityOption?: ForeignKey<AvailabilityOption['id']>
-  declare dwellingAdjustment?: ForeignKey<DwellingAdjustment['id']>
 
-  declare setService: (service: number | object) => Promise<void>;
+  declare getReportable: BelongsToManyGetAssociationsMixin<Reportable>;
+  declare getReportables: BelongsToManyGetAssociationsMixin<Reportable[]>;
+  service?: Service;
+  additionalService?: AdditionalService;
+  availabilityOption?: AvailabilityOption;
+  dwellingAdjustment?: DwellingAdjustment;
+  
+  declare addReportable: BelongsToManyAddAssociationMixin<Reportable, Reportable['report_writing_id']>;
+  declare addReportables: BelongsToManyAddAssociationMixin<
+  Reportable[],
+  Reportable['report_writing_id'][]
+  >;
 }
 
 export function ReportWritingFactory(sequelize: Sequelize): typeof ReportWriting {

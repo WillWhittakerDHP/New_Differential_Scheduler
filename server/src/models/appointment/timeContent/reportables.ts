@@ -7,32 +7,33 @@ import {
   Sequelize,
 } from 'sequelize';
 
-export class Serviceable extends Model<
-InferAttributes<Serviceable>,
-InferCreationAttributes<Serviceable>
+export class Reportable extends Model<
+InferAttributes<Reportable>,
+InferCreationAttributes<Reportable>
 >  {
   declare id: CreationOptional<number>;
-  declare service_id: number;
-  declare serviceable_type: string;
+  declare report_writing_id: number;
+  declare reportable_type: string;
+
   }
 
-export function ServiceableFactory(sequelize: Sequelize) {
-  Serviceable.init(
+export function ReportableFactory(sequelize: Sequelize) {
+  Reportable.init(
     {
       id: {
         type: DataTypes.INTEGER,
-        unique: 'ss_unique_constraint',
+        unique: 'rw_unique_constraint',
         primaryKey: true,
         autoIncrement: true,
         // references: null,
       },
-      service_id: {
+      report_writing_id: {
         type: DataTypes.INTEGER,
-        unique: 'ss_unique_constraint',
+        unique: 'rw_unique_constraint',
       },
-      serviceable_type: {
+      reportable_type: {
         type: DataTypes.STRING,
-        unique: 'ss_unique_constraint',
+        unique: 'rw_unique_constraint',
       },
     },
     { 
@@ -40,11 +41,11 @@ export function ServiceableFactory(sequelize: Sequelize) {
       timestamps: false,
       underscored: true,
       schema: 'public',
-      modelName: 'serviceables',
-      tableName: 'serviceables',
+      modelName: 'reportables',
+      tableName: 'reportables',
       freezeTableName: true,
     }
   );
 
-  return Serviceable;
+  return Reportable;
 }

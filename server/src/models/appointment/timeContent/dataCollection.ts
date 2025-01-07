@@ -1,16 +1,19 @@
-import { Model, DataTypes, 
-  type InferAttributes,
-  type InferCreationAttributes,
-  type CreationOptional,
-  type Sequelize,
-  ForeignKey
-  } from 'sequelize';
+import { 
+  Model, 
+  DataTypes, 
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  Sequelize, 
+} from 'sequelize';
     
-  import { Service } from '../structure/serviceTypes';
-  import { AdditionalService } from '../structure/additionalServices';
-  import { AvailabilityOption } from '../structure/availabilityOptions';
-  import { DwellingAdjustment } from '../structure/dwellingAdjustments';
-
+import { Collectable } from './collectables';
+import { Service } from '../structure/serviceTypes';
+import { AdditionalService } from '../structure/additionalServices';
+import { AvailabilityOption } from '../structure/availabilityOptions';
+import { DwellingAdjustment } from '../structure/dwellingAdjustments';
 
 export class DataCollection extends Model<
   InferAttributes<DataCollection>,
@@ -23,12 +26,19 @@ export class DataCollection extends Model<
   declare rate_over_base_time: number;
   declare base_fee: number;
   declare rate_over_base_fee: number;
-  declare service?: ForeignKey<Service['id']>
-  declare additionalService?: ForeignKey<AdditionalService['id']>
-  declare availabilityOption?: ForeignKey<AvailabilityOption['id']>
-  declare dwellingAdjustment?: ForeignKey<DwellingAdjustment['id']>
-
-  declare setService: (service: number | object) => Promise<void>;
+  
+  declare getCollectable: BelongsToManyGetAssociationsMixin<Collectable>;
+  declare getCollectables: BelongsToManyGetAssociationsMixin<Collectable[]>;
+  service?: Service;
+  additionalService?: AdditionalService;
+  availabilityOption?: AvailabilityOption;
+  dwellingAdjustment?: DwellingAdjustment;
+  
+  declare addCollectable: BelongsToManyAddAssociationMixin<Collectable, Collectable['data_collection_id']>;
+  declare addCollectables: BelongsToManyAddAssociationMixin<
+  Collectable[],
+  Collectable['data_collection_id'][]
+  >;
 }
 
 export function DataCollectionFactory(sequelize: Sequelize): typeof DataCollection {
@@ -41,21 +51,27 @@ export function DataCollectionFactory(sequelize: Sequelize): typeof DataCollecti
       },
       on_site: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
       },
       base_sq_ft: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       base_time: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       rate_over_base_time: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       base_fee: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       rate_over_base_fee: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
     },
     {

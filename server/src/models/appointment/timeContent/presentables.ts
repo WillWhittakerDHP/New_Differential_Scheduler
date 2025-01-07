@@ -7,32 +7,33 @@ import {
   Sequelize,
 } from 'sequelize';
 
-export class Serviceable extends Model<
-InferAttributes<Serviceable>,
-InferCreationAttributes<Serviceable>
+export class Presentable extends Model<
+InferAttributes<Presentable>,
+InferCreationAttributes<Presentable>
 >  {
   declare id: CreationOptional<number>;
-  declare service_id: number;
-  declare serviceable_type: string;
+  declare client_presentation_id: number;
+  declare presentable_type: string;
+
   }
 
-export function ServiceableFactory(sequelize: Sequelize) {
-  Serviceable.init(
+export function PresentableFactory(sequelize: Sequelize) {
+  Presentable.init(
     {
       id: {
         type: DataTypes.INTEGER,
-        unique: 'ss_unique_constraint',
+        unique: 'cp_unique_constraint',
         primaryKey: true,
         autoIncrement: true,
         // references: null,
       },
-      service_id: {
+      client_presentation_id: {
         type: DataTypes.INTEGER,
-        unique: 'ss_unique_constraint',
+        unique: 'cp_unique_constraint',
       },
-      serviceable_type: {
+      presentable_type: {
         type: DataTypes.STRING,
-        unique: 'ss_unique_constraint',
+        unique: 'cp_unique_constraint',
       },
     },
     { 
@@ -40,11 +41,11 @@ export function ServiceableFactory(sequelize: Sequelize) {
       timestamps: false,
       underscored: true,
       schema: 'public',
-      modelName: 'serviceables',
-      tableName: 'serviceables',
+      modelName: 'presentables',
+      tableName: 'presentables',
       freezeTableName: true,
     }
   );
 
-  return Serviceable;
+  return Presentable;
 }

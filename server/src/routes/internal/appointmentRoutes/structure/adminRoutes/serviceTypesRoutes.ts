@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { ClientPresentation, DataCollection, EarlyArrival, ReportWriting, Service } from '../../../../../models/index.js';
+import { ClientPresentation, DataCollection, ReportWriting, Service } from '../../../../../models/index.js';
 
 const router = Router();
 
@@ -35,13 +35,11 @@ router.get('/:id', async (req: Request, res: Response) => {
 });  
 
 
-type EarlyArrivalInstance = InstanceType<typeof EarlyArrival>;
 type DataCollectionInstance = InstanceType<typeof DataCollection>;
 type ReportWritingInstance = InstanceType<typeof ReportWriting>;
 type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
 type ServiceWithTimesValues = InstanceType<typeof Service> & {
   dataValues: {
-    EarlyArrival: EarlyArrivalInstance[],
     DataCollection: DataCollectionInstance[],
     ReportWriting: ReportWritingInstance[],
     ClientPresentation: ClientPresentationInstance[];
@@ -54,13 +52,6 @@ router.get('/tc/:id', async (req: Request, res: Response) => {
   try {
     const TimesValuesByServiceID = (await Service.findByPk(id, {
       include: [
-        {
-          model: EarlyArrival,
-          as: 'EarlyArrival',
-          where: { visibility: true },
-          attributes: ['on_site,', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
-          through: { attributes: [] },
-        },
         {
           model: DataCollection,
           as: 'DataCollection',

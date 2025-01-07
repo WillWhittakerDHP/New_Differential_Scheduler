@@ -11,6 +11,10 @@ import {
 
 import type { Service } from './serviceTypes.js';
 
+import { DataCollection } from '../timeContent/dataCollection.js';
+import { ReportWriting } from '../timeContent/reportWriting.js';
+import { ClientPresentation } from '../timeContent/clientPresentation.js';
+
 export class DwellingAdjustment extends Model<
   InferAttributes<DwellingAdjustment>,
   InferCreationAttributes<DwellingAdjustment>
@@ -28,6 +32,36 @@ export class DwellingAdjustment extends Model<
     Service[],
     Service['id'][]
   >;
+
+    declare getDataCollection: BelongsToManyGetAssociationsMixin<DataCollection>;
+    declare getDataCollections: BelongsToManyGetAssociationsMixin<DataCollection[]>;
+    DataCollections?: DataCollection[];
+    
+    declare addDataCollection: BelongsToManyAddAssociationMixin<DataCollection, DataCollection['id']>;
+    declare addDataCollections: BelongsToManyAddAssociationMixin<
+    DataCollection[],
+    DataCollection['id'][]
+    >;
+  
+    declare getReportWriting: BelongsToManyGetAssociationsMixin<ReportWriting>;
+    declare getReportWritings: BelongsToManyGetAssociationsMixin<ReportWriting[]>;
+    ReportWritings?: ReportWriting[];
+    
+    declare addReportWriting: BelongsToManyAddAssociationMixin<ReportWriting, ReportWriting['id']>;
+    declare addReportWritings: BelongsToManyAddAssociationMixin<
+    ReportWriting[],
+    ReportWriting['id'][]
+    >;
+  
+    declare getClientPresentation: BelongsToManyGetAssociationsMixin<ClientPresentation>;
+    declare getClientPresentations: BelongsToManyGetAssociationsMixin<ClientPresentation[]>;
+    ClientPresentations?: ClientPresentation[];
+    
+    declare addClientPresentation: BelongsToManyAddAssociationMixin<ClientPresentation, ClientPresentation['id']>;
+    declare addClientPresentations: BelongsToManyAddAssociationMixin<
+    ClientPresentation[],
+    ClientPresentation['id'][]
+    >;
 }
 
 export function DwellingAdjustmentFactory(sequelize: Sequelize) {

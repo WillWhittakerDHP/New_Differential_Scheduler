@@ -8,14 +8,12 @@ import { DwellingAdjustmentFactory } from './appointment/structure/dwellingAdjus
 import { AdditionalServiceFactory } from './appointment/structure/additionalServices.js';
 import { AvailabilityOptionFactory } from './appointment/structure/availabilityOptions.js';
 // TimeBlocks
-import { EarlyArrivalFactory } from './appointment/timeContent/earlyArrival.js';
 import { DataCollectionFactory } from './appointment/timeContent/dataCollection.js';
-import { ReportWritingFactory } from './appointment/timeContent/reportWriting.js';
+import { CollectableFactory } from './appointment/timeContent/collectables.js';
 import { ClientPresentationFactory } from './appointment/timeContent/clientPresentation.js';
-// import { DescriptionsFactory } from './appointment/details/descriptions.js';
-// Participants
-// import { UserFactory } from './participantModels/Users.js';
-// import { LoginFactory } from './participantModels/Logins.js';
+import { PresentableFactory } from './appointment/timeContent/presentables.js';
+import { ReportWritingFactory } from './appointment/timeContent/reportWriting.js';
+import { ReportableFactory } from './appointment/timeContent/reportables.js';
 
 // Appointment Content
 const Service = ServiceFactory(sequelize);
@@ -25,30 +23,13 @@ const DwellingAdjustment = DwellingAdjustmentFactory(sequelize);
 const AdditionalService = AdditionalServiceFactory(sequelize);
 const AvailabilityOption = AvailabilityOptionFactory(sequelize);
 // TimeBlocks
-const EarlyArrival = EarlyArrivalFactory(sequelize);
-const DataCollection = DataCollectionFactory(sequelize);
-const ReportWriting = ReportWritingFactory(sequelize);
 const ClientPresentation = ClientPresentationFactory(sequelize);
-// import { Descriptions } from './appointment/details/descriptions.js';
-// Participants
-// const Login = LoginFactory(sequelize);
-// const User = UserFactory(sequelize);
+const Presentable = PresentableFactory(sequelize);
+const ReportWriting = ReportWritingFactory(sequelize);
+const Reportable = ReportableFactory(sequelize);
+const DataCollection = DataCollectionFactory(sequelize);
+const Collectable = CollectableFactory(sequelize);
 
-
-// Descriptions.hasOne(Service, {
-//   onDelete: 'CASCADE',
-// });
-// Service.belongsTo(Descriptions);
-
-// Descriptions.hasOne(AdditionalService, {
-//   onDelete: 'CASCADE',
-// });
-// AdditionalService.belongsTo(Descriptions);
-
-// Descriptions.hasOne(AvailabilityOption, {
-//   onDelete: 'CASCADE',
-// });
-// AvailabilityOption.belongsTo(Descriptions);
 
 
 Service.belongsToMany(UserType, {
@@ -57,50 +38,9 @@ Service.belongsToMany(UserType, {
     unique: false,
   },
   foreignKey: 'service_id', // Use snake_case
-  as: 'Services',
+  as: 'UserTypes',
   constraints: false,
 });
-Service.belongsToMany(AdditionalService, {
-  through: {
-    model: Serviceable,
-    unique: false,
-  },
-  foreignKey: 'service_id',
-  as: 'AdditionalServices',
-  constraints: false,
-});
-Service.belongsToMany(AvailabilityOption, {
-  through: {
-    model: Serviceable,
-    unique: false,
-  },
-  foreignKey: 'service_id',
-  as: 'AvailabilityOptions',
-  constraints: false,
-});
-Service.belongsToMany(DwellingAdjustment, {
-  through: {
-    model: Serviceable,
-    unique: false,
-  },
-  foreignKey: 'service_id',
-  as: 'DwellingAdjustments',
-  constraints: false,
-});
-Service.hasOne(EarlyArrival, {
-  onDelete: 'CASCADE',
-});
-Service.hasOne(DataCollection, {
-  onDelete: 'CASCADE',
-});
-Service.hasOne(ReportWriting, {
-  onDelete: 'CASCADE',
-});
-Service.hasOne(ClientPresentation, {
-  onDelete: 'CASCADE',
-});
-
-
 UserType.belongsToMany(Service, {
   through: {
     model: Serviceable,
@@ -113,6 +53,15 @@ UserType.belongsToMany(Service, {
 });
 
 
+Service.belongsToMany(AdditionalService, {
+  through: {
+    model: Serviceable,
+    unique: false,
+  },
+  foreignKey: 'service_id',
+  as: 'AdditionalServices',
+  constraints: false,
+});
 AdditionalService.belongsToMany(Service, {
   through: {
     model: Serviceable,
@@ -122,23 +71,20 @@ AdditionalService.belongsToMany(Service, {
     },
   },
   foreignKey: 'serviceable_id',
-  as: 'AdditionalServices',
+  as: 'Services',
   constraints: false,
 });
-AdditionalService.hasOne(EarlyArrival, {
-  onDelete: 'CASCADE',
-});
-AdditionalService.hasOne(DataCollection, {
-  onDelete: 'CASCADE',
-});
-AdditionalService.hasOne(ReportWriting, {
-  onDelete: 'CASCADE',
-});
-AdditionalService.hasOne(ClientPresentation, {
-  onDelete: 'CASCADE',
-});
 
 
+Service.belongsToMany(AvailabilityOption, {
+  through: {
+    model: Serviceable,
+    unique: false,
+  },
+  foreignKey: 'service_id',
+  as: 'AvailabilityOptions',
+  constraints: false,
+});
 AvailabilityOption.belongsToMany(Service, {
   through: {
     model: Serviceable,
@@ -148,23 +94,20 @@ AvailabilityOption.belongsToMany(Service, {
     },
   },
   foreignKey: 'serviceable_id',
-  as: 'AvailabilityOptions',
+  as: 'Services',
   constraints: false,
 });
-AvailabilityOption.hasOne(EarlyArrival, {
-  onDelete: 'CASCADE',
-});
-AvailabilityOption.hasOne(DataCollection, {
-  onDelete: 'CASCADE',
-});
-AvailabilityOption.hasOne(ReportWriting, {
-  onDelete: 'CASCADE',
-});
-AvailabilityOption.hasOne(ClientPresentation, {
-  onDelete: 'CASCADE',
-});
 
 
+Service.belongsToMany(DwellingAdjustment, {
+  through: {
+    model: Serviceable,
+    unique: false,
+  },
+  foreignKey: 'service_id',
+  as: 'DwellingAdjustments',
+  constraints: false,
+});
 DwellingAdjustment.belongsToMany(Service, {
   through: {
     model: Serviceable,
@@ -174,39 +117,273 @@ DwellingAdjustment.belongsToMany(Service, {
     },
   },
   foreignKey: 'serviceable_id',
+  as: 'Services',
+  constraints: false,
+});
+
+
+// TimeBlocks
+
+
+DataCollection.belongsToMany(Service, {
+  through: {
+    model: Collectable,
+    unique: false,
+  },
+  foreignKey: 'data_collection_id', // Use snake_case
+  as: 'Services',
+  constraints: false,
+});
+Service.belongsToMany(DataCollection, {
+  through: {
+    model: Collectable,
+    unique: false,
+    scope: { collectable_type: 'service' }, // Use snake_case
+  },
+  foreignKey: 'collectable_id', // Use snake_case
+  as: 'DataCollections',
+  constraints: false,
+});
+
+DataCollection.belongsToMany(AdditionalService, {
+  through: {
+    model: Collectable,
+    unique: false,
+  },
+  foreignKey: 'data_collection_id',
+  as: 'AdditionalServices',
+  constraints: false,
+});
+AdditionalService.belongsToMany(DataCollection, {
+  through: {
+    model: Collectable,
+    unique: false,
+    scope: {
+      collectable_type: 'additional_service'
+    },
+  },
+  foreignKey: 'collectable_id',
+  as: 'DataCollections',
+  constraints: false,
+});
+
+DataCollection.belongsToMany(AvailabilityOption, {
+  through: {
+    model: Collectable,
+    unique: false,
+  },
+  foreignKey: 'data_collection_id',
+  as: 'AvailabilityOptions',
+  constraints: false,
+});
+AvailabilityOption.belongsToMany(DataCollection, {
+  through: {
+    model: Collectable,
+    unique: false,
+    scope: {
+      collectable_type: 'availability_option'
+    },
+  },
+  foreignKey: 'collectable_id',
+  as: 'DataCollections',
+  constraints: false,
+});
+
+DataCollection.belongsToMany(DwellingAdjustment, {
+  through: {
+    model: Collectable,
+    unique: false,
+  },
+  foreignKey: 'data_collection_id',
   as: 'DwellingAdjustments',
   constraints: false,
 });
-DwellingAdjustment.hasOne(EarlyArrival, {
-  onDelete: 'CASCADE',
-});
-DwellingAdjustment.hasOne(DataCollection, {
-  onDelete: 'CASCADE',
-});
-DwellingAdjustment.hasOne(ReportWriting, {
-  onDelete: 'CASCADE',
-});
-DwellingAdjustment.hasOne(ClientPresentation, {
-  onDelete: 'CASCADE',
+DwellingAdjustment.belongsToMany(DataCollection, {
+  through: {
+    model: Collectable,
+    unique: false,
+    scope: {
+      collectable_type: 'dwelling_adjustment'
+    },
+  },
+  foreignKey: 'collectable_id',
+  as: 'DataCollections',
+  constraints: false,
 });
 
 
-EarlyArrival.belongsTo(DwellingAdjustment);
-EarlyArrival.belongsTo(AvailabilityOption);
-EarlyArrival.belongsTo(AdditionalService);
-EarlyArrival.belongsTo(Service);
-DataCollection.belongsTo(Service);
-DataCollection.belongsTo(AdditionalService);
-DataCollection.belongsTo(AvailabilityOption);
-DataCollection.belongsTo(DwellingAdjustment);
-ReportWriting.belongsTo(Service);
-ReportWriting.belongsTo(AdditionalService);
-ReportWriting.belongsTo(AvailabilityOption);
-ReportWriting.belongsTo(DwellingAdjustment);
-ClientPresentation.belongsTo(Service);
-ClientPresentation.belongsTo(AdditionalService);
-ClientPresentation.belongsTo(AvailabilityOption);
-ClientPresentation.belongsTo(DwellingAdjustment);
+ReportWriting.belongsToMany(Service, {
+  through: {
+    model: Reportable,
+    unique: false,
+  },
+  foreignKey: 'report_writing_id', // Use snake_case
+  as: 'Services',
+  constraints: false,
+});
+Service.belongsToMany(ReportWriting, {
+  through: {
+    model: Reportable,
+    unique: false,
+    scope: { reportable_type: 'service' }, // Use snake_case
+  },
+  foreignKey: 'reportable_id', // Use snake_case
+  as: 'ReportWritings',
+  constraints: false,
+});
+
+ReportWriting.belongsToMany(AdditionalService, {
+  through: {
+    model: Reportable,
+    unique: false,
+  },
+  foreignKey: 'report_writing_id',
+  as: 'AdditionalServices',
+  constraints: false,
+}); 
+AdditionalService.belongsToMany(ReportWriting, {
+  through: {
+    model: Reportable,
+    unique: false,
+    scope: {
+      reportable_type: 'additional_service'
+    },
+  },
+  foreignKey: 'reportable_id',
+  as: 'ReportWritings',
+  constraints: false,
+});
+
+ReportWriting.belongsToMany(AvailabilityOption, {
+  through: {
+    model: Reportable,
+    unique: false,
+  },
+  foreignKey: 'report_writing_id',
+  as: 'AvailabilityOptions',
+  constraints: false,
+});
+AvailabilityOption.belongsToMany(ReportWriting, {
+  through: {
+    model: Reportable,
+    unique: false,
+    scope: {
+      reportable_type: 'availability_option'
+    },
+  },
+  foreignKey: 'reportable_id',
+  as: 'ReportWritings',
+  constraints: false,
+});
+
+ReportWriting.belongsToMany(DwellingAdjustment, {
+  through: {
+    model: Reportable,
+    unique: false,
+  },
+  foreignKey: 'report_writing_id',
+  as: 'DwellingAdjustments',
+  constraints: false,
+});
+DwellingAdjustment.belongsToMany(ReportWriting, {
+  through: {
+    model: Reportable,
+    unique: false,
+    scope: {
+      reportable_type: 'dwelling_adjustment'
+    },
+  },
+  foreignKey: 'reportable_id',
+  as: 'ReportWritings',
+  constraints: false,
+});
+
+
+ClientPresentation.belongsToMany(Service, {
+  through: {
+    model: Presentable,
+    unique: false,
+  },
+  foreignKey: 'client_presentation_id', // Use snake_case
+  as: 'Services',
+  constraints: false,
+});
+Service.belongsToMany(ClientPresentation, {
+  through: {
+    model: Presentable,
+    unique: false,
+    scope: { presentable_type: 'service' }, // Use snake_case
+  },
+  foreignKey: 'presentable_id', // Use snake_case
+  as: 'ClientPresentations',
+  constraints: false,
+});
+
+ClientPresentation.belongsToMany(AdditionalService, {
+  through: {
+    model: Presentable,
+    unique: false,
+  },
+  foreignKey: 'client_presentation_id',
+  as: 'AdditionalServices',
+  constraints: false,
+}); 
+AdditionalService.belongsToMany(ClientPresentation, {
+  through: {
+    model: Presentable,
+    unique: false,
+    scope: {
+      presentable_type: 'additional_service'
+    },
+  },
+  foreignKey: 'presentable_id',
+  as: 'ClientPresentations',
+  constraints: false,
+});
+
+ClientPresentation.belongsToMany(AvailabilityOption, {
+  through: {
+    model: Presentable,
+    unique: false,
+  },
+  foreignKey: 'client_presentation_id',
+  as: 'AvailabilityOptions',
+  constraints: false,
+});
+AvailabilityOption.belongsToMany(ClientPresentation, {
+  through: {
+    model: Presentable,
+    unique: false,
+    scope: {
+      presentable_type: 'availability_option'
+    },
+  },
+  foreignKey: 'presentable_id',
+  as: 'ClientPresentations',
+  constraints: false,
+});
+
+ClientPresentation.belongsToMany(DwellingAdjustment, {
+  through: {
+    model: Presentable,
+    unique: false,
+  },
+  foreignKey: 'client_presentation_id',
+  as: 'DwellingAdjustments',
+  constraints: false,
+});
+DwellingAdjustment.belongsToMany(ClientPresentation, {
+  through: {
+    model: Presentable,
+    unique: false,
+    scope: {
+      presentable_type: 'dwelling_adjustment'
+    },
+  },
+  foreignKey: 'presentable_id',
+  as: 'ClientPresentations',
+  constraints: false,
+});
 
 
 export { 
@@ -216,12 +393,10 @@ export {
   DwellingAdjustment, 
   AdditionalService, 
   AvailabilityOption,
-  EarlyArrival,
   DataCollection,
+  Collectable,
+  ClientPresentation,
+  Presentable,
   ReportWriting,
-  ClientPresentation
-  // , 
-  // Descriptions
-  // User, 
-  // Login 
+  Reportable
 };

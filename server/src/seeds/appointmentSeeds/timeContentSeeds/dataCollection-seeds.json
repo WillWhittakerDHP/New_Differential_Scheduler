@@ -33,7 +33,7 @@
   
   },
   {
-    "on-site": true,
+    "on_site": true,
     "base_sq_ft": 600,
     "base_time": 100, 
     "rate_over_base_time": 150, 
@@ -41,7 +41,7 @@
     "rate_over_base_fee": 125
   },
   {
-    "on-site": true,
+    "on_site": true,
     "base_sq_ft": 600,
     "base_time": 15, 
     "rate_over_base_time": 100, 

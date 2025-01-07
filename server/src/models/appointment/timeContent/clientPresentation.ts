@@ -1,16 +1,19 @@
-import { Model, DataTypes, 
-  type InferAttributes,
-  type InferCreationAttributes,
-  type CreationOptional,
-  type Sequelize,
-  ForeignKey 
-  } from 'sequelize';
+import { 
+  Model, 
+  DataTypes, 
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  Sequelize, 
+} from 'sequelize';
   
-  import { Service } from '../structure/serviceTypes';
-  import { AdditionalService } from '../structure/additionalServices';
-  import { AvailabilityOption } from '../structure/availabilityOptions';
-  import { DwellingAdjustment } from '../structure/dwellingAdjustments';
-  
+import { Presentable } from './presentables';
+import { Service } from '../structure/serviceTypes';
+import { AdditionalService } from '../structure/additionalServices';
+import { AvailabilityOption } from '../structure/availabilityOptions';
+import { DwellingAdjustment } from '../structure/dwellingAdjustments';
 
 export class ClientPresentation extends Model<
   InferAttributes<ClientPresentation>,
@@ -23,13 +26,19 @@ export class ClientPresentation extends Model<
   declare rate_over_base_time: number;
   declare base_fee: number;
   declare rate_over_base_fee: number;
-  declare service?: ForeignKey<Service['id']>
-  declare additionalService?: ForeignKey<AdditionalService['id']>
-  declare availabilityOption?: ForeignKey<AvailabilityOption['id']>
-  declare dwellingAdjustment?: ForeignKey<DwellingAdjustment['id']>
-
-  declare setService: (service: number | object) => Promise<void>;
-}
+  
+  declare getPresentable: BelongsToManyGetAssociationsMixin<Presentable>;
+  declare getPresentables: BelongsToManyGetAssociationsMixin<Presentable[]>;
+  service?: Service;
+  additionalService?: AdditionalService;
+  availabilityOption?: AvailabilityOption;
+  dwellingAdjustment?: DwellingAdjustment;
+  
+  declare addPresentable: BelongsToManyAddAssociationMixin<Presentable, Presentable['client_presentation_id']>;
+  declare addPresentables: BelongsToManyAddAssociationMixin<
+  Presentable[],
+  Presentable['client_presentation_id'][]
+  >;}
 
 export function ClientPresentationFactory(sequelize: Sequelize): typeof ClientPresentation {
   ClientPresentation.init(

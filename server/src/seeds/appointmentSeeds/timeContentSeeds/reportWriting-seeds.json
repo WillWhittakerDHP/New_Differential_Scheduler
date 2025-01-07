@@ -1,6 +1,6 @@
 [
   {
-    "on-site": true,
+    "on_site": true,
     "base_sq_ft": 600,
     "base_time": 60, 
     "rate_over_base_time": 100, 
@@ -8,7 +8,7 @@
     "rate_over_base_fee": 10
   },
   {
-    "on-site": true,
+    "on_site": true,
     "base_sq_ft": 600,
     "base_time": 60, 
     "rate_over_base_time": 150, 
@@ -16,7 +16,7 @@
     "rate_over_base_fee": 100
   },
   {
-    "on-site": false,
+    "on_site": false,
     "base_sq_ft": 600,
     "base_time": 75, 
     "rate_over_base_time": 100, 
@@ -25,7 +25,7 @@
   
   },
   {
-    "on-site": false,
+    "on_site": false,
     "base_sq_ft": 600,
     "base_time": 175,
     "rate_over_base_time": 0, 
@@ -33,7 +33,7 @@
     "rate_over_base_fee": 0
   },
   {
-    "on-site": false,
+    "on_site": false,
     "base_sq_ft": 600,
     "base_time": 30, 
     "rate_over_base_time": 50, 
@@ -41,7 +41,7 @@
     "rate_over_base_fee": 120
   },
   {
-    "on-site": false,
+    "on_site": false,
     "base_sq_ft": 600,
     "base_time": 100,
     "rate_over_base_time": 100,
