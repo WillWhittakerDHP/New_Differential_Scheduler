@@ -1,25 +1,23 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, Row, Card } from 'react-bootstrap';
 import { AppointmentContext } from '../AppointmentContext';
-import { retrieveServicesForUserTypeByID } from '../../api/internalAPI/adminAPI';
-import { retrieveServiceByID } from '../../api/internalAPI/appointmentAPI';
+import { retrieveServicesForUserTypeByID, retrieveBaseServiceByID } from '../../api/internalAPI/appointmentAPI';
 
-import type { AdditionalServiceData, ServiceData } from '../../interfaces/serviceInterfaces';
+import type { ServiceData } from '../../interfaces/serviceInterfaces';
 
 // Define the props for the component
-// interface ServicesListProps {
-//   Services: ServiceData[] | null;
-//   AdditionalServices: AdditionalServiceData[] | null;
-// }
-
-const ServicesList: React.FC<ServiceData> = () => {
+interface ServicesListProps {
+  //   Services: ServiceTypeData[] | null;
+  }
+  
+  const ServicesList: React.FC<ServicesListProps> = () => {
   // Access the context
   const context = useContext(AppointmentContext);
   if (!context) {
     throw new Error('ServicesList must be used within an AppointmentProvider');
   }
 
-  const { thisUserType, thisService, availableServices, setAvailableServices, setThisService, setAvailableAdditionalServiceTypes, setAvailableAvailabilityOptions, setDwellingAdjustments
+  const { thisUserType, availableServices, thisService, setThisService, setAvailableServices, setAvailableAdditionalServices, setAvailableAvailabilityOptions, setDwellingAdjustments
   } = context;
 
   // Fetch Service types
@@ -45,17 +43,18 @@ const ServicesList: React.FC<ServiceData> = () => {
   const handleServiceTypeSelect = (selectedServiceType: ServiceData) => {
     setThisService(selectedServiceType);
   };
-
-    // Fetch AdditionalService types
-    const fetchServiceByID = async () => {
-      if (thisService !== undefined)
+  
+  // Fetch Associated AdditionalServices, AdditionalServices, and DwellingAdjustments
+  const fetchServiceByID = async () => {
+    if (thisService !== undefined)
       try {
-        if(thisService) {
-          const data = await retrieveServiceByID(thisService.id);
-          const service: ServiceData = JSON.parse(JSON.stringify(data));
+    if(thisService) {
+      const data = await retrieveBaseServiceByID(thisService.id);
+      const service: ServiceData = JSON.parse(JSON.stringify(data));
+      console.log('service from ServicesList.tsx', service)
           const availableAdditionalServices =  service.AdditionalServices;
           if (availableAdditionalServices !== undefined && availableAdditionalServices !== null)
-          setAvailableAdditionalServiceTypes(availableAdditionalServices);
+          setAvailableAdditionalServices(availableAdditionalServices);
           const availableAvailabilityOptions =  service.AvailabilityOptions;
           if (availableAvailabilityOptions !== undefined && availableAvailabilityOptions !== null)
           setAvailableAvailabilityOptions(availableAvailabilityOptions);
@@ -72,7 +71,7 @@ const ServicesList: React.FC<ServiceData> = () => {
   
     useEffect(() => {
       fetchServiceByID();
-    }, [thisService, setAvailableAdditionalServiceTypes]);
+    }, [thisService, setAvailableAdditionalServices, setAvailableAvailabilityOptions, setDwellingAdjustments]);
 
   return (
     <Container className="mt-4">

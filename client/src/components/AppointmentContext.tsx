@@ -1,8 +1,7 @@
 import React, { createContext, useState, ReactNode } from 'react';
 import type { UserTypeData, ServiceData, DwellingAdjustmentData, AdditionalServiceData, AvailabilityOptionData } from '../interfaces/serviceInterfaces';
 import { DescriptionsData } from '../interfaces/detailInterfaces';
-import type { AddressData, PropertyData } from '../interfaces/appointmentInterfaces';
-
+import { AddressData, PropertyData } from '../interfaces/appointmentInterfaces';
 
 interface AppointmentContextType {
   userTypes: UserTypeData[];
@@ -15,8 +14,8 @@ interface AppointmentContextType {
   thisService: ServiceData | undefined;
   setThisService: React.Dispatch<React.SetStateAction<ServiceData | undefined>>;
 
-  availableAdditionalServiceTypes: AdditionalServiceData[];
-  setAvailableAdditionalServiceTypes: React.Dispatch<React.SetStateAction<AdditionalServiceData[]>>;
+  availableAdditionalServices: AdditionalServiceData[];
+  setAvailableAdditionalServices: React.Dispatch<React.SetStateAction<AdditionalServiceData[]>>;
   thisAdditionalService: AdditionalServiceData | undefined;
   setThisAdditionalService: React.Dispatch<React.SetStateAction<AdditionalServiceData | undefined>>;
 
@@ -47,7 +46,7 @@ export const AppointmentProvider = ({ children }: { children: ReactNode }) => {
   const [thisUserType, setThisUserType] = useState<UserTypeData | undefined>();
   const [availableServices, setAvailableServices] = useState<ServiceData[]>([]);
   const [thisService, setThisService] = useState<ServiceData | undefined>();
-  const [availableAdditionalServiceTypes, setAvailableAdditionalServiceTypes] = useState<AdditionalServiceData[]>([]);
+  const [availableAdditionalServices, setAvailableAdditionalServices] = useState<AdditionalServiceData[]>([]);
   const [thisAdditionalService, setThisAdditionalService] = useState<AdditionalServiceData | undefined>();
   const [availableAvailabilityOptions, setAvailableAvailabilityOptions] = useState<AvailabilityOptionData[]>([]);
   const [thisAvailabilityOption, setThisAvailabilityOption] = useState<AvailabilityOptionData | undefined>();
@@ -59,7 +58,7 @@ export const AppointmentProvider = ({ children }: { children: ReactNode }) => {
   
 
   return (
-    <AppointmentContext.Provider value={{ userTypes, setUserTypes, thisUserType, setThisUserType, availableServices, setAvailableServices, thisService, setThisService, availableAdditionalServiceTypes, setAvailableAdditionalServiceTypes, thisAdditionalService, setThisAdditionalService, availableAvailabilityOptions, setAvailableAvailabilityOptions, thisAvailabilityOption, setThisAvailabilityOption, dwellingAdjustments, setDwellingAdjustments, thisDwellingAdjustment, setThisDwellingAdjustment, serviceDescriptions, setServiceDescriptions, thisAddress, setThisAddress, thisProperty, setThisProperty}}>
+    <AppointmentContext.Provider value={{ userTypes, setUserTypes, thisUserType, setThisUserType, availableServices, setAvailableServices, thisService, setThisService, availableAdditionalServices, setAvailableAdditionalServices, thisAdditionalService, setThisAdditionalService, availableAvailabilityOptions, setAvailableAvailabilityOptions, thisAvailabilityOption, setThisAvailabilityOption, dwellingAdjustments, setDwellingAdjustments, thisDwellingAdjustment, setThisDwellingAdjustment, serviceDescriptions, setServiceDescriptions, thisAddress, setThisAddress, thisProperty, setThisProperty}}>
       {children}
     </AppointmentContext.Provider>
   );

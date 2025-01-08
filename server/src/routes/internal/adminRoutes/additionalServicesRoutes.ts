@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { ClientPresentation, DataCollection, ReportWriting, AdditionalService } from '../../../../../models/index.js';
+import { ClientPresentation, DataCollection, ReportWriting, AdditionalService } from '../../../models/index.js';
 
 const router = Router();
 

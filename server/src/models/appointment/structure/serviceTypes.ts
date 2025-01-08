@@ -31,8 +31,8 @@ InferCreationAttributes<Service>
   declare report_writing_id?: number; // Foreign key
   declare client_presentation_id?: number; // Foreign key
   declare AdditionalServices?: AdditionalService[];
-  AvailabilityOptions?: AvailabilityOption;
-  DwellingAdjustments?: DwellingAdjustment;
+  declare AvailabilityOptions?: AvailabilityOption[];
+  declare DwellingAdjustments?: DwellingAdjustment[];
 
   declare getServiceable: BelongsToManyGetAssociationsMixin<Serviceable>;
   declare getServiceables: BelongsToManyGetAssociationsMixin<Serviceable[]>;

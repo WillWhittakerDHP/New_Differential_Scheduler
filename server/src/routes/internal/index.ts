@@ -1,10 +1,10 @@
-import { Router } from 'express';
-import { AppointmentRouter } from './appointmentRoutes/index.js';
-// import { ParticipantRouter } from './participantRoutes/index.js';
+import { Router } from "express";
+import { AppointmentRouter } from "./appointmentRoutes.js";
+import { AdminRouter } from "./adminRoutes/index.js";
 
 const router = Router();
 
 router.use('/appointment', AppointmentRouter);
-// router.use('/participants', ParticipantRouter);
+router.use('/admin', AdminRouter);
 
-export { router as InternalRouter} ;
+export { router as InternalRouter };
