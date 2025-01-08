@@ -19,42 +19,43 @@ export const seedServices = async () => {
 
   try{
     console.log('\n----- Seeding Services ... -----\n');
-    const services = await Service.bulkCreate(serviceSeedData, {
-      returning: true,
-      validate: true,
-    });
-    console.log('\n----- SERVICES SEEDING COMPLETE ... -----\n');
+const services = await Service.bulkCreate(serviceSeedData, {
+  returning: true,
+  validate: true,
+});
+console.log('\n----- SERVICES SEEDING COMPLETE ... -----\n');
+
 
     console.log('\n----- Seeding DataCollections ... -----\n');
-    const DataCollections = await DataCollection.bulkCreate(dataCollectionSeedData, {
+    const dataCollections = await DataCollection.bulkCreate(dataCollectionSeedData, {
       returning: true,
       validate: true,
     });
     
     console.log('\n----- Seeding ReportWritings ... -----\n');
-    const ReportWritings = await ReportWriting.bulkCreate(reportWritingSeedData, {
+    const reportWritings = await ReportWriting.bulkCreate(reportWritingSeedData, {
       returning: true,
       validate: true,
     });
 
     console.log('\n----- Seeding ClientPresentations ... -----\n');
-    const ClientPresentations = await ClientPresentation.bulkCreate(clientPresentationSeedData, {
+    const clientPresentations = await ClientPresentation.bulkCreate(clientPresentationSeedData, {
       returning: true,
       validate: true,
     });
     
     for (const service of services) {
       console.log('\n----- Associating DataCollections for', service.name);
-      const randomDataCollections = DataCollections.slice(Math.floor(Math.random() * DataCollections.length));
-      await service.addDataCollections(randomDataCollections);
+      const dataCollection = dataCollections[Math.floor(Math.random() * dataCollections.length)];    
+      await service.update({ data_collection_id: dataCollection.id }); 
       
       console.log('\n----- Associating ReportWritings for', service.name);
-      const randomReportWritings = ReportWritings.slice(Math.floor(Math.random() * ReportWritings.length));
-      await service.addReportWritings(randomReportWritings);
+      const reportWriting = reportWritings[Math.floor(Math.random() * reportWritings.length)];    
+      await service.update({ report_writing_id: reportWriting.id }); 
       
       console.log('\n----- Associating ClientPresentations for', service.name);
-      const randomClientPresentations = ClientPresentations.slice(Math.floor(Math.random() * ClientPresentations.length));
-      await service.addClientPresentations(randomClientPresentations);
+      const clientPresentation = clientPresentations[Math.floor(Math.random() * clientPresentations.length)];    
+      await service.update({ client_presentation_id: clientPresentation.id }); 
     }
     console.log('\n----- SERVICE SEEDING COMPLETE -----\n');
 
@@ -80,21 +81,17 @@ export const seedServices = async () => {
     });
     
     for (const additionalService of additionalServices) {
-      console.log('\n----- Associating Services for', additionalService.name);
-      const randomServices = services.slice(Math.floor(Math.random() * services.length));
-      await additionalService.addServices(randomServices);
-
       console.log('\n----- Associating DataCollections for', additionalService.name);
-      const randomDataCollections = DataCollections.slice(Math.floor(Math.random() * DataCollections.length));
-      await additionalService.addDataCollections(randomDataCollections);
-
+      const dataCollection = dataCollections[Math.floor(Math.random() * dataCollections.length)];    
+      await additionalService.update({ data_collection_id: dataCollection.id }); 
+      
       console.log('\n----- Associating ReportWritings for', additionalService.name);
-      const randomReportWritings = ReportWritings.slice(Math.floor(Math.random() * ReportWritings.length));
-      await additionalService.addReportWritings(randomReportWritings);
-
+      const reportWriting = reportWritings[Math.floor(Math.random() * reportWritings.length)];    
+      await additionalService.update({ report_writing_id: reportWriting.id }); 
+      
       console.log('\n----- Associating ClientPresentations for', additionalService.name);
-      const randomClientPresentations = ClientPresentations.slice(Math.floor(Math.random() * ClientPresentations.length));
-      await additionalService.addClientPresentations(randomClientPresentations);
+      const clientPresentation = clientPresentations[Math.floor(Math.random() * clientPresentations.length)];    
+      await additionalService.update({ client_presentation_id: clientPresentation.id }); 
     }
     console.log('\n----- ADDITIONALSERVICES SEEDING COMPLETE -----\n');
     
@@ -106,21 +103,17 @@ export const seedServices = async () => {
     });
     
     for (const availabilityOption of availabilityOptions) {
-      console.log('\n----- Associating Services for', availabilityOption.name);
-      const randomServices = services.slice(Math.floor(Math.random() * services.length));
-      await availabilityOption.addServices(randomServices);
-
       console.log('\n----- Associating DataCollections for', availabilityOption.name);
-      const randomDataCollections = DataCollections.slice(Math.floor(Math.random() * DataCollections.length));
-      await availabilityOption.addDataCollections(randomDataCollections);
-
+      const dataCollection = dataCollections[Math.floor(Math.random() * dataCollections.length)];    
+      await availabilityOption.update({ data_collection_id: dataCollection.id }); 
+      
       console.log('\n----- Associating ReportWritings for', availabilityOption.name);
-      const randomReportWritings = ReportWritings.slice(Math.floor(Math.random() * ReportWritings.length));
-      await availabilityOption.addReportWritings(randomReportWritings);
-
+      const reportWriting = reportWritings[Math.floor(Math.random() * reportWritings.length)];    
+      await availabilityOption.update({ report_writing_id: reportWriting.id }); 
+      
       console.log('\n----- Associating ClientPresentations for', availabilityOption.name);
-      const randomClientPresentations = ClientPresentations.slice(Math.floor(Math.random() * ClientPresentations.length));
-      await availabilityOption.addClientPresentations(randomClientPresentations);
+      const clientPresentation = clientPresentations[Math.floor(Math.random() * clientPresentations.length)];    
+      await availabilityOption.update({ client_presentation_id: clientPresentation.id }); 
     }
     console.log('\n----- AVAILABILITYOPTION SEEDING COMPLETE -----\n');
     
@@ -132,21 +125,17 @@ export const seedServices = async () => {
     });
     
     for (const dwellingAdjustment of dwellingAdjustments) {
-      console.log('\n----- Associating Services for', dwellingAdjustment.name);
-      const randomServices = services.slice(Math.floor(Math.random() * services.length));
-      await dwellingAdjustment.addServices(randomServices);
-
       console.log('\n----- Associating DataCollections for', dwellingAdjustment.name);
-      const randomDataCollections = DataCollections.slice(Math.floor(Math.random() * DataCollections.length));
-      await dwellingAdjustment.addDataCollections(randomDataCollections);
-
+      const dataCollection = dataCollections[Math.floor(Math.random() * dataCollections.length)];    
+      await dwellingAdjustment.update({ data_collection_id: dataCollection.id }); 
+      
       console.log('\n----- Associating ReportWritings for', dwellingAdjustment.name);
-      const randomReportWritings = ReportWritings.slice(Math.floor(Math.random() * ReportWritings.length));
-      await dwellingAdjustment.addReportWritings(randomReportWritings);
-
+      const reportWriting = reportWritings[Math.floor(Math.random() * reportWritings.length)];    
+      await dwellingAdjustment.update({ report_writing_id: reportWriting.id }); 
+      
       console.log('\n----- Associating ClientPresentations for', dwellingAdjustment.name);
-      const randomClientPresentations = ClientPresentations.slice(Math.floor(Math.random() * ClientPresentations.length));
-      await dwellingAdjustment.addClientPresentations(randomClientPresentations);
+      const clientPresentation = clientPresentations[Math.floor(Math.random() * clientPresentations.length)];    
+      await dwellingAdjustment.update({ client_presentation_id: clientPresentation.id }); 
     }
     console.log('\n----- DWELLINGTYPE SEEDING COMPLETE -----\n');
 

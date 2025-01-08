@@ -4,22 +4,23 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
-  BelongsToManyAddAssociationMixin,
-  BelongsToManyGetAssociationsMixin,
   Sequelize, 
 } from 'sequelize';
     
-import { Collectable } from './collectables';
-import { Service } from '../structure/serviceTypes';
-import { AdditionalService } from '../structure/additionalServices';
-import { AvailabilityOption } from '../structure/availabilityOptions';
-import { DwellingAdjustment } from '../structure/dwellingAdjustments';
+// import { Service } from '../structure/serviceTypes';
+// import { AdditionalService } from '../structure/additionalServices';
+// import { AvailabilityOption } from '../structure/availabilityOptions';
+// import { DwellingAdjustment } from '../structure/dwellingAdjustments';
 
 export class DataCollection extends Model<
   InferAttributes<DataCollection>,
   InferCreationAttributes<DataCollection>
 > {
   declare id: CreationOptional<number>;
+  // declare service_id: number; // Foreign key
+  // declare additional_service_id?: number; // Foreign key
+  // declare availability_option_id?: number; // Foreign key
+  // declare dwelling_adjustment_id?: number; // Foreign key
   declare on_site: boolean;
   declare base_sq_ft: number;
   declare base_time: number;
@@ -27,18 +28,6 @@ export class DataCollection extends Model<
   declare base_fee: number;
   declare rate_over_base_fee: number;
   
-  declare getCollectable: BelongsToManyGetAssociationsMixin<Collectable>;
-  declare getCollectables: BelongsToManyGetAssociationsMixin<Collectable[]>;
-  service?: Service;
-  additionalService?: AdditionalService;
-  availabilityOption?: AvailabilityOption;
-  dwellingAdjustment?: DwellingAdjustment;
-  
-  declare addCollectable: BelongsToManyAddAssociationMixin<Collectable, Collectable['data_collection_id']>;
-  declare addCollectables: BelongsToManyAddAssociationMixin<
-  Collectable[],
-  Collectable['data_collection_id'][]
-  >;
 }
 
 export function DataCollectionFactory(sequelize: Sequelize): typeof DataCollection {
@@ -49,6 +38,38 @@ export function DataCollectionFactory(sequelize: Sequelize): typeof DataCollecti
         autoIncrement: true,
         primaryKey: true,
       },
+      // service_id: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'services', // Matches table name
+      //     key: 'id',
+      //   },
+      // },
+      // additional_service_id: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'additional_services', // Matches table name
+      //     key: 'id',
+      //   },
+      // },
+      // availability_option_id: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'availability_options', // Matches table name
+      //     key: 'id',
+      //   },
+      // },
+      // dwelling_adjustment_id: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'dwelling_adjustments', // Matches table name
+      //     key: 'id',
+      //   },
+      // },
       on_site: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

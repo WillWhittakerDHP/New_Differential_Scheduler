@@ -8,4 +8,3 @@ router.use('/appointment', AppointmentRouter);
 // router.use('/participants', ParticipantRouter);
 
 export { router as InternalRouter} ;
-

@@ -1,13 +1,13 @@
 import { Router, Request, Response } from 'express';
-import { DwellingAdjustment } from '../../../../../models/index.js';
+import { ClientPresentation, DataCollection, ReportWriting, DwellingAdjustment } from '../../../../../models/index.js';
 
 const router = Router();
 
-// GET /DwellingAdjustments - Get all DwellingAdjustments
+// GET ALL DwellingAdjustments /internal/appointment/service/admin/dwellingAdjustments/
 router.get('/', async (_req: Request, res: Response) => {
   try {
-    const dwellingAdjustments = await DwellingAdjustment.findAll();
-    res.json(dwellingAdjustments);
+    const dwellingAdjustment = await DwellingAdjustment.findAll();
+    res.json(dwellingAdjustment);
   } catch (error: any) {
     res.status(500).json({
       message: error.message
@@ -15,7 +15,7 @@ router.get('/', async (_req: Request, res: Response) => {
   }  
 });  
 
-// GET /DwellingAdjustments/:id - Get a DwellingAdjustment by ID
+// GET an DwellingAdjustment by ID /internal/appointment/service/admin/dwellingAdjustments/:id
 router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -34,22 +34,69 @@ router.get('/:id', async (req: Request, res: Response) => {
   }  
 });  
 
-// // POST /DwellingAdjustments - Create a new DwellingAdjustment
-// router.post('/', async (req: Request, res: Response) => {
-//   const { name } = req.body;
-//   try {
-//     const newDwellingAdjustment = await DwellingAdjustment.create({
-//       name = name;
-//     });  
-//     res.status(201).json(newDwellingAdjustment);
-//   } catch (error: any) {
-//     res.status(400).json({
-//       message: error.message
-//     });  
-//   }  
-// });  
 
-// PUT /DwellingAdjustments/:id - Update a DwellingAdjustment by ID
+type DataCollectionInstance = InstanceType<typeof DataCollection>;
+type ReportWritingInstance = InstanceType<typeof ReportWriting>;
+type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
+
+type DwellingAdjustmentWithTimesValues = InstanceType<typeof DwellingAdjustment> & {
+  dataValues: {
+    DataCollection: DataCollectionInstance[],
+    ReportWriting: ReportWritingInstance[],
+    ClientPresentation: ClientPresentationInstance[];
+  };
+};
+
+// Get TimeContent by DwellingAdjustment ID /internal/appointment/service/admin/dwellingAdjustments/tc/:id
+router.get('/tc/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  console.log('Begin TimeContentFetch on DwellingAdjustmentsRoutes.ts');
+  try {
+    const TimesValuesByDwellingAdjustmentID = (await DwellingAdjustment.findByPk(id, {
+      attributes: {
+        exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId'],},
+      include: [
+        {
+          model: DataCollection,
+          as: 'data_colleciton',
+          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+        {
+          model: ReportWriting,
+          as: 'report_writing',
+          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+        {
+          model: ClientPresentation,
+          as: 'client_presentation',
+          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+      ],
+    })) as DwellingAdjustmentWithTimesValues;
+    
+    if (TimesValuesByDwellingAdjustmentID) {
+      console.log('TimeContentFetch on DwellingAdjustmentsRoutes.ts', TimesValuesByDwellingAdjustmentID);
+      res.json(TimesValuesByDwellingAdjustmentID);
+    } else {
+      res.status(404).json({ message: 'DwellingAdjustment not found' });
+    }
+  } catch (error: any) {
+    console.error('Error fetching TimesValues:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// CREATE a new DwellingAdjustment /internal/appointment/service/admin/dwellingAdjustments/
+router.post('/', async (req: Request, res: Response) => {
+  try {
+    const newDwellingAdjustmentData = await DwellingAdjustment.create(req.body);
+    res.status(200).json(newDwellingAdjustmentData);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+}); 
+
+// UPDATE an DwellingAdjustment by ID /internal/appointment/service/admin/dwellingAdjustments/:id
 router.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name } = req.body;
@@ -71,24 +118,24 @@ router.put('/:id', async (req: Request, res: Response) => {
   }  
 });  
 
-// DELETE /DwellingAdjustments/:id - Delete a DwellingAdjustment by ID
+// DELETE an DwellingAdjustment /internal/appointment/service/admin/dwellingAdjustments/:id
 router.delete('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
   try {
-    const dwellingAdjustment = await DwellingAdjustment.findByPk(id);
-    if(dwellingAdjustment) {
-      await dwellingAdjustment.destroy();
-      res.json({ message: 'DwellingAdjustment deleted' });
-    } else {
-      res.status(404).json({
-        message: 'User not found'
-      });  
-    }  
-  } catch (error: any) {
-    res.status(500).json({
-      message: error.message
-    });  
-  }  
-});  
+    const dwellingAdjustmentData = await DwellingAdjustment.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
 
-export { router as DwellingAdjustmentsTypesRouter };
+    if (!dwellingAdjustmentData) {
+      res.status(404).json({ message: 'No DwellingAdjustment found with that id!' });
+      return;
+    }
+
+    res.status(200).json(dwellingAdjustmentData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+export { router as DwellingAdjustmentRouter };

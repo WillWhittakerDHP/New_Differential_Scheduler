@@ -3,6 +3,7 @@ import { TimeContentData } from "../../interfaces/appointmentInterfaces";
 
 const retrieveAllVisibleUserTypes = async () => {
   try {
+    console.log('ding')
     const response = await fetch('/internal/appointment/service/structure/', {
       headers: {
         'Content-Type': 'application/json',

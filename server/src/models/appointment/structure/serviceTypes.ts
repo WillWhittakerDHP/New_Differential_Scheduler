@@ -14,9 +14,9 @@ import { DwellingAdjustment } from './dwellingAdjustments.js';
 import { AdditionalService } from './additionalServices.js';
 import { AvailabilityOption } from './availabilityOptions.js';
 
-import { DataCollection } from '../timeContent/dataCollection.js';
-import { ReportWriting } from '../timeContent/reportWriting.js';
-import { ClientPresentation } from '../timeContent/clientPresentation.js';
+// import { DataCollection } from '../timeContent/dataCollection.js';
+// import { ReportWriting } from '../timeContent/reportWriting.js';
+// import { ClientPresentation } from '../timeContent/clientPresentation.js';
 
 export class Service extends Model<
 InferAttributes<Service>,
@@ -25,8 +25,11 @@ InferCreationAttributes<Service>
   declare id: CreationOptional<number>;
   declare name: string;
   declare differential_scheduling: boolean;
-  declare visibility: boolean;
   declare description: string;
+  declare visibility: boolean;
+  declare data_collection_id?: number; // Foreign key
+  declare report_writing_id?: number; // Foreign key
+  declare client_presentation_id?: number; // Foreign key
 
   declare getServiceable: BelongsToManyGetAssociationsMixin<Serviceable>;
   declare getServiceables: BelongsToManyGetAssociationsMixin<Serviceable[]>;
@@ -38,36 +41,6 @@ InferCreationAttributes<Service>
   declare addServiceables: BelongsToManyAddAssociationMixin<
   Serviceable[],
   Serviceable['service_id'][]
-  >;
-
-  declare getDataCollection: BelongsToManyGetAssociationsMixin<DataCollection>;
-  declare getDataCollections: BelongsToManyGetAssociationsMixin<DataCollection[]>;
-  DataCollections?: DataCollection[];
-  
-  declare addDataCollection: BelongsToManyAddAssociationMixin<DataCollection, DataCollection['id']>;
-  declare addDataCollections: BelongsToManyAddAssociationMixin<
-  DataCollection[],
-  DataCollection['id'][]
-  >;
-
-  declare getReportWriting: BelongsToManyGetAssociationsMixin<ReportWriting>;
-  declare getReportWritings: BelongsToManyGetAssociationsMixin<ReportWriting[]>;
-  ReportWritings?: ReportWriting[];
-  
-  declare addReportWriting: BelongsToManyAddAssociationMixin<ReportWriting, ReportWriting['id']>;
-  declare addReportWritings: BelongsToManyAddAssociationMixin<
-  ReportWriting[],
-  ReportWriting['id'][]
-  >;
-
-  declare getClientPresentation: BelongsToManyGetAssociationsMixin<ClientPresentation>;
-  declare getClientPresentations: BelongsToManyGetAssociationsMixin<ClientPresentation[]>;
-  ClientPresentations?: ClientPresentation[];
-  
-  declare addClientPresentation: BelongsToManyAddAssociationMixin<ClientPresentation, ClientPresentation['id']>;
-  declare addClientPresentations: BelongsToManyAddAssociationMixin<
-  ClientPresentation[],
-  ClientPresentation['id'][]
   >;
 }
 
@@ -94,6 +67,27 @@ export function ServiceFactory(sequelize: Sequelize) {
       visibility: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
+      },
+      data_collection_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'data_collection', // Matches table name
+          key: 'id',
+        },
+      },
+      report_writing_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'report_writing', // Matches table name
+          key: 'id',
+        },
+      },
+      client_presentation_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'client_presentation', // Matches table name
+          key: 'id',
+        },
       },
     },
     {

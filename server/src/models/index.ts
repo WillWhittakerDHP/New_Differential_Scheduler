@@ -9,11 +9,9 @@ import { AdditionalServiceFactory } from './appointment/structure/additionalServ
 import { AvailabilityOptionFactory } from './appointment/structure/availabilityOptions.js';
 // TimeBlocks
 import { DataCollectionFactory } from './appointment/timeContent/dataCollection.js';
-import { CollectableFactory } from './appointment/timeContent/collectables.js';
 import { ClientPresentationFactory } from './appointment/timeContent/clientPresentation.js';
-import { PresentableFactory } from './appointment/timeContent/presentables.js';
 import { ReportWritingFactory } from './appointment/timeContent/reportWriting.js';
-import { ReportableFactory } from './appointment/timeContent/reportables.js';
+
 
 // Appointment Content
 const Service = ServiceFactory(sequelize);
@@ -24,11 +22,8 @@ const AdditionalService = AdditionalServiceFactory(sequelize);
 const AvailabilityOption = AvailabilityOptionFactory(sequelize);
 // TimeBlocks
 const ClientPresentation = ClientPresentationFactory(sequelize);
-const Presentable = PresentableFactory(sequelize);
 const ReportWriting = ReportWritingFactory(sequelize);
-const Reportable = ReportableFactory(sequelize);
 const DataCollection = DataCollectionFactory(sequelize);
-const Collectable = CollectableFactory(sequelize);
 
 
 
@@ -125,265 +120,78 @@ DwellingAdjustment.belongsToMany(Service, {
 // TimeBlocks
 
 
-DataCollection.belongsToMany(Service, {
-  through: {
-    model: Collectable,
-    unique: false,
-  },
-  foreignKey: 'data_collection_id', // Use snake_case
-  as: 'Services',
-  constraints: false,
+DataCollection.hasMany(Service, {
+  onDelete: 'CASCADE',
 });
-Service.belongsToMany(DataCollection, {
-  through: {
-    model: Collectable,
-    unique: false,
-    scope: { collectable_type: 'service' }, // Use snake_case
-  },
-  foreignKey: 'collectable_id', // Use snake_case
-  as: 'DataCollections',
-  constraints: false,
-});
+Service.belongsTo(DataCollection);
 
-DataCollection.belongsToMany(AdditionalService, {
-  through: {
-    model: Collectable,
-    unique: false,
-  },
-  foreignKey: 'data_collection_id',
-  as: 'AdditionalServices',
-  constraints: false,
+DataCollection.hasMany(AdditionalService, {
+  onDelete: 'CASCADE',
 });
-AdditionalService.belongsToMany(DataCollection, {
-  through: {
-    model: Collectable,
-    unique: false,
-    scope: {
-      collectable_type: 'additional_service'
-    },
-  },
-  foreignKey: 'collectable_id',
-  as: 'DataCollections',
-  constraints: false,
-});
-
-DataCollection.belongsToMany(AvailabilityOption, {
-  through: {
-    model: Collectable,
-    unique: false,
-  },
-  foreignKey: 'data_collection_id',
-  as: 'AvailabilityOptions',
-  constraints: false,
-});
-AvailabilityOption.belongsToMany(DataCollection, {
-  through: {
-    model: Collectable,
-    unique: false,
-    scope: {
-      collectable_type: 'availability_option'
-    },
-  },
-  foreignKey: 'collectable_id',
-  as: 'DataCollections',
-  constraints: false,
-});
-
-DataCollection.belongsToMany(DwellingAdjustment, {
-  through: {
-    model: Collectable,
-    unique: false,
-  },
-  foreignKey: 'data_collection_id',
-  as: 'DwellingAdjustments',
-  constraints: false,
-});
-DwellingAdjustment.belongsToMany(DataCollection, {
-  through: {
-    model: Collectable,
-    unique: false,
-    scope: {
-      collectable_type: 'dwelling_adjustment'
-    },
-  },
-  foreignKey: 'collectable_id',
-  as: 'DataCollections',
-  constraints: false,
-});
+AdditionalService.belongsTo(DataCollection);
 
 
-ReportWriting.belongsToMany(Service, {
-  through: {
-    model: Reportable,
-    unique: false,
-  },
-  foreignKey: 'report_writing_id', // Use snake_case
-  as: 'Services',
-  constraints: false,
+DataCollection.hasMany(AvailabilityOption, {
+  onDelete: 'CASCADE',
 });
-Service.belongsToMany(ReportWriting, {
-  through: {
-    model: Reportable,
-    unique: false,
-    scope: { reportable_type: 'service' }, // Use snake_case
-  },
-  foreignKey: 'reportable_id', // Use snake_case
-  as: 'ReportWritings',
-  constraints: false,
-});
+AvailabilityOption.belongsTo(DataCollection);
 
-ReportWriting.belongsToMany(AdditionalService, {
-  through: {
-    model: Reportable,
-    unique: false,
-  },
-  foreignKey: 'report_writing_id',
-  as: 'AdditionalServices',
-  constraints: false,
+
+DataCollection.hasMany(DwellingAdjustment, {
+  onDelete: 'CASCADE',
+});
+DwellingAdjustment.belongsTo(DataCollection);
+
+
+
+ReportWriting.hasMany(Service, {
+  onDelete: 'CASCADE',
+});
+Service.belongsTo(ReportWriting);
+
+
+ReportWriting.hasMany(AdditionalService, {
+  onDelete: 'CASCADE',
 }); 
-AdditionalService.belongsToMany(ReportWriting, {
-  through: {
-    model: Reportable,
-    unique: false,
-    scope: {
-      reportable_type: 'additional_service'
-    },
-  },
-  foreignKey: 'reportable_id',
-  as: 'ReportWritings',
-  constraints: false,
-});
-
-ReportWriting.belongsToMany(AvailabilityOption, {
-  through: {
-    model: Reportable,
-    unique: false,
-  },
-  foreignKey: 'report_writing_id',
-  as: 'AvailabilityOptions',
-  constraints: false,
-});
-AvailabilityOption.belongsToMany(ReportWriting, {
-  through: {
-    model: Reportable,
-    unique: false,
-    scope: {
-      reportable_type: 'availability_option'
-    },
-  },
-  foreignKey: 'reportable_id',
-  as: 'ReportWritings',
-  constraints: false,
-});
-
-ReportWriting.belongsToMany(DwellingAdjustment, {
-  through: {
-    model: Reportable,
-    unique: false,
-  },
-  foreignKey: 'report_writing_id',
-  as: 'DwellingAdjustments',
-  constraints: false,
-});
-DwellingAdjustment.belongsToMany(ReportWriting, {
-  through: {
-    model: Reportable,
-    unique: false,
-    scope: {
-      reportable_type: 'dwelling_adjustment'
-    },
-  },
-  foreignKey: 'reportable_id',
-  as: 'ReportWritings',
-  constraints: false,
-});
+AdditionalService.belongsTo(ReportWriting);
 
 
-ClientPresentation.belongsToMany(Service, {
-  through: {
-    model: Presentable,
-    unique: false,
-  },
-  foreignKey: 'client_presentation_id', // Use snake_case
-  as: 'Services',
-  constraints: false,
+ReportWriting.hasMany(AvailabilityOption, {
+  onDelete: 'CASCADE',
 });
-Service.belongsToMany(ClientPresentation, {
-  through: {
-    model: Presentable,
-    unique: false,
-    scope: { presentable_type: 'service' }, // Use snake_case
-  },
-  foreignKey: 'presentable_id', // Use snake_case
-  as: 'ClientPresentations',
-  constraints: false,
-});
+AvailabilityOption.belongsTo(ReportWriting);
 
-ClientPresentation.belongsToMany(AdditionalService, {
-  through: {
-    model: Presentable,
-    unique: false,
-  },
-  foreignKey: 'client_presentation_id',
-  as: 'AdditionalServices',
-  constraints: false,
+
+ReportWriting.hasMany(DwellingAdjustment, {
+  onDelete: 'CASCADE',
+});
+DwellingAdjustment.belongsTo(ReportWriting);
+
+
+
+ClientPresentation.hasMany(Service, {
+  onDelete: 'CASCADE',
+});
+Service.belongsTo(ClientPresentation);
+
+
+ClientPresentation.hasMany(AdditionalService, {
+  onDelete: 'CASCADE',
 }); 
-AdditionalService.belongsToMany(ClientPresentation, {
-  through: {
-    model: Presentable,
-    unique: false,
-    scope: {
-      presentable_type: 'additional_service'
-    },
-  },
-  foreignKey: 'presentable_id',
-  as: 'ClientPresentations',
-  constraints: false,
-});
+AdditionalService.belongsTo(ClientPresentation);
 
-ClientPresentation.belongsToMany(AvailabilityOption, {
-  through: {
-    model: Presentable,
-    unique: false,
-  },
-  foreignKey: 'client_presentation_id',
-  as: 'AvailabilityOptions',
-  constraints: false,
-});
-AvailabilityOption.belongsToMany(ClientPresentation, {
-  through: {
-    model: Presentable,
-    unique: false,
-    scope: {
-      presentable_type: 'availability_option'
-    },
-  },
-  foreignKey: 'presentable_id',
-  as: 'ClientPresentations',
-  constraints: false,
-});
 
-ClientPresentation.belongsToMany(DwellingAdjustment, {
-  through: {
-    model: Presentable,
-    unique: false,
-  },
-  foreignKey: 'client_presentation_id',
-  as: 'DwellingAdjustments',
-  constraints: false,
+ClientPresentation.hasMany(AvailabilityOption, {
+  onDelete: 'CASCADE',
 });
-DwellingAdjustment.belongsToMany(ClientPresentation, {
-  through: {
-    model: Presentable,
-    unique: false,
-    scope: {
-      presentable_type: 'dwelling_adjustment'
-    },
-  },
-  foreignKey: 'presentable_id',
-  as: 'ClientPresentations',
-  constraints: false,
+AvailabilityOption.belongsTo(ClientPresentation);
+
+
+ClientPresentation.hasMany(DwellingAdjustment, {
+  onDelete: 'CASCADE',
 });
+DwellingAdjustment.belongsTo(ClientPresentation);
+
 
 
 export { 
@@ -394,9 +202,6 @@ export {
   AdditionalService, 
   AvailabilityOption,
   DataCollection,
-  Collectable,
   ClientPresentation,
-  Presentable,
   ReportWriting,
-  Reportable
 };

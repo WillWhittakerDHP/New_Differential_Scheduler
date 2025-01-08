@@ -1,3 +1,5 @@
+import { TimeContentData } from "./appointmentInterfaces";
+
 export interface UserTypeData {
   id: number | null;
   name: string | null;
@@ -16,6 +18,7 @@ export interface ServiceTypeData {
   AdditionalServices?: string | null;
   AvailabilityOptions?: string | null;
   DwellingAdjustments?: string | null;
+  time_content: TimeContentData | null;
 }
 
 export interface AdditionalServiceData {
@@ -24,6 +27,7 @@ export interface AdditionalServiceData {
   differential_scheduling: boolean | null;
   visibility: boolean | null;
   description: string | null;
+  time_content: TimeContentData | null;
 }
 
 export interface AvailabilityOptionData {
@@ -32,10 +36,12 @@ export interface AvailabilityOptionData {
   differential_scheduling: boolean | null;
   visibility: boolean | null;
   description: string | null;
+  time_content: TimeContentData | null;
 }
 
 export interface DwellingAdjustmentData {
   id: number | null;
   name: string | null;
   visibility: boolean | null;
+  time_content: TimeContentData | null;
 }

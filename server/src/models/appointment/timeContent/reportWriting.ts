@@ -4,22 +4,23 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
-  BelongsToManyAddAssociationMixin,
-  BelongsToManyGetAssociationsMixin,
   Sequelize, 
 } from 'sequelize';
   
-import { Reportable } from './reportables';
-import { Service } from '../structure/serviceTypes';
-import { AdditionalService } from '../structure/additionalServices';
-import { AvailabilityOption } from '../structure/availabilityOptions';
-import { DwellingAdjustment } from '../structure/dwellingAdjustments';
+// import { Service } from '../structure/serviceTypes';
+// import { AdditionalService } from '../structure/additionalServices';
+// import { AvailabilityOption } from '../structure/availabilityOptions';
+// import { DwellingAdjustment } from '../structure/dwellingAdjustments';
 
 export class ReportWriting extends Model<
   InferAttributes<ReportWriting>,
   InferCreationAttributes<ReportWriting>
 > {
   declare id: CreationOptional<number>;
+  // declare service_id: number; // Foreign key
+  // declare additional_service_id?: number; // Foreign key
+  // declare availability_option_id?: number; // Foreign key
+  // declare dwelling_adjustment_id?: number; // Foreign key
   declare on_site: boolean;
   declare base_sq_ft: number;
   declare base_time: number;
@@ -27,18 +28,6 @@ export class ReportWriting extends Model<
   declare base_fee: number;
   declare rate_over_base_fee: number;
 
-  declare getReportable: BelongsToManyGetAssociationsMixin<Reportable>;
-  declare getReportables: BelongsToManyGetAssociationsMixin<Reportable[]>;
-  service?: Service;
-  additionalService?: AdditionalService;
-  availabilityOption?: AvailabilityOption;
-  dwellingAdjustment?: DwellingAdjustment;
-  
-  declare addReportable: BelongsToManyAddAssociationMixin<Reportable, Reportable['report_writing_id']>;
-  declare addReportables: BelongsToManyAddAssociationMixin<
-  Reportable[],
-  Reportable['report_writing_id'][]
-  >;
 }
 
 export function ReportWritingFactory(sequelize: Sequelize): typeof ReportWriting {
@@ -49,6 +38,38 @@ export function ReportWritingFactory(sequelize: Sequelize): typeof ReportWriting
         autoIncrement: true,
         primaryKey: true,
       },
+      // service_id: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'services', // Matches table name
+      //     key: 'id',
+      //   },
+      // },
+      // additional_service_id: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'additional_services', // Matches table name
+      //     key: 'id',
+      //   },
+      // },
+      // availability_option_id: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'availability_options', // Matches table name
+      //     key: 'id',
+      //   },
+      // },
+      // dwelling_adjustment_id: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'dwelling_adjustments', // Matches table name
+      //     key: 'id',
+      //   },
+      // },
       on_site: {
         type: DataTypes.BOOLEAN,
       },
