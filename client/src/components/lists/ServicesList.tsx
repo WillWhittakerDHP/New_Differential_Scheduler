@@ -2,23 +2,25 @@ import React, { useContext, useEffect } from 'react';
 import { Container, Row, Card } from 'react-bootstrap';
 import { AppointmentContext } from '../AppointmentContext';
 import { retrieveServicesForUserTypeByID } from '../../api/internalAPI/adminAPI';
-// import { retrieveDescriptionForUserTypeByID } from '../../api/internalAPI/detailsAPI';
-import type { ServiceTypeData } from '../../interfaces/serviceInterfaces';
-// import type { DescriptionsData } from '../../interfaces/detailInterfaces';
+import { retrieveServiceByID } from '../../api/internalAPI/appointmentAPI';
+
+import type { AdditionalServiceData, ServiceData } from '../../interfaces/serviceInterfaces';
 
 // Define the props for the component
-interface ServicesListProps {
-//   Services: ServiceTypeData[] | null;
-}
+// interface ServicesListProps {
+//   Services: ServiceData[] | null;
+//   AdditionalServices: AdditionalServiceData[] | null;
+// }
 
-const ServicesList: React.FC<ServicesListProps> = () => {
+const ServicesList: React.FC<ServiceData> = () => {
   // Access the context
   const context = useContext(AppointmentContext);
   if (!context) {
     throw new Error('ServicesList must be used within an AppointmentProvider');
   }
 
-  const { thisUserType, thisService, availableServices, setAvailableServices, setThisService, setServiceDescriptions } = context;
+  const { thisUserType, thisService, availableServices, setAvailableServices, setThisService, setAvailableAdditionalServiceTypes, setAvailableAvailabilityOptions, setDwellingAdjustments
+  } = context;
 
   // Fetch Service types
   const fetchAllAvailableServices = async () => {
@@ -26,7 +28,7 @@ const ServicesList: React.FC<ServicesListProps> = () => {
     try {
       if(thisUserType) {
         const data = await retrieveServicesForUserTypeByID(thisUserType.id);
-        const availableServices: ServiceTypeData[] = JSON.parse(JSON.stringify(data));
+        const availableServices: ServiceData[] = JSON.parse(JSON.stringify(data));
         setAvailableServices(availableServices);
       } else {
         throw new Error()
@@ -36,31 +38,41 @@ const ServicesList: React.FC<ServicesListProps> = () => {
     }
   };
 
-  // // Fetch Descriptions for Users
-  // const fetchDescriptionForUserTypeByID = async () => {
-  //   if (thisUserType !== undefined )
-  //   try {
-  //     if(thisUserType) {
-  //       const data = await retrieveDescriptionForUserTypeByID(thisUserType.id);
-  //       const serviceDescriptions: DescriptionsData[] = JSON.parse(JSON.stringify(data));
-  //       setServiceDescriptions(serviceDescriptions);
-  //       console.log(serviceDescriptions)
-  //     } else {
-  //       throw new Error()
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching Service types:', error);
-  //   }
-  // };
-
   useEffect(() => {
     fetchAllAvailableServices();
-    // fetchDescriptionForUserTypeByID();
-  }, [thisUserType, setAvailableServices, setServiceDescriptions]);
+  }, [thisUserType, setAvailableServices]);
 
-  const handleServiceTypeSelect = (selectedServiceType: ServiceTypeData) => {
+  const handleServiceTypeSelect = (selectedServiceType: ServiceData) => {
     setThisService(selectedServiceType);
   };
+
+    // Fetch AdditionalService types
+    const fetchServiceByID = async () => {
+      if (thisService !== undefined)
+      try {
+        if(thisService) {
+          const data = await retrieveServiceByID(thisService.id);
+          const service: ServiceData = JSON.parse(JSON.stringify(data));
+          const availableAdditionalServices =  service.AdditionalServices;
+          if (availableAdditionalServices !== undefined && availableAdditionalServices !== null)
+          setAvailableAdditionalServiceTypes(availableAdditionalServices);
+          const availableAvailabilityOptions =  service.AvailabilityOptions;
+          if (availableAvailabilityOptions !== undefined && availableAvailabilityOptions !== null)
+          setAvailableAvailabilityOptions(availableAvailabilityOptions);
+          const availableDwellingAdjustments =  service.DwellingAdjustments;
+          if (availableDwellingAdjustments !== undefined && availableDwellingAdjustments !== null)
+          setDwellingAdjustments(availableDwellingAdjustments);
+        } else {
+          throw new Error()
+        }
+      } catch (error) {
+        console.error('Error fetching Service types:', error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchServiceByID();
+    }, [thisService, setAvailableAdditionalServiceTypes]);
 
   return (
     <Container className="mt-4">

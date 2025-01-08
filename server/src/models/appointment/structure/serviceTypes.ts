@@ -30,18 +30,20 @@ InferCreationAttributes<Service>
   declare data_collection_id?: number; // Foreign key
   declare report_writing_id?: number; // Foreign key
   declare client_presentation_id?: number; // Foreign key
+  declare AdditionalServices?: AdditionalService[];
+  AvailabilityOptions?: AvailabilityOption;
+  DwellingAdjustments?: DwellingAdjustment;
 
   declare getServiceable: BelongsToManyGetAssociationsMixin<Serviceable>;
   declare getServiceables: BelongsToManyGetAssociationsMixin<Serviceable[]>;
-  DwellingAdjustments?: DwellingAdjustment;
-  AdditionalServices?: AdditionalService;
-  AvailabilityOptions?: AvailabilityOption;
   
   declare addServiceable: BelongsToManyAddAssociationMixin<Serviceable, Serviceable['service_id']>;
   declare addServiceables: BelongsToManyAddAssociationMixin<
   Serviceable[],
   Serviceable['service_id'][]
   >;
+
+
 }
 
 export function ServiceFactory(sequelize: Sequelize) {

@@ -1,7 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Container, Row, Card } from 'react-bootstrap';
 import { AppointmentContext } from '../AppointmentContext';
-import { retrieveAdditionalServicesForServiceByID } from '../../api/internalAPI/adminAPI';
 import type { AdditionalServiceData } from '../../interfaces/serviceInterfaces';
 
 // Define the props for the component
@@ -16,27 +15,7 @@ const AdditionalServicesList: React.FC<AdditionalServicesListProps> = () => {
     throw new Error('AdditionalServicesList must be used within an AppointmentProvider');
   }
 
-  const { thisService, availableAdditionalServiceTypes, setAvailableAdditionalServiceTypes, setThisAdditionalService } = context;
-
-  // Fetch AdditionalService types
-  const fetchAllAvailableAdditionalServiceTypes = async () => {
-    if (thisService !== undefined )
-    try {
-      if(thisService) {
-        const data = await retrieveAdditionalServicesForServiceByID(thisService.id);
-        const availableAdditionalServices: AdditionalServiceData[] = JSON.parse(JSON.stringify(data));
-        setAvailableAdditionalServiceTypes(availableAdditionalServices);
-      } else {
-        throw new Error()
-      }
-    } catch (error) {
-      console.error('Error fetching Service types:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllAvailableAdditionalServiceTypes();
-  }, [thisService, setAvailableAdditionalServiceTypes]);
+  const { availableAdditionalServiceTypes, setThisAdditionalService } = context;
 
   const handleAdditionalServiceTypeSelect = (selectedAdditionalService: AdditionalServiceData) => {
     setThisAdditionalService(selectedAdditionalService);

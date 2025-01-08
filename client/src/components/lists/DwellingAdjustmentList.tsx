@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, Row, Button } from 'react-bootstrap';
 import { AppointmentContext } from '../AppointmentContext';
-import { retrieveDwellingAdjustmentsForServiceByID } from '../../api/internalAPI/adminAPI';
 import type { DwellingAdjustmentData } from '../../interfaces/serviceInterfaces';
 
 // Define the props for the component
@@ -16,27 +15,7 @@ const DwellingAdjustmentsList: React.FC<DwellingAdjustmentsListProps> = () => {
     throw new Error('DwellingAdjustmentsList must be used within an AppointmentProvider');
   }
 
-  const { thisService, dwellingAdjustments, setDwellingAdjustments, thisDwellingAdjustment,setThisDwellingAdjustment } = context;
-
-  // Fetch DwellingAdjustment types
-  const fetchAllAvailableDwellingAdjustmentTypes = async () => {
-    if ( thisService !== undefined )
-    try {
-      if(thisService) {
-        const data = await retrieveDwellingAdjustmentsForServiceByID(thisService.id);
-        const dwellingAdjustments: DwellingAdjustmentData[] = JSON.parse(JSON.stringify(data));
-        setDwellingAdjustments(dwellingAdjustments);
-      } else {
-        throw new Error()
-      }
-    } catch (error) {
-      console.error('Error fetching Service types:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllAvailableDwellingAdjustmentTypes();
-  }, [thisService, setDwellingAdjustments]);
+  const { dwellingAdjustments, setThisDwellingAdjustment } = context;
 
   const handlePropertyTypeSelect = (selectedDwellingAdjustment: DwellingAdjustmentData) => {
     setThisDwellingAdjustment(selectedDwellingAdjustment);

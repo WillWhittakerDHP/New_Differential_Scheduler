@@ -1,5 +1,5 @@
 import React, { createContext, useState, ReactNode } from 'react';
-import type { UserTypeData, ServiceTypeData, DwellingAdjustmentData, AdditionalServiceData, AvailabilityOptionData } from '../interfaces/serviceInterfaces';
+import type { UserTypeData, ServiceData, DwellingAdjustmentData, AdditionalServiceData, AvailabilityOptionData } from '../interfaces/serviceInterfaces';
 import { DescriptionsData } from '../interfaces/detailInterfaces';
 import type { AddressData, PropertyData } from '../interfaces/appointmentInterfaces';
 
@@ -10,10 +10,10 @@ interface AppointmentContextType {
   thisUserType: UserTypeData | undefined;
   setThisUserType: React.Dispatch<React.SetStateAction<UserTypeData | undefined>>;
 
-  availableServices: ServiceTypeData[];
-  setAvailableServices: React.Dispatch<React.SetStateAction<ServiceTypeData[]>>;
-  thisService: ServiceTypeData | undefined;
-  setThisService: React.Dispatch<React.SetStateAction<ServiceTypeData | undefined>>;
+  availableServices: ServiceData[];
+  setAvailableServices: React.Dispatch<React.SetStateAction<ServiceData[]>>;
+  thisService: ServiceData | undefined;
+  setThisService: React.Dispatch<React.SetStateAction<ServiceData | undefined>>;
 
   availableAdditionalServiceTypes: AdditionalServiceData[];
   setAvailableAdditionalServiceTypes: React.Dispatch<React.SetStateAction<AdditionalServiceData[]>>;
@@ -45,8 +45,8 @@ export const AppointmentContext = createContext<AppointmentContextType | null>(n
 export const AppointmentProvider = ({ children }: { children: ReactNode }) => {
   const [userTypes, setUserTypes] = useState<UserTypeData[]>([]);
   const [thisUserType, setThisUserType] = useState<UserTypeData | undefined>();
-  const [availableServices, setAvailableServices] = useState<ServiceTypeData[]>([]);
-  const [thisService, setThisService] = useState<ServiceTypeData | undefined>();
+  const [availableServices, setAvailableServices] = useState<ServiceData[]>([]);
+  const [thisService, setThisService] = useState<ServiceData | undefined>();
   const [availableAdditionalServiceTypes, setAvailableAdditionalServiceTypes] = useState<AdditionalServiceData[]>([]);
   const [thisAdditionalService, setThisAdditionalService] = useState<AdditionalServiceData | undefined>();
   const [availableAvailabilityOptions, setAvailableAvailabilityOptions] = useState<AvailabilityOptionData[]>([]);

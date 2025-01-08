@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, Row, Card } from 'react-bootstrap';
 import { AppointmentContext } from '../AppointmentContext';
-import { retrieveAvailabilityOptionsForServiceByID } from '../../api/internalAPI/adminAPI';
 import type { AvailabilityOptionData } from '../../interfaces/serviceInterfaces';
 
 // Define the props for the component
@@ -16,27 +15,7 @@ const AvailabilityOptionsList: React.FC<AvailabilityOptionsListProps> = () => {
     throw new Error('AvailabilityOptionsList must be used within an AppointmentProvider');
   }
 
-  const { thisService, availableAvailabilityOptions, setAvailableAvailabilityOptions, setThisAvailabilityOption } = context;
-
-  // Fetch AvailabilityOption types
-  const fetchAllAvailableAvailabilityOptionTypes = async () => {
-    if (thisService !== undefined )
-    try {
-      if(thisService) {
-        const data = await retrieveAvailabilityOptionsForServiceByID(thisService.id);
-        const availableAvailabilityOptions: AvailabilityOptionData[] = JSON.parse(JSON.stringify(data));
-        setAvailableAvailabilityOptions(availableAvailabilityOptions);
-      } else {
-        throw new Error()
-      }
-    } catch (error) {
-      console.error('Error fetching Service types:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllAvailableAvailabilityOptionTypes();
-  }, [thisService, setAvailableAvailabilityOptions]);
+  const { availableAvailabilityOptions, setThisAvailabilityOption } = context;
 
   const handleAvailabilityOptionTypeSelect = (selectedAvailabilityOption: AvailabilityOptionData) => {
     setThisAvailabilityOption(selectedAvailabilityOption);
