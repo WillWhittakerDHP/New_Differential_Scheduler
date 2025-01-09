@@ -3,7 +3,7 @@ import { Container, Row, Card } from 'react-bootstrap';
 import { AppointmentContext } from '../AppointmentContext';
 import { retrieveServicesForUserTypeByID, retrieveBaseServiceByID } from '../../api/internalAPI/appointmentAPI';
 
-import type { ServiceData } from '../../interfaces/serviceInterfaces';
+import type { ServiceData } from '../../interfaces/apiInterfaces';
 
 // Define the props for the component
 interface ServicesListProps {
@@ -17,7 +17,7 @@ interface ServicesListProps {
     throw new Error('ServicesList must be used within an AppointmentProvider');
   }
 
-  const { thisUserType, availableServices, thisService, setThisService, setAvailableServices, setAvailableAdditionalServices, setAvailableAvailabilityOptions, setDwellingAdjustments
+  const { thisUserType, availableServices, thisService, thisAppointment, setThisAppointment, setThisService, setAvailableServices, setAvailableAdditionalServices, setAvailableAvailabilityOptions, setDwellingAdjustments
   } = context;
 
   // Fetch Service types
@@ -40,8 +40,8 @@ interface ServicesListProps {
     fetchAllAvailableServices();
   }, [thisUserType, setAvailableServices]);
 
-  const handleServiceTypeSelect = (selectedServiceType: ServiceData) => {
-    setThisService(selectedServiceType);
+  const handleServiceTypeSelect = (selectedService: ServiceData) => {
+    setThisService(selectedService);
   };
   
   // Fetch Associated AdditionalServices, AdditionalServices, and DwellingAdjustments
@@ -72,6 +72,13 @@ interface ServicesListProps {
     useEffect(() => {
       fetchServiceByID();
     }, [thisService, setAvailableAdditionalServices, setAvailableAvailabilityOptions, setDwellingAdjustments]);
+
+    // useEffect(() => {
+    //   setThisAppointment(
+    //     ...thisAppointment,
+    //     base_service: thisService
+    //   );
+    // }, [thisService, setThisAppointment])
 
   return (
     <Container className="mt-4">

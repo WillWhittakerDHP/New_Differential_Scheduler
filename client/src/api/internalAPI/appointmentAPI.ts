@@ -1,4 +1,4 @@
-import { UserTypeData, ServiceData } from "../../interfaces/serviceInterfaces";
+import { UserTypeData, ServiceData } from "../../interfaces/apiInterfaces";
 
 const retrieveVisibleUserTypes = async () => {
   try {

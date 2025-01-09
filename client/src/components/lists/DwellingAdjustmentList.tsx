@@ -3,7 +3,7 @@ import { Container, Row, Button } from 'react-bootstrap';
 import { AppointmentContext } from '../AppointmentContext';
 // import { retrieveDwellingAdjustmentByID } from '../../api/internalAPI/appointmentAPI';
 
-import type { DwellingAdjustmentData } from '../../interfaces/serviceInterfaces';
+import type { DwellingAdjustmentData } from '../../interfaces/apiInterfaces';
 
 // Define the props for the component
 interface DwellingAdjustmentsProps {

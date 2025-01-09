@@ -1,6 +1,4 @@
-// import { AdditionalServiceData, AvailabilityOptionData, DwellingAdjustmentData, ServiceData } from "./serviceInterfaces";
-
-export interface AddressData {
+interface Address{
   address1: string;
   address2: string;
   unitNumber?: number;
@@ -9,200 +7,223 @@ export interface AddressData {
   zipCode: number;
 }
 
-export interface PropertyData{
-  sqFt: number;
+interface Property{
+  home_sq_ft: number;
   bedrooms?: number;
   foundationAccess?: string;
 }
 
-// export interface AppointmentData{
-//   service: ServiceData;
-//   additional_service: AdditionalServiceData[] | null;
-//   availability_option: AvailabilityOptionData[] | null;
-//   dwelling_adjustment: DwellingAdjustmentData;
-//   property_data: PropertyData;
-//   address: AddressData;
-// }
+interface Service{
+  fees: FeeContent;
+  center: CenterContent;
+  time: TimeContent;
+}
+interface AdditionalService{
+  fees: FeeContent;
+  center: CenterContent;
+  time: TimeContent;
+}
+interface AvailabilityOption{
+  fees: FeeContent;
+  center: CenterContent;
+  time: TimeContent;
+}
+interface DwellingAdjustment{
+  fees: FeeContent;
+  center: CenterContent;
+  time: TimeContent;
+}
 
-interface PartFee {
+interface FeeContent extends CenterContent{
+  on_site: boolean;
+  base_time: number;
+  rate_over_base_time: number;
+}
+interface FeePart {
+  differential_scheduling: boolean;
+  data_collection: FeeContent;
+  report_writing: FeeContent;
+  client_presentation: FeeContent;
+}
+interface AppointmentFee {
+  data_collection_time: number;
+  report_writing_time: number;
+  client_presentation_time: number;
+}
+
+interface CenterContent{
   base_sq_ft: number;
+}
+
+interface TimeContent extends CenterContent{
   base_fee: number;
   rate_over_base_fee: number;
 }
-interface FeeContent {
-  base_sq_ft: number;
-  base_fee: number;
-  rate_over_base_fee: number;
+interface TimePart {
+  base_service: TimeContent;
+  dwelling_type: TimeContent;
+  add_services: TimeContent;
+  avail_options: TimeContent;
 }
-interface AppointmentFees {
-  service_fee: number;
+interface AppointmentTime {
+  base_service_fee: number;
   dwelling_type_fee: number;
   add_service_fees: number;
   avail_option_fees: number;
 }
 
-interface PartTime {
-  base_sq_ft: number;
-  base_time: number;
-  rate_over_base_time: number;
-}  
-interface TimeContent {
-  base_sq_ft: number;
-  base_time: number;
-  rate_over_base_time: number;
-}
-interface AppointmentTimes {
-  data_collection: number;
-  report_writing: number;
-  client_presentation: number;
-}
-
 
 export class Appointment {
-
-  home_sq_ft: number;
   
-  service_fee: PartFee;
-  dwelling_type_fee: PartFee;
-  add_service_fees: PartFee;
-  avail_option_fees: PartFee;
-  collections: FeeContent[];
-  writings: FeeContent[];
-  presentations: FeeContent[];
-
-  data_collection: PartTime;
-  report_writing: PartTime;
-  client_presentation: PartTime;
-  service: TimeContent[];
-  additional_service: TimeContent[];
-  availability_option: TimeContent[];
-  dwelling_adjustment: TimeContent[];
-
+  address: Address;
+  property: Property;
+  home_sq_ft: number;
+  service: Service;
+  dwelling: DwellingAdjustment;
+  additional_services: AdditionalService[];
+  availability_options: AvailabilityOption[];
+  
+  data_collection: TimePart;
+  data_collection_time: number;
+  report_writing: TimePart;
+  report_writing_time: number;
+  client_presentation: TimePart;
+  client_presentation_time: number;
+  
+  base_service: FeePart;
+  base_service_fee: number;
+  dwelling_type: FeePart;
+  dwelling_type_fee: number;
+  add_services: FeePart;
+  add_service_fees: number;
+  avail_options: FeePart;
+  avail_option_fees: number;
+  
   constructor(
+    address: Address,
+    property: Property,
     home_sq_ft: number,
-
-    service_fee: PartFee,
-    dwelling_type_fee: PartFee,
-    add_service_fees: PartFee,
-    avail_option_fees: PartFee,
-    collections: FeeContent[],
-    writings: FeeContent[],
-    presentations: FeeContent[],
-    
-    data_collection: PartTime,
-    report_writing: PartTime,
-    client_presentation: PartTime,
-    service: TimeContent[],
-    additional_service: TimeContent[],
-    availability_option: TimeContent[],
-    dwelling_adjustment: TimeContent[]
+    service: Service,
+    dwelling: DwellingAdjustment,
+    additional_services: AdditionalService[],
+    availability_options: AvailabilityOption[],
+  
+    data_collection: TimePart,
+    data_collection_time: number,
+    report_writing: TimePart,
+    report_writing_time: number,
+    client_presentation: TimePart,
+    client_presentation_time: number,
+  
+    base_service: FeePart,
+    base_service_fee: number,
+    dwelling_type: FeePart,
+    dwelling_type_fee: number,
+    add_services: FeePart,
+    add_service_fees: number,
+    avail_options: FeePart,
+    avail_option_fees: number
   ) {
+    this.address = address;
+    this.property = property;
     this.home_sq_ft = home_sq_ft;
-    
-    this.service_fee = service_fee;
-    this.dwelling_type_fee = dwelling_type_fee;
-    this.add_service_fees = add_service_fees;
-    this.avail_option_fees = avail_option_fees;
-    this.collections = collections; // Assign here
-    this.writings = writings;       // Assign here
-    this.presentations = presentations; // Assign here
-    
-    this.data_collection = data_collection;
-    this.report_writing = report_writing;
-    this.client_presentation = client_presentation;
     this.service = service;
-    this.additional_service = additional_service;
-    this.availability_option = availability_option;
-    this.dwelling_adjustment = dwelling_adjustment;
+    this.dwelling = dwelling;
+    this.additional_services = additional_services;
+    this.availability_options = availability_options;
+  
+    this.data_collection = data_collection;
+    this.data_collection_time = data_collection_time;
+    this.report_writing = report_writing;
+    this.report_writing_time = report_writing_time;
+    this.client_presentation = client_presentation;
+    this.client_presentation_time = client_presentation_time;
+  
+    this.base_service = base_service;
+    this.base_service_fee = base_service_fee;
+    this.dwelling_type = dwelling_type;
+    this.dwelling_type_fee = dwelling_type_fee;
+    this.add_services = add_services;
+    this.add_service_fees = add_service_fees;
+    this.avail_options = avail_options;
+    this.avail_option_fees = avail_option_fees;
   }
   
-  
-    calculateFee(home_sq_ft: number, feeContent: FeeContent): number {
-      if (home_sq_ft <= feeContent.base_sq_ft) return feeContent.base_fee;
-      const extra_sq_ft = home_sq_ft - feeContent.base_sq_ft;
-      const additional_fee = extra_sq_ft * feeContent.rate_over_base_fee;
-      return feeContent.base_fee + additional_fee;
+    calculateFee(home_sq_ft: number, TimeContent: TimeContent): number {
+      if (home_sq_ft <= TimeContent.base_sq_ft) return TimeContent.base_sq_ft;
+      const extra_sq_ft = home_sq_ft - TimeContent.base_sq_ft;
+      const additional_fee = extra_sq_ft * TimeContent.rate_over_base_fee;
+      return TimeContent.base_sq_ft + additional_fee;
     }
   
-    calculateAllPartFees(): AppointmentFees {
+    calculateAllPartFees(): AppointmentTime {
       // Initialize fees
-      let baseServiceFee = this.calculateFee(this.home_sq_ft, this.service_fee);
-      let dwellingTypeFee = this.calculateFee(this.home_sq_ft, this.dwelling_type_fee);
-      let AdditionalServicesFees = this.calculateFee(this.home_sq_ft, this.add_service_fees);
-      let AvailabilityOptionsFees = this.calculateFee(this.home_sq_ft, this.add_service_fees);
+      let baseServiceFee = 0;
+      let dwellingTypeFee = 0;
+      let AdditionalServicesFees = 0;
+      let AvailabilityOptionsFees = 0;
   
-      // Add contributions from data_collection, report_writing, and cleint_presentation
-      this.collections.forEach(collections => {
-        baseServiceFee += this.calculateFee(this.home_sq_ft, collections);
-        dwellingTypeFee += this.calculateFee(this.home_sq_ft, collections);
-        AdditionalServicesFees += this.calculateFee(this.home_sq_ft, collections);
-        AvailabilityOptionsFees += this.calculateFee(this.home_sq_ft, collections)
-      });
+      // Add contributions from data_collection, report_writing, and client_presentation
+      baseServiceFee = this.calculateFee(this.home_sq_ft, this.data_collection.base_service) + 
+      this.calculateFee(this.home_sq_ft, this.report_writing.base_service) + 
+      this.calculateFee(this.home_sq_ft, this.client_presentation.base_service);
   
-      this.writings.forEach(writings => {
-        baseServiceFee += this.calculateFee(this.home_sq_ft, writings);
-        dwellingTypeFee += this.calculateFee(this.home_sq_ft, writings);
-        AdditionalServicesFees += this.calculateFee(this.home_sq_ft, writings);
-        AvailabilityOptionsFees += this.calculateFee(this.home_sq_ft, writings)
-      });
+      dwellingTypeFee = this.calculateFee(this.home_sq_ft, this.data_collection.dwelling_type) + 
+      this.calculateFee(this.home_sq_ft, this.report_writing.dwelling_type) + 
+      this.calculateFee(this.home_sq_ft, this.client_presentation.dwelling_type);
   
-      this.presentations.forEach(presentations => {
-        baseServiceFee += this.calculateFee(this.home_sq_ft, presentations);
-        dwellingTypeFee += this.calculateFee(this.home_sq_ft, presentations);
-        AdditionalServicesFees += this.calculateFee(this.home_sq_ft, presentations);
-        AvailabilityOptionsFees += this.calculateFee(this.home_sq_ft, presentations) 
-      });
+      AdditionalServicesFees = this.calculateFee(this.home_sq_ft, this.data_collection.add_services) + 
+      this.calculateFee(this.home_sq_ft, this.report_writing.add_services) + 
+      this.calculateFee(this.home_sq_ft, this.client_presentation.add_services);
 
-  
+      AvailabilityOptionsFees = this.calculateFee(this.home_sq_ft, this.data_collection.avail_options) + 
+      this.calculateFee(this.home_sq_ft, this.report_writing.base_service) + 
+      this.calculateFee(this.home_sq_ft, this.client_presentation.base_service);
+
       // Return fees as an object
       return {
-        service_fee: baseServiceFee,
+        base_service_fee: baseServiceFee,
         dwelling_type_fee: dwellingTypeFee,
         add_service_fees: AdditionalServicesFees,
-        avail_option_fees: AdditionalServicesFees
+        avail_option_fees: AvailabilityOptionsFees
       };
     }
 
-  calculateTime(home_sq_ft: number, timeContent: TimeContent): number {
-    if (home_sq_ft <= timeContent.base_sq_ft) return timeContent.base_time;
-    const extra_sq_ft = home_sq_ft - timeContent.base_sq_ft;
-    const additional_time = extra_sq_ft * timeContent.rate_over_base_time;
-    return timeContent.base_time + additional_time;
-  }
+  
+    calculateTime(home_sq_ft: number, FeeContent: FeeContent): number {
+      if (home_sq_ft <= FeeContent.base_sq_ft) return FeeContent.base_sq_ft;
+      const extra_sq_ft = home_sq_ft - FeeContent.base_sq_ft;
+      const additional_time = extra_sq_ft * FeeContent.rate_over_base_time;
+      return FeeContent.base_sq_ft + additional_time;
+    }
+  
+    calculateAllPartTimes(): AppointmentFee {
+      // Initialize fees
+      let dataCollectionTime = 0;
+      let reportWritingTime = 0;
+      let clientPresentationTime = 0;
+  
+      // Add contributions from data_collection, report_writing, and client_presentation
+      dataCollectionTime = this.calculateTime(this.home_sq_ft, this.base_service.data_collection) + 
+      this.calculateTime(this.home_sq_ft, this.base_service.data_collection) +       
+      this.calculateTime(this.home_sq_ft, this.base_service.data_collection) + 
+      this.calculateTime(this.home_sq_ft, this.base_service.data_collection);
+  
+      reportWritingTime = this.calculateTime(this.home_sq_ft, this.base_service.report_writing) + 
+      this.calculateTime(this.home_sq_ft, this.base_service.report_writing) +       
+      this.calculateTime(this.home_sq_ft, this.base_service.report_writing) + 
+      this.calculateTime(this.home_sq_ft, this.base_service.report_writing);
+  
+      clientPresentationTime = this.calculateTime(this.home_sq_ft, this.base_service.client_presentation) + 
+      this.calculateTime(this.home_sq_ft, this.base_service.client_presentation) +       
+      this.calculateTime(this.home_sq_ft, this.base_service.client_presentation) + 
+      this.calculateTime(this.home_sq_ft, this.base_service.client_presentation);
 
-  calculateAllPartTimes(): AppointmentTimes {
-    // Initialize times
-    let dataCollectionTime = this.calculateTime(this.home_sq_ft, this.data_collection);
-    let reportWritingTime = this.calculateTime(this.home_sq_ft, this.report_writing);
-    let clientPresentationTime = this.calculateTime(this.home_sq_ft, this.client_presentation);
-
-    // Add contributions from service, additional services, availability options, and dwelling adjustment
-    this.service.forEach(service => {
-      dataCollectionTime += this.calculateTime(this.home_sq_ft, service);
-      reportWritingTime += this.calculateTime(this.home_sq_ft, service);
-      clientPresentationTime += this.calculateTime(this.home_sq_ft, service);
-    });
-
-    this.additional_service.forEach(addService => {
-      dataCollectionTime += this.calculateTime(this.home_sq_ft, addService);
-      reportWritingTime += this.calculateTime(this.home_sq_ft, addService);
-      clientPresentationTime += this.calculateTime(this.home_sq_ft, addService);    });
-
-    this.availability_option.forEach(option => {
-      dataCollectionTime += this.calculateTime(this.home_sq_ft, option);
-      reportWritingTime += this.calculateTime(this.home_sq_ft, option);
-      clientPresentationTime += this.calculateTime(this.home_sq_ft, option);    });
-
-    this.dwelling_adjustment.forEach(adjustment => {
-      dataCollectionTime += this.calculateTime(this.home_sq_ft, adjustment);
-      reportWritingTime += this.calculateTime(this.home_sq_ft, adjustment);
-      clientPresentationTime += this.calculateTime(this.home_sq_ft, adjustment);    });
-
-    // Return times as an object
-    return {
-      data_collection: dataCollectionTime,
-      report_writing: reportWritingTime,
-      client_presentation: clientPresentationTime,
-    };
-  }
+      // Return times as an object
+      return {
+        data_collection_time: dataCollectionTime,
+        report_writing_time: reportWritingTime,
+        client_presentation_time: clientPresentationTime,
+      };
+    }
 }

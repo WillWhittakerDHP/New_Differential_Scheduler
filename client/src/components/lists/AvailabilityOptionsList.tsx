@@ -3,7 +3,7 @@ import { Container, Row, Button } from 'react-bootstrap';
 import { AppointmentContext } from '../AppointmentContext';
 // import { retrieveAvailabilityOptionByID } from '../../api/internalAPI/appointmentAPI';
 
-import type { AvailabilityOptionData } from '../../interfaces/serviceInterfaces';
+import type { AvailabilityOptionData } from '../../interfaces/apiInterfaces';
 
 // Define the props for the component
 interface AvailabilityOptionsProps {

@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Container, Row, Card } from 'react-bootstrap';
 import { AppointmentContext } from '../AppointmentContext';
 // import { retrieveAdditionalServiceByID } from '../../api/internalAPI/appointmentAPI';
 
-import type { AdditionalServiceData } from '../../interfaces/serviceInterfaces';
+import type { AdditionalServiceData } from '../../interfaces/apiInterfaces';
 
 // Define the props for the component
 interface AdditionalServicesProps {
