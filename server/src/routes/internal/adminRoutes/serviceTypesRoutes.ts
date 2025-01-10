@@ -1,15 +1,13 @@
 import { Router, Request, Response } from 'express';
-import {  
-  Service, 
-} from '../../../models/index.js';
+import { ClientPresentation, DataCollection, ReportWriting, Service } from '../../../models/index.js';
 
 const router = Router();
 
-// GET ALL Services /internal/appointment/service/admin/serviceTypes/
+// GET ALL services /internal/appointment/service/admin/services/
 router.get('/', async (_req: Request, res: Response) => {
   try {
-    const Services = await Service.findAll();
-    res.json(Services);
+    const service = await Service.findAll();
+    res.json(service);
   } catch (error: any) {
     res.status(500).json({
       message: error.message
@@ -17,7 +15,7 @@ router.get('/', async (_req: Request, res: Response) => {
   }  
 });  
 
-// GET a Service by ID /internal/appointment/service/admin/serviceTypes/:id
+// GET an service by ID /internal/appointment/service/admin/services/:id
 router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -26,7 +24,7 @@ router.get('/:id', async (req: Request, res: Response) => {
       res.json(service);
     } else {
       res.status(404).json({
-        message: 'Service not found'
+        message: 'service not found'
       });  
     }  
   } catch (error: any) {
@@ -36,17 +34,68 @@ router.get('/:id', async (req: Request, res: Response) => {
   }  
 });  
 
-// CREATE a new Service /internal/appointment/service/admin/serviceTypes/
+type DataCollectionInstance = InstanceType<typeof DataCollection>;
+type ReportWritingInstance = InstanceType<typeof ReportWriting>;
+type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
+
+type serviceWithTimesValues = InstanceType<typeof Service> & {
+  dataValues: {
+    DataCollection: DataCollectionInstance[],
+    ReportWriting: ReportWritingInstance[],
+    ClientPresentation: ClientPresentationInstance[];
+  };
+};
+
+// Get TimeContent by service ID /internal/appointment/service/admin/services/tc/:id
+router.get('/tc/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  console.log('Begin TimeContentFetch on servicesRoutes.ts');
+  try {
+    const TimesValuesByserviceID = (await Service.findByPk(id, {
+      attributes: {
+        exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId' ], },
+        include: [
+          {
+            model: DataCollection,
+            as: 'data_collection',
+            attributes: ['base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ReportWriting,
+            as: 'report_writing',
+            attributes: ['base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ClientPresentation,
+            as: 'client_presentation',
+            attributes: ['base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          },
+        ],
+    })) as serviceWithTimesValues;
+    console.log(TimesValuesByserviceID)
+    if (TimesValuesByserviceID) {
+      console.log('TimeContentFetch on servicesRoutes.ts', TimesValuesByserviceID);
+      res.json(TimesValuesByserviceID);
+    } else {
+      res.status(404).json({ message: 'service not found' });
+    }
+  } catch (error: any) {
+    console.error('Error fetching TimesValues:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// CREATE a new service /internal/appointment/service/admin/services/
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const newServiceData = await Service.create(req.body);
-    res.status(200).json(newServiceData);
+    const newserviceData = await Service.create(req.body);
+    res.status(200).json(newserviceData);
   } catch (err) {
     res.status(400).json(err);
   }
 }); 
 
-// UPDATE a Service by ID /internal/appointment/service/admin/serviceTypes/:id
+// UPDATE an service by ID /internal/appointment/service/admin/services/:id
 router.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name } = req.body;
@@ -58,7 +107,7 @@ router.put('/:id', async (req: Request, res: Response) => {
       res.json(service);
     } else {
       res.status(404).json({
-        message: 'Service not found'
+        message: 'service not found'
       });  
     }  
   } catch (error: any) {
@@ -68,7 +117,7 @@ router.put('/:id', async (req: Request, res: Response) => {
   }  
 });  
 
-// DELETE a Service /internal/appointment/service/admin/serviceTypes/:id
+// DELETE an service /internal/appointment/service/admin/services/:id
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     const serviceData = await Service.destroy({
@@ -78,7 +127,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     });
 
     if (!serviceData) {
-      res.status(404).json({ message: 'No ServiceType found with that id!' });
+      res.status(404).json({ message: 'No service found with that id!' });
       return;
     }
 
@@ -88,4 +137,4 @@ router.delete('/:id', async (req: Request, res: Response) => {
   }
 });
 
-export { router as ServiceTypesRouter };
+export { router as ServiceRouter };

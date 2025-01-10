@@ -14,9 +14,7 @@ import { DwellingAdjustment } from './dwellingAdjustments.js';
 import { AdditionalService } from './additionalServices.js';
 import { AvailabilityOption } from './availabilityOptions.js';
 
-// import { DataCollection } from '../timeContent/dataCollection.js';
-// import { ReportWriting } from '../timeContent/reportWriting.js';
-// import { ClientPresentation } from '../timeContent/clientPresentation.js';
+// import { FeeTime } from './feeTime/feeTimes.js';
 
 export class Service extends Model<
 InferAttributes<Service>,
@@ -27,13 +25,9 @@ InferCreationAttributes<Service>
   declare differential_scheduling: boolean;
   declare description: string;
   declare visibility: boolean;
-  declare base_sq_ft: number;
-  declare data_collection_time_id?: number; // Foreign key
-  declare report_writing_time_id?: number; // Foreign key
-  declare client_presentation_time_id?: number; // Foreign key
-  declare data_collection_fee_id?: number; // Foreign key
-  declare report_writing_fee_id?: number; // Foreign key
-  declare client_presentation_fee_id?: number; // Foreign key
+  declare data_collection_id?: number; // Foreign key
+  declare report_writing_id?: number; // Foreign key
+  declare client_presentation_id?: number; // Foreign key
   declare AdditionalServices?: AdditionalService[];
   declare AvailabilityOptions?: AvailabilityOption[];
   declare DwellingAdjustments?: DwellingAdjustment[];
@@ -47,6 +41,14 @@ InferCreationAttributes<Service>
   Serviceable['service_id'][]
   >;
 
+  // declare getFeeTime: BelongsToManyGetAssociationsMixin<FeeTime>;
+  // declare getFeeTimes: BelongsToManyGetAssociationsMixin<FeeTime[]>;
+  
+  // declare addFeeTime: BelongsToManyAddAssociationMixin<FeeTime, FeeTime['id']>;
+  // declare addFeeTimes: BelongsToManyAddAssociationMixin<
+  // FeeTime[],
+  // FeeTime['id'][]
+  // >;
 
 }
 
@@ -74,51 +76,28 @@ export function ServiceFactory(sequelize: Sequelize) {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      base_sq_ft: {
-        type: DataTypes.INTEGER,
-      },
-      data_collection_time_id: {
+      data_collection_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'data_collection_time', // Matches table name
+          model: 'data_collection', // Matches table name
           key: 'id',
         },
       },
-      report_writing_time_id: {
+      report_writing_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'report_writing_time', // Matches table name
+          model: 'report_writing', // Matches table name
           key: 'id',
         },
       },
-      client_presentation_time_id: {
+      client_presentation_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'client_presentation_time', // Matches table name
+          model: 'client_presentation', // Matches table name
           key: 'id',
         },
       },
-      data_collection_fee_id: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'data_collection_fee', // Matches table name
-          key: 'id',
-        },
-      },
-      report_writing_fee_id: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'report_writing_fee', // Matches table name
-          key: 'id',
-        },
-      },
-      client_presentation_fee_id: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'client_presentation_fee', // Matches table name
-          key: 'id',
-        },
-      },    },
+    },
     {
       sequelize,
       timestamps: false,

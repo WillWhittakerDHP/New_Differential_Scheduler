@@ -8,12 +8,11 @@ import { DwellingAdjustmentFactory } from './appointment/structure/dwellingAdjus
 import { AdditionalServiceFactory } from './appointment/structure/additionalServices.js';
 import { AvailabilityOptionFactory } from './appointment/structure/availabilityOptions.js';
 // TimeBlocks
-import { DataCollectionTimeFactory } from './appointment/structure/timeContent/dataCollectionTime.js';
-import { ReportWritingTimeFactory } from './appointment/structure/timeContent/reportWritingTime.js';
-import { ClientPresentationTimeFactory } from './appointment/structure/timeContent/clientPresentationTime.js';
-import { DataCollectionFeeFactory } from './appointment/structure/feeContent/dataCollectionFee.js';
-import { ReportWritingFeeFactory } from './appointment/structure/feeContent/reportWritingFee.js';
-import { ClientPresentationFeeFactory } from './appointment/structure/feeContent/clientPresentationFee.js';
+import { FeeTimeFactory } from './appointment/structure/feeTime/feeTimes.js';
+import { FeeTimeableFactory } from './appointment/structure/feeTime/feeTimeables.js';
+import { DataCollectionFactory } from './appointment/structure/feeTime/dataCollection.js';
+import { ReportWritingFactory } from './appointment/structure/feeTime/reportWriting.js';
+import { ClientPresentationFactory } from './appointment/structure/feeTime/clientPresentation.js';
 
 
 // Appointment Content
@@ -24,13 +23,12 @@ const DwellingAdjustment = DwellingAdjustmentFactory(sequelize);
 const AdditionalService = AdditionalServiceFactory(sequelize);
 const AvailabilityOption = AvailabilityOptionFactory(sequelize);
 // TimeBlocks
-const DataCollectionTime = DataCollectionTimeFactory(sequelize);
-const ReportWritingTime = ReportWritingTimeFactory(sequelize);
-const ClientPresentationTime = ClientPresentationTimeFactory(sequelize);
-// FeeBlocks
-const DataCollectionFee = DataCollectionFeeFactory(sequelize);
-const ReportWritingFee = ReportWritingFeeFactory(sequelize);
-const ClientPresentationFee = ClientPresentationFeeFactory(sequelize);
+const FeeTime = FeeTimeFactory(sequelize);
+const FeeTimeable = FeeTimeableFactory(sequelize);
+const DataCollection = DataCollectionFactory(sequelize);
+const ReportWriting = ReportWritingFactory(sequelize);
+const ClientPresentation = ClientPresentationFactory(sequelize);
+
 
 
 Service.belongsToMany(UserType, {
@@ -123,154 +121,171 @@ DwellingAdjustment.belongsToMany(Service, {
 });
 
 
-// TimeBlocks
-DataCollectionTime.hasMany(Service, {
+// FeeTimeBlocks
+DataCollection.hasMany(Service, {
   onDelete: 'CASCADE',
 });
-Service.belongsTo(DataCollectionTime);
+Service.belongsTo(DataCollection);
 
-DataCollectionTime.hasMany(AdditionalService, {
+DataCollection.hasMany(AdditionalService, {
   onDelete: 'CASCADE',
 });
-AdditionalService.belongsTo(DataCollectionTime);
+AdditionalService.belongsTo(DataCollection);
 
 
-DataCollectionTime.hasMany(AvailabilityOption, {
+DataCollection.hasMany(AvailabilityOption, {
   onDelete: 'CASCADE',
 });
-AvailabilityOption.belongsTo(DataCollectionTime);
+AvailabilityOption.belongsTo(DataCollection);
 
 
-DataCollectionTime.hasMany(DwellingAdjustment, {
+DataCollection.hasMany(DwellingAdjustment, {
   onDelete: 'CASCADE',
 });
-DwellingAdjustment.belongsTo(DataCollectionTime);
+DwellingAdjustment.belongsTo(DataCollection);
 
 
 
-ReportWritingTime.hasMany(Service, {
+ReportWriting.hasMany(Service, {
   onDelete: 'CASCADE',
 });
-Service.belongsTo(ReportWritingTime);
+Service.belongsTo(ReportWriting);
 
 
-ReportWritingTime.hasMany(AdditionalService, {
+ReportWriting.hasMany(AdditionalService, {
   onDelete: 'CASCADE',
 }); 
-AdditionalService.belongsTo(ReportWritingTime);
+AdditionalService.belongsTo(ReportWriting);
 
 
-ReportWritingTime.hasMany(AvailabilityOption, {
+ReportWriting.hasMany(AvailabilityOption, {
   onDelete: 'CASCADE',
 });
-AvailabilityOption.belongsTo(ReportWritingTime);
+AvailabilityOption.belongsTo(ReportWriting);
 
 
-ReportWritingTime.hasMany(DwellingAdjustment, {
+ReportWriting.hasMany(DwellingAdjustment, {
   onDelete: 'CASCADE',
 });
-DwellingAdjustment.belongsTo(ReportWritingTime);
+DwellingAdjustment.belongsTo(ReportWriting);
 
 
 
-ClientPresentationTime.hasMany(Service, {
+ClientPresentation.hasMany(Service, {
   onDelete: 'CASCADE',
 });
-Service.belongsTo(ClientPresentationTime);
+Service.belongsTo(ClientPresentation);
 
 
-ClientPresentationTime.hasMany(AdditionalService, {
+ClientPresentation.hasMany(AdditionalService, {
   onDelete: 'CASCADE',
 }); 
-AdditionalService.belongsTo(ClientPresentationTime);
+AdditionalService.belongsTo(ClientPresentation);
 
 
-ClientPresentationTime.hasMany(AvailabilityOption, {
+ClientPresentation.hasMany(AvailabilityOption, {
   onDelete: 'CASCADE',
 });
-AvailabilityOption.belongsTo(ClientPresentationTime);
+AvailabilityOption.belongsTo(ClientPresentation);
 
 
-ClientPresentationTime.hasMany(DwellingAdjustment, {
+ClientPresentation.hasMany(DwellingAdjustment, {
   onDelete: 'CASCADE',
 });
-DwellingAdjustment.belongsTo(ClientPresentationTime);
+DwellingAdjustment.belongsTo(ClientPresentation);
 
 
 
-// FeeBlocks
-DataCollectionFee.hasMany(Service, {
-  onDelete: 'CASCADE',
+// FeeTimeBlocks
+FeeTime.belongsToMany(DataCollection, {
+  through: {
+    model: FeeTimeable,
+    unique: false,
+  },
+  foreignKey: 'feeTime_id', // Use snake_case
+  as: 'DataCollections',
+  constraints: false,
 });
-Service.belongsTo(DataCollectionFee);
-
-DataCollectionFee.hasMany(AdditionalService, {
-  onDelete: 'CASCADE',
+DataCollection.belongsToMany(FeeTime, {
+  through: {
+    model: FeeTimeable,
+    unique: false,
+    scope: { feeTimeable_type: 'data_collection' }, // Use snake_case
+  },
+  foreignKey: 'feeTimeable_id', // Use snake_case
+  as: 'FeeTimes',
+  constraints: false,
 });
-AdditionalService.belongsTo(DataCollectionFee);
 
 
-DataCollectionFee.hasMany(AvailabilityOption, {
-  onDelete: 'CASCADE',
+FeeTime.belongsToMany(ReportWriting, {
+  through: {
+    model: FeeTimeable,
+    unique: false,
+  },
+  foreignKey: 'feeTime_id',
+  as: 'ReportWritings',
+  constraints: false,
 });
-AvailabilityOption.belongsTo(DataCollectionFee);
-
-
-DataCollectionFee.hasMany(DwellingAdjustment, {
-  onDelete: 'CASCADE',
+ReportWriting.belongsToMany(FeeTime, {
+  through: {
+    model: FeeTimeable,
+    unique: false,
+    scope: {
+      feeTimeable_type: 'report_writing'
+    },
+  },
+  foreignKey: 'feeTimeable_id',
+  as: 'FeeTimes',
+  constraints: false,
 });
-DwellingAdjustment.belongsTo(DataCollectionFee);
 
 
-
-ReportWritingFee.hasMany(Service, {
-  onDelete: 'CASCADE',
+FeeTime.belongsToMany(ClientPresentation, {
+  through: {
+    model: FeeTimeable,
+    unique: false,
+  },
+  foreignKey: 'feeTime_id',
+  as: 'ClientPresentations',
+  constraints: false,
 });
-Service.belongsTo(ReportWritingFee);
-
-
-ReportWritingFee.hasMany(AdditionalService, {
-  onDelete: 'CASCADE',
-}); 
-AdditionalService.belongsTo(ReportWritingFee);
-
-
-ReportWritingFee.hasMany(AvailabilityOption, {
-  onDelete: 'CASCADE',
+ClientPresentation.belongsToMany(FeeTime, {
+  through: {
+    model: FeeTimeable,
+    unique: false,
+    scope: {
+      feeTimeable_type: 'client_presentation'
+    },
+  },
+  foreignKey: 'feeTimeable_id',
+  as: 'FeeTimes',
+  constraints: false,
 });
-AvailabilityOption.belongsTo(ReportWritingFee);
 
 
-ReportWritingFee.hasMany(DwellingAdjustment, {
-  onDelete: 'CASCADE',
+// AppointmentPart-FeeTimeable Assocations
+FeeTime.belongsToMany(Service, {
+  through: {
+    model: FeeTimeable,
+    unique: false,
+  },
+  foreignKey: 'feeTime_id',
+  as: 'Services',
+  constraints: false,
 });
-DwellingAdjustment.belongsTo(ReportWritingFee);
-
-
-
-ClientPresentationFee.hasMany(Service, {
-  onDelete: 'CASCADE',
+Service.belongsToMany(FeeTime, {
+  through: {
+    model: FeeTimeable,
+    unique: false,
+    scope: {
+      feeTimeable_type: 'client_presentation'
+    },
+  },
+  foreignKey: 'feeTimeable_id',
+  as: 'FeeTimes',
+  constraints: false,
 });
-Service.belongsTo(ClientPresentationFee);
-
-
-ClientPresentationFee.hasMany(AdditionalService, {
-  onDelete: 'CASCADE',
-}); 
-AdditionalService.belongsTo(ClientPresentationFee);
-
-
-ClientPresentationFee.hasMany(AvailabilityOption, {
-  onDelete: 'CASCADE',
-});
-AvailabilityOption.belongsTo(ClientPresentationFee);
-
-
-ClientPresentationFee.hasMany(DwellingAdjustment, {
-  onDelete: 'CASCADE',
-});
-DwellingAdjustment.belongsTo(ClientPresentationFee);
-
 
 
 
@@ -282,10 +297,9 @@ export {
   DwellingAdjustment, 
   AdditionalService, 
   AvailabilityOption,
-  DataCollectionTime,
-  ClientPresentationTime,
-  ReportWritingTime,  
-  DataCollectionFee,
-  ClientPresentationFee,
-  ReportWritingFee,
+  FeeTime,
+  FeeTimeable,
+  DataCollection,
+  ClientPresentation,
+  ReportWriting  
 };

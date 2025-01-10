@@ -4,7 +4,9 @@ import { AppointmentContext } from '../AppointmentContext';
 import { retrieveServicesForUserTypeByID, retrieveBaseServiceByID } from '../../api/internalAPI/appointmentAPI';
 
 import type { ServiceData } from '../../interfaces/apiInterfaces';
-import { Appointment } from '../../interfaces/appointmentInterfaces';
+import { 
+  // FeePart, TimePart, 
+  AppointmentPart, Appointment } from '../../interfaces/appointmentInterfaces';
 
 // Define the props for the component
 interface ServicesListProps {
@@ -51,6 +53,13 @@ interface ServicesListProps {
       try {
     if(thisService) {
       const data = await retrieveBaseServiceByID(thisService.id);
+      // const newAppointmentPart: AppointmentPart = {
+      //   name: data.name,
+      //   feePart: newFeePart,
+      //   base_sq_ft: data.base_sq_ft,
+      //   timePart: newTimePart,
+      //   // Add other relevant fields if required by AppointmentPart
+      // };
       const availableAdditionalServices =  data.AdditionalServices;
       if (availableAdditionalServices !== undefined && availableAdditionalServices !== null)
         setAvailableAdditionalServices(availableAdditionalServices);
@@ -60,6 +69,30 @@ interface ServicesListProps {
       const availableDwellingAdjustments =  data.DwellingAdjustments;
       if (availableDwellingAdjustments !== undefined && availableDwellingAdjustments !== null)
         setDwellingAdjustments(availableDwellingAdjustments);
+        // setThisAppointment((prev) => {
+        //   if (prev) {
+        //     return new Appointment(
+        //       prev.home_sq_ft,
+        //       {
+        //         ...prev.base_service, // Preserve other base_service properties
+        //         name: data.name,
+        //         base_sq_ft: newBaseSqFt, // Update base_sq_ft
+        //       },
+        //       prev.dwelling_type,
+        //       prev.additional_services,
+        //       prev.availability_options,
+        //       prev.data_collection_time,
+        //       prev.report_writing_time,
+        //       prev.client_presentation_time,
+        //       prev.base_service_fee,
+        //       prev.dwelling_type_fee,
+        //       prev.add_service_fees,
+        //       prev.avail_option_fees
+          //   );
+          // }
+          // return undefined; // If prev is undefined, return undefined
+        // });
+        // console.log(thisAppointment)
       } else {
         throw new Error()
       }
@@ -70,7 +103,6 @@ interface ServicesListProps {
   
     useEffect(() => {
       fetchServiceByID();
-      // updateThisAppointment();
     }, [
       thisService,
       setAvailableAdditionalServices,
@@ -78,37 +110,6 @@ interface ServicesListProps {
       setDwellingAdjustments,
       setThisAppointment
     ]);
-
-// const updateThisAppointment = async () => {
-//       if (thisService !== undefined) {
-//         console.log(thisService.timeFeeContent.base_sq_ft);
-//         setThisAppointment((prev) => {
-//           if (prev) {
-//             return new Appointment(
-//               prev.home_sq_ft,
-//               {
-//                 ...prev.base_service, // Preserve other base_service properties
-//                 base_sq_ft: thisService.timeFeeContent.base_sq_ft, // Update base_sq_ft
-//               },
-//               prev.dwelling_type,
-//               prev.additional_services,
-//               prev.availability_options,
-//               prev.data_collection_time,
-//               prev.report_writing_time,
-//               prev.client_presentation_time,
-//               prev.base_service_fee,
-//               prev.dwelling_type_fee,
-//               prev.add_service_fees,
-//               prev.avail_option_fees
-//             );
-//           }
-//           return undefined; // If prev is undefined, return undefined
-//         });
-//         console.log('settingstate for thisAppointnment', thisAppointment);
-//       }
-//     }
-    
-    
     
 
   return (

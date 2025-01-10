@@ -15,8 +15,7 @@ export interface ServiceData {
   description: string;
   visibility: boolean;
   timeFeeContent: AppointmentPart;
-  AdditionalServices?: 
-  AdditionalServiceData[] | null;
+  AdditionalServices?: AdditionalServiceData[] | null;
   AvailabilityOptions?: AvailabilityOptionData[] | null;
   DwellingAdjustments?: DwellingAdjustmentData[] | null;
 }

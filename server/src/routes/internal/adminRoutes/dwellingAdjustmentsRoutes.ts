@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
-import { ClientPresentationFee, DataCollectionFee, ReportWritingFee, ClientPresentationTime, DataCollectionTime, ReportWritingTime, DwellingAdjustment } from '../../../models/index.js';
+import { ClientPresentation, DataCollection, ReportWriting, DwellingAdjustment } from '../../../models/index.js';
 
 const router = Router();
 
-// GET ALL DwellingAdjustments /internal/appointment/service/admin/dwellingAdjustments/
+// GET ALL dwellingAdjustments /internal/appointment/service/admin/dwellingAdjustments/
 router.get('/', async (_req: Request, res: Response) => {
   try {
     const dwellingAdjustment = await DwellingAdjustment.findAll();
@@ -15,7 +15,7 @@ router.get('/', async (_req: Request, res: Response) => {
   }  
 });  
 
-// GET an DwellingAdjustment by ID /internal/appointment/service/admin/dwellingAdjustments/:id
+// GET an dwellingAdjustment by ID /internal/appointment/service/admin/dwellingAdjustments/:id
 router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -24,7 +24,7 @@ router.get('/:id', async (req: Request, res: Response) => {
       res.json(dwellingAdjustment);
     } else {
       res.status(404).json({
-        message: 'DwellingAdjustment not found'
+        message: 'dwellingAdjustment not found'
       });  
     }  
   } catch (error: any) {
@@ -34,72 +34,50 @@ router.get('/:id', async (req: Request, res: Response) => {
   }  
 });  
 
+type DataCollectionInstance = InstanceType<typeof DataCollection>;
+type ReportWritingInstance = InstanceType<typeof ReportWriting>;
+type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
 
-type DataCollectionFeeInstance = InstanceType<typeof DataCollectionFee>;
-type ReportWritingFeeInstance = InstanceType<typeof ReportWritingFee>;
-type ClientPresentationFeeInstance = InstanceType<typeof ClientPresentationFee>;
-type DataCollectionTimeInstance = InstanceType<typeof DataCollectionTime>;
-type ReportWritingTimeInstance = InstanceType<typeof ReportWritingTime>;
-type ClientPresentationTimeInstance = InstanceType<typeof ClientPresentationTime>;
-
-type DwellingAdjustmentWithTimesValues = InstanceType<typeof DwellingAdjustment> & {
+type dwellingAdjustmentWithTimesValues = InstanceType<typeof DwellingAdjustment> & {
   dataValues: {
-    DataCollectionFee: DataCollectionFeeInstance[],
-    ReportWritingFee: ReportWritingFeeInstance[],
-    ClientPresentationFee: ClientPresentationFeeInstance[];
-    DataCollectionTime: DataCollectionTimeInstance[],
-    ReportWritingTime: ReportWritingTimeInstance[],
-    ClientPresentationTime: ClientPresentationTimeInstance[];
+    DataCollection: DataCollectionInstance[],
+    ReportWriting: ReportWritingInstance[],
+    ClientPresentation: ClientPresentationInstance[];
   };
 };
 
-// Get TimeContent by DwellingAdjustment ID /internal/appointment/service/admin/dwellingAdjustments/tc/:id
+// Get TimeContent by dwellingAdjustment ID /internal/appointment/service/admin/dwellingAdjustments/tc/:id
 router.get('/tc/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  console.log('Begin TimeContentFetch on DwellingAdjustmentsRoutes.ts');
+  console.log('Begin TimeContentFetch on dwellingAdjustmentsRoutes.ts');
   try {
-    const TimesValuesByDwellingAdjustmentID = (await DwellingAdjustment.findByPk(id, {
+    const TimesValuesBydwellingAdjustmentID = (await DwellingAdjustment.findByPk(id, {
       attributes: {
-        exclude: [ 'data_collection_time_id', 'report_writing_time_id', 'client_presentation_time_id', 'dataCollectionTimeId', 'reportWritingTimeId', 'clientPresentationTimeId', 'data_collection_fee_id', 'report_writing_fee_id', 'client_presentation_fee_id', 'dataCollectionFeeId', 'reportWritingFeeId', 'clientPresentationFeeId' ], },
-      include: [
-        {
-          model: DataCollectionFee,
-          as: 'data_collection_fee',
-          attributes: ['base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: ReportWritingFee,
-          as: 'report_writing_fee',
-          attributes: ['base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: ClientPresentationFee,
-          as: 'client_presentation_fee',
-          attributes: ['base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: DataCollectionTime,
-          as: 'data_collection_time',
-          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
-        },
-        {
-          model: ReportWritingTime,
-          as: 'report_writing_time',
-          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
-        },
-        {
-          model: ClientPresentationTime,
-          as: 'client_presentation_time',
-          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
-        },
-      ],
-  })) as DwellingAdjustmentWithTimesValues;
+        exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId' ], },
+        include: [
+          {
+            model: DataCollection,
+            as: 'data_collection',
+            attributes: ['base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ReportWriting,
+            as: 'report_writing',
+            attributes: ['base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ClientPresentation,
+            as: 'client_presentation',
+            attributes: ['base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          },
+        ],
+    })) as dwellingAdjustmentWithTimesValues;
     
-    if (TimesValuesByDwellingAdjustmentID) {
-      console.log('TimeContentFetch on DwellingAdjustmentsRoutes.ts', TimesValuesByDwellingAdjustmentID);
-      res.json(TimesValuesByDwellingAdjustmentID);
+    if (TimesValuesBydwellingAdjustmentID) {
+      console.log('TimeContentFetch on dwellingAdjustmentsRoutes.ts', TimesValuesBydwellingAdjustmentID);
+      res.json(TimesValuesBydwellingAdjustmentID);
     } else {
-      res.status(404).json({ message: 'DwellingAdjustment not found' });
+      res.status(404).json({ message: 'dwellingAdjustment not found' });
     }
   } catch (error: any) {
     console.error('Error fetching TimesValues:', error);
@@ -107,17 +85,17 @@ router.get('/tc/:id', async (req: Request, res: Response) => {
   }
 });
 
-// CREATE a new DwellingAdjustment /internal/appointment/service/admin/dwellingAdjustments/
+// CREATE a new dwellingAdjustment /internal/appointment/service/admin/dwellingAdjustments/
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const newDwellingAdjustmentData = await DwellingAdjustment.create(req.body);
-    res.status(200).json(newDwellingAdjustmentData);
+    const newdwellingAdjustmentData = await DwellingAdjustment.create(req.body);
+    res.status(200).json(newdwellingAdjustmentData);
   } catch (err) {
     res.status(400).json(err);
   }
 }); 
 
-// UPDATE an DwellingAdjustment by ID /internal/appointment/service/admin/dwellingAdjustments/:id
+// UPDATE an dwellingAdjustment by ID /internal/appointment/service/admin/dwellingAdjustments/:id
 router.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name } = req.body;
@@ -129,7 +107,7 @@ router.put('/:id', async (req: Request, res: Response) => {
       res.json(dwellingAdjustment);
     } else {
       res.status(404).json({
-        message: 'DwellingAdjustment not found'
+        message: 'dwellingAdjustment not found'
       });  
     }  
   } catch (error: any) {
@@ -139,7 +117,7 @@ router.put('/:id', async (req: Request, res: Response) => {
   }  
 });  
 
-// DELETE an DwellingAdjustment /internal/appointment/service/admin/dwellingAdjustments/:id
+// DELETE an dwellingAdjustment /internal/appointment/service/admin/dwellingAdjustments/:id
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     const dwellingAdjustmentData = await DwellingAdjustment.destroy({
@@ -149,7 +127,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     });
 
     if (!dwellingAdjustmentData) {
-      res.status(404).json({ message: 'No DwellingAdjustment found with that id!' });
+      res.status(404).json({ message: 'No dwellingAdjustment found with that id!' });
       return;
     }
 

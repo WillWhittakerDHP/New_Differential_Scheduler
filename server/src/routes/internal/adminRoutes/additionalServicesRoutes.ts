@@ -1,13 +1,13 @@
 import { Router, Request, Response } from 'express';
-import { ClientPresentationFee, DataCollectionFee, ReportWritingFee, ClientPresentationTime, DataCollectionTime, ReportWritingTime, AdditionalService } from '../../../models/index.js';
+import { ClientPresentation, DataCollection, ReportWriting, AdditionalService } from '../../../models/index.js';
 
 const router = Router();
 
-// GET ALL AdditionalServices /internal/appointment/service/admin/additionalServices/
+// GET ALL additionalServices /internal/appointment/service/admin/additionalServices/
 router.get('/', async (_req: Request, res: Response) => {
   try {
-    const additionalServices = await AdditionalService.findAll();
-    res.json(additionalServices);
+    const additionalService = await AdditionalService.findAll();
+    res.json(additionalService);
   } catch (error: any) {
     res.status(500).json({
       message: error.message
@@ -15,7 +15,7 @@ router.get('/', async (_req: Request, res: Response) => {
   }  
 });  
 
-// GET an AdditionalService by ID /internal/appointment/service/admin/additionalServices/:id
+// GET an additionalService by ID /internal/appointment/service/admin/additionalServices/:id
 router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -24,7 +24,7 @@ router.get('/:id', async (req: Request, res: Response) => {
       res.json(additionalService);
     } else {
       res.status(404).json({
-        message: 'AdditionalService not found'
+        message: 'additionalService not found'
       });  
     }  
   } catch (error: any) {
@@ -34,72 +34,50 @@ router.get('/:id', async (req: Request, res: Response) => {
   }  
 });  
 
+type DataCollectionInstance = InstanceType<typeof DataCollection>;
+type ReportWritingInstance = InstanceType<typeof ReportWriting>;
+type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
 
-type DataCollectionFeeInstance = InstanceType<typeof DataCollectionFee>;
-type ReportWritingFeeInstance = InstanceType<typeof ReportWritingFee>;
-type ClientPresentationFeeInstance = InstanceType<typeof ClientPresentationFee>;
-type DataCollectionTimeInstance = InstanceType<typeof DataCollectionTime>;
-type ReportWritingTimeInstance = InstanceType<typeof ReportWritingTime>;
-type ClientPresentationTimeInstance = InstanceType<typeof ClientPresentationTime>;
-
-type AdditionalServiceWithTimesValues = InstanceType<typeof AdditionalService> & {
+type additionalServiceWithTimesValues = InstanceType<typeof AdditionalService> & {
   dataValues: {
-    DataCollectionFee: DataCollectionFeeInstance[],
-    ReportWritingFee: ReportWritingFeeInstance[],
-    ClientPresentationFee: ClientPresentationFeeInstance[];
-    DataCollectionTime: DataCollectionTimeInstance[],
-    ReportWritingTime: ReportWritingTimeInstance[],
-    ClientPresentationTime: ClientPresentationTimeInstance[];
+    DataCollection: DataCollectionInstance[],
+    ReportWriting: ReportWritingInstance[],
+    ClientPresentation: ClientPresentationInstance[];
   };
 };
 
-// Get TimeContent by AdditionalService ID /internal/appointment/service/admin/additionalServices/tc/:id
+// Get TimeContent by additionalService ID /internal/appointment/service/admin/additionalServices/tc/:id
 router.get('/tc/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  console.log('Begin TimeContentFetch on AdditionalServicesRoutes.ts');
+  console.log('Begin TimeContentFetch on additionalServicesRoutes.ts');
   try {
-    const ValuesByAdditionalServiceID = (await AdditionalService.findByPk(id, {
+    const TimesValuesByadditionalServiceID = (await AdditionalService.findByPk(id, {
       attributes: {
-        exclude: [ 'data_collection_time_id', 'report_writing_time_id', 'client_presentation_time_id', 'dataCollectionTimeId', 'reportWritingTimeId', 'clientPresentationTimeId', 'data_collection_fee_id', 'report_writing_fee_id', 'client_presentation_fee_id', 'dataCollectionFeeId', 'reportWritingFeeId', 'clientPresentationFeeId' ], },
-      include: [
-        {
-          model: DataCollectionFee,
-          as: 'data_collection_fee',
-          attributes: ['base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: ReportWritingFee,
-          as: 'report_writing_fee',
-          attributes: ['base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: ClientPresentationFee,
-          as: 'client_presentation_fee',
-          attributes: ['base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: DataCollectionTime,
-          as: 'data_collection_time',
-          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
-        },
-        {
-          model: ReportWritingTime,
-          as: 'report_writing_time',
-          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
-        },
-        {
-          model: ClientPresentationTime,
-          as: 'client_presentation_time',
-          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
-        },
-      ],
-    })) as AdditionalServiceWithTimesValues;
+        exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId' ], },
+        include: [
+          {
+            model: DataCollection,
+            as: 'data_collection',
+            attributes: ['base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ReportWriting,
+            as: 'report_writing',
+            attributes: ['base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ClientPresentation,
+            as: 'client_presentation',
+            attributes: ['base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          },
+        ],
+    })) as additionalServiceWithTimesValues;
     
-    if (ValuesByAdditionalServiceID) {
-      console.log('TimeContentFetch on AdditionalServicesRoutes.ts', ValuesByAdditionalServiceID);
-      res.json(ValuesByAdditionalServiceID);
+    if (TimesValuesByadditionalServiceID) {
+      console.log('TimeContentFetch on additionalServicesRoutes.ts', TimesValuesByadditionalServiceID);
+      res.json(TimesValuesByadditionalServiceID);
     } else {
-      res.status(404).json({ message: 'AdditionalService not found' });
+      res.status(404).json({ message: 'additionalService not found' });
     }
   } catch (error: any) {
     console.error('Error fetching TimesValues:', error);
@@ -107,17 +85,17 @@ router.get('/tc/:id', async (req: Request, res: Response) => {
   }
 });
 
-// CREATE a new AdditionalService /internal/appointment/service/admin/additionalServices/
+// CREATE a new additionalService /internal/appointment/service/admin/additionalServices/
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const newAdditionalServiceData = await AdditionalService.create(req.body);
-    res.status(200).json(newAdditionalServiceData);
+    const newadditionalServiceData = await AdditionalService.create(req.body);
+    res.status(200).json(newadditionalServiceData);
   } catch (err) {
     res.status(400).json(err);
   }
 }); 
 
-// UPDATE an AdditionalService by ID /internal/appointment/service/admin/additionalServices/:id
+// UPDATE an additionalService by ID /internal/appointment/service/admin/additionalServices/:id
 router.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name } = req.body;
@@ -129,7 +107,7 @@ router.put('/:id', async (req: Request, res: Response) => {
       res.json(additionalService);
     } else {
       res.status(404).json({
-        message: 'AdditionalService not found'
+        message: 'additionalService not found'
       });  
     }  
   } catch (error: any) {
@@ -139,7 +117,7 @@ router.put('/:id', async (req: Request, res: Response) => {
   }  
 });  
 
-// DELETE an AdditionalService /internal/appointment/service/admin/additionalServices/:id
+// DELETE an additionalService /internal/appointment/service/admin/additionalServices/:id
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     const additionalServiceData = await AdditionalService.destroy({
@@ -149,7 +127,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     });
 
     if (!additionalServiceData) {
-      res.status(404).json({ message: 'No AdditionalService found with that id!' });
+      res.status(404).json({ message: 'No additionalService found with that id!' });
       return;
     }
 

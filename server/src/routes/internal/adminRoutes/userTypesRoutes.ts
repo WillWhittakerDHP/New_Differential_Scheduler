@@ -1,7 +1,48 @@
 import { Router, Request, Response } from 'express';
-import { UserType } from '../../../models/index.js';
+import { UserType, Service } from '../../../models/index.js';
 
 const router = Router();
+// GET VisibleUserTypes
+router.get('/', async (_req: Request, res: Response) => {
+  try {
+    const VisibleUserTypes = await UserType.findAll({
+      order: ['id'],
+      where: { visibility: true },
+      attributes: ['id', 'name', 'icon', 'description'],
+      raw: true,
+    });  
+    res.json(VisibleUserTypes);
+  } catch (err) {
+    console.error('Error fetching Users on StructureRoutes.ts:', err);
+  }  
+})    
+
+
+// GET ServicesForUserTypeByID
+router.get('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const ServicesForUserTypeByID = await UserType.findByPk(id,{
+      include: [{ 
+        model: Service,
+        as: 'Services',
+        where: {
+          visibility: true,
+        },  
+        attributes: ['id', 'name', 'description'],
+        through: { attributes: [] }
+      }],  
+    });  
+    if (ServicesForUserTypeByID) {
+      const UserTypeServices = (ServicesForUserTypeByID.dataValues.Services || []).map(service => service.get({ plain: true }));
+      res.json(UserTypeServices);
+    } else {
+      res.status(404).json({ message: 'Services not found' });
+    }  
+  } catch (error: any) {
+    res.status(500).json({ 'Error fetching Users on StructureRoutes.ts:': error.message });
+  }  
+})  
 
 // GET /UserTypes - Get all UserTypes
 router.get('/', async (_req: Request, res: Response) => {
