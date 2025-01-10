@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode, useEffect } from 'react';
 import type { UserTypeData, ServiceData, DwellingAdjustmentData, AdditionalServiceData, AvailabilityOptionData } from '../interfaces/apiInterfaces';
 import { DescriptionsData } from '../interfaces/detailInterfaces';
 import { Appointment } from '../interfaces/appointmentInterfaces';
@@ -60,7 +60,12 @@ export const AppointmentProvider = ({ children }: { children: ReactNode }) => {
   // const [thisAddress, setThisAddress] = useState<Address>();
   // const [thisProperty, setThisProperty] = useState<Property>();
   
-
+  useEffect(() => {
+    const appointment = new Appointment();
+    setThisAppointment(appointment);
+  }, []);
+  
+  
   return (
     <AppointmentContext.Provider value={{ thisAppointment, setThisAppointment, userTypes, setUserTypes, thisUserType, setThisUserType, availableServices, setAvailableServices, thisService, setThisService, availableAdditionalServices, setAvailableAdditionalServices, thisAdditionalService, setThisAdditionalService, availableAvailabilityOptions, setAvailableAvailabilityOptions, thisAvailabilityOption, setThisAvailabilityOption, dwellingAdjustments, setDwellingAdjustments, thisDwellingAdjustment, setThisDwellingAdjustment, serviceDescriptions, setServiceDescriptions
     // , thisAddress, setThisAddress, thisProperty, setThisProperty

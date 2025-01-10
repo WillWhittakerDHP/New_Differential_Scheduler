@@ -1,9 +1,62 @@
 import { Router, Request, Response } from 'express';
-import { UserType, Service, AdditionalService, AvailabilityOption, DwellingAdjustment, ClientPresentation, DataCollection, ReportWriting } from '../../models/index.js';
+import { UserType, Service, AdditionalService, AvailabilityOption, DwellingAdjustment, ClientPresentationFee, DataCollectionFee, ReportWritingFee, ClientPresentationTime, DataCollectionTime, ReportWritingTime } from '../../models/index.js';
 
 
 const router = Router();
 
+type DataCollectionFeeInstance = InstanceType<typeof DataCollectionFee>;
+type ReportWritingFeeInstance = InstanceType<typeof ReportWritingFee>;
+type ClientPresentationFeeInstance = InstanceType<typeof ClientPresentationFee>;
+type DataCollectionTimeInstance = InstanceType<typeof DataCollectionTime>;
+type ReportWritingTimeInstance = InstanceType<typeof ReportWritingTime>;
+type ClientPresentationTimeInstance = InstanceType<typeof ClientPresentationTime>;
+type AdditionalServiceInstance = InstanceType<typeof AdditionalService>;
+type AvailabilityOptionInstance = InstanceType<typeof AdditionalService>;
+type DwellingAdjustmentInstance = InstanceType<typeof AdditionalService>;
+
+type BaseServiceByID = InstanceType<typeof Service> & {
+  dataValues: {
+    AvailabilityOptions: AvailabilityOptionInstance[];
+    AdditionalServices: AdditionalServiceInstance[];
+    DwellingAdjustments: DwellingAdjustmentInstance[];
+    DataCollectionFee: DataCollectionFeeInstance[],
+    ReportWritingFee: ReportWritingFeeInstance[],
+    ClientPresentationFee: ClientPresentationFeeInstance[];
+    DataCollectionTime: DataCollectionTimeInstance[],
+    ReportWritingTime: ReportWritingTimeInstance[],
+    ClientPresentationTime: ClientPresentationTimeInstance[];
+  };
+};
+type AdditionalServiceByID = InstanceType<typeof AdditionalService> & {
+  dataValues: {
+    DataCollectionFee: DataCollectionFeeInstance[],
+    ReportWritingFee: ReportWritingFeeInstance[],
+    ClientPresentationFee: ClientPresentationFeeInstance[];
+    DataCollectionTime: DataCollectionTimeInstance[],
+    ReportWritingTime: ReportWritingTimeInstance[],
+    ClientPresentationTime: ClientPresentationTimeInstance[];
+  };
+};
+type AvailabilityOptionByID = InstanceType<typeof AvailabilityOption> & {
+  dataValues: {
+    DataCollectionFee: DataCollectionFeeInstance[],
+    ReportWritingFee: ReportWritingFeeInstance[],
+    ClientPresentationFee: ClientPresentationFeeInstance[];
+    DataCollectionTime: DataCollectionTimeInstance[],
+    ReportWritingTime: ReportWritingTimeInstance[],
+    ClientPresentationTime: ClientPresentationTimeInstance[];
+  };
+};
+type DwellingAdjustmentByID = InstanceType<typeof DwellingAdjustment> & {
+  dataValues: {
+    DataCollectionFee: DataCollectionFeeInstance[],
+    ReportWritingFee: ReportWritingFeeInstance[],
+    ClientPresentationFee: ClientPresentationFeeInstance[];
+    DataCollectionTime: DataCollectionTimeInstance[],
+    ReportWritingTime: ReportWritingTimeInstance[],
+    ClientPresentationTime: ClientPresentationTimeInstance[];
+  };
+};
 
 // GET VisibleUserTypes
 router.get('/', async (_req: Request, res: Response) => {
@@ -48,52 +101,15 @@ router.get('/:id', async (req: Request, res: Response) => {
 })  
 
 
-type AdditionalServiceInstance = InstanceType<typeof AdditionalService>;
-type AvailabilityOptionInstance = InstanceType<typeof AdditionalService>;
-type DwellingAdjustmentInstance = InstanceType<typeof AdditionalService>;
-type DataCollectionInstance = InstanceType<typeof DataCollection>;
-type ReportWritingInstance = InstanceType<typeof ReportWriting>;
-type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
-type BaseServiceByID = InstanceType<typeof Service> & {
-  dataValues: {
-    AvailabilityOptions: AvailabilityOptionInstance[];
-    AdditionalServices: AdditionalServiceInstance[];
-    DwellingAdjustments: DwellingAdjustmentInstance[];
-    DataCollection: DataCollectionInstance[],
-    ReportWriting: ReportWritingInstance[],
-    ClientPresentation: ClientPresentationInstance[];
-  };
-};
-type AdditionalServiceByID = InstanceType<typeof AdditionalService> & {
-  dataValues: {
-    DataCollection: DataCollectionInstance[],
-    ReportWriting: ReportWritingInstance[],
-    ClientPresentation: ClientPresentationInstance[];
-  };
-};
-type AvailabilityOptionByID = InstanceType<typeof AvailabilityOption> & {
-  dataValues: {
-    DataCollection: DataCollectionInstance[],
-    ReportWriting: ReportWritingInstance[],
-    ClientPresentation: ClientPresentationInstance[];
-  };
-};
-type DwellingAdjustmentByID = InstanceType<typeof DwellingAdjustment> & {
-  dataValues: {
-    DataCollection: DataCollectionInstance[],
-    ReportWriting: ReportWritingInstance[],
-    ClientPresentation: ClientPresentationInstance[];
-  };
-};
 
 
 // GET BaseServiceByID
 router.get('/bs/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  
+  console.log('id on appointmentRoutes.ts', id)
   try {
     const BaseServiceByID = (await Service.findByPk(id, {
-      attributes: { exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId'], },
+      attributes: { exclude: [ 'data_collection_time_id', 'report_writing_time_id', 'client_presentation_time_id', 'dataCollectionTimeId', 'reportWritingTimeId', 'clientPresentationTimeId', 'data_collection_fee_id', 'report_writing_fee_id', 'client_presentation_fee_id', 'dataCollectionFeeId', 'reportWritingFeeId', 'clientPresentationFeeId' ], },
         include: [
         {
           model: AdditionalService,
@@ -117,25 +133,39 @@ router.get('/bs/:id', async (req: Request, res: Response) => {
           through: { attributes: [] },
         },
         {
-          model: DataCollection,
-          as: 'data_collection',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          model: DataCollectionFee,
+          as: 'data_collection_fee',
+          attributes: ['base_fee', 'rate_over_base_fee'],
         },
         {
-          model: ReportWriting,
-          as: 'report_writing',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          model: ReportWritingFee,
+          as: 'report_writing_fee',
+          attributes: ['base_fee', 'rate_over_base_fee'],
         },
         {
-          model: ClientPresentation,
-          as: 'client_presentation',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          model: ClientPresentationFee,
+          as: 'client_presentation_fee',
+          attributes: ['base_fee', 'rate_over_base_fee'],
+        },
+        {
+          model: DataCollectionTime,
+          as: 'data_collection_time',
+          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+        },
+        {
+          model: ReportWritingTime,
+          as: 'report_writing_time',
+          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+        },
+        {
+          model: ClientPresentationTime,
+          as: 'client_presentation_time',
+          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
         },
       ],
     })) as BaseServiceByID;
-    
+    console.log('baseServiceByID', BaseServiceByID);
     if (BaseServiceByID) {
-      console.log('Service From serviceTypesRoutes.ts', BaseServiceByID);
       res.json(BaseServiceByID);
     } else {
       res.status(404).json({ message: 'BaseServiceByID not found' });
@@ -150,23 +180,38 @@ router.get('/as/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const AdditionalServiceByID = (await AdditionalService.findByPk(id, {
-      attributes: { exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId'], },
-        include: [
-        {
-          model: DataCollection,
-          as: 'data_collection',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: ReportWriting,
-          as: 'report_writing',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: ClientPresentation,
-          as: 'client_presentation',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
-        },
+      attributes: { 
+        exclude: [ 'data_collection_time_id', 'report_writing_time_id', 'client_presentation_time_id', 'dataCollectionTimeId', 'reportWritingTimeId', 'clientPresentationTimeId', 'data_collection_fee_id', 'report_writing_fee_id', 'client_presentation_fee_id', 'dataCollectionFeeId', 'reportWritingFeeId', 'clientPresentationFeeId' ], },        include: [
+          {
+            model: DataCollectionFee,
+            as: 'data_collection_fee',
+            attributes: ['base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ReportWritingFee,
+            as: 'report_writing_fee',
+            attributes: ['base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ClientPresentationFee,
+            as: 'client_presentation_fee',
+            attributes: ['base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: DataCollectionTime,
+            as: 'data_collection_time',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+          },
+          {
+            model: ReportWritingTime,
+            as: 'report_writing_time',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+          },
+          {
+            model: ClientPresentationTime,
+            as: 'client_presentation_time',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+          },
       ],
     })) as AdditionalServiceByID;
     
@@ -186,23 +231,40 @@ router.get('/ao/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const AvailabilityOptionByID = (await AvailabilityOption.findByPk(id, {
-      attributes: { exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId'], },
+      attributes: { 
+        exclude: [ 'data_collection_time_id', 'report_writing_time_id', 'client_presentation_time_id', 'dataCollectionTimeId', 'reportWritingTimeId', 'clientPresentationTimeId', 'data_collection_fee_id', 'report_writing_fee_id', 'client_presentation_fee_id', 'dataCollectionFeeId', 'reportWritingFeeId', 'clientPresentationFeeId' ], },
         include: [
-        {
-          model: DataCollection,
-          as: 'data_collection',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: ReportWriting,
-          as: 'report_writing',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: ClientPresentation,
-          as: 'client_presentation',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
-        },
+          { attributes: ['base_sq_ft'],},
+          {
+            model: DataCollectionFee,
+            as: 'data_collection_fee',
+            attributes: ['base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ReportWritingFee,
+            as: 'report_writing_fee',
+            attributes: ['base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ClientPresentationFee,
+            as: 'client_presentation_fee',
+            attributes: ['base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: DataCollectionTime,
+            as: 'data_collection_time',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+          },
+          {
+            model: ReportWritingTime,
+            as: 'report_writing_time',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+          },
+          {
+            model: ClientPresentationTime,
+            as: 'client_presentation_time',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+          },
       ],
     })) as AvailabilityOptionByID;
     
@@ -222,23 +284,39 @@ router.get('/da/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const DwellingAdjustmentByID = (await DwellingAdjustment.findByPk(id, {
-      attributes: { exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId'], },
+      attributes: { 
+        exclude: [ 'data_collection_time_id', 'report_writing_time_id', 'client_presentation_time_id', 'dataCollectionTimeId', 'reportWritingTimeId', 'clientPresentationTimeId', 'data_collection_fee_id', 'report_writing_fee_id', 'client_presentation_fee_id', 'dataCollectionFeeId', 'reportWritingFeeId', 'clientPresentationFeeId' ], },
         include: [
-        {
-          model: DataCollection,
-          as: 'data_collection',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: ReportWriting,
-          as: 'report_writing',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
-        },
-        {
-          model: ClientPresentation,
-          as: 'client_presentation',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
-        },
+          {
+            model: DataCollectionFee,
+            as: 'data_collection_fee',
+            attributes: ['base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ReportWritingFee,
+            as: 'report_writing_fee',
+            attributes: ['base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: ClientPresentationFee,
+            as: 'client_presentation_fee',
+            attributes: ['base_fee', 'rate_over_base_fee'],
+          },
+          {
+            model: DataCollectionTime,
+            as: 'data_collection_time',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+          },
+          {
+            model: ReportWritingTime,
+            as: 'report_writing_time',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+          },
+          {
+            model: ClientPresentationTime,
+            as: 'client_presentation_time',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+          },
       ],
     })) as DwellingAdjustmentByID;
     

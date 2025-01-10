@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { ClientPresentation, DataCollection, ReportWriting, DwellingAdjustment } from '../../../models/index.js';
+import { ClientPresentationFee, DataCollectionFee, ReportWritingFee, ClientPresentationTime, DataCollectionTime, ReportWritingTime, DwellingAdjustment } from '../../../models/index.js';
 
 const router = Router();
 
@@ -35,15 +35,21 @@ router.get('/:id', async (req: Request, res: Response) => {
 });  
 
 
-type DataCollectionInstance = InstanceType<typeof DataCollection>;
-type ReportWritingInstance = InstanceType<typeof ReportWriting>;
-type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
+type DataCollectionFeeInstance = InstanceType<typeof DataCollectionFee>;
+type ReportWritingFeeInstance = InstanceType<typeof ReportWritingFee>;
+type ClientPresentationFeeInstance = InstanceType<typeof ClientPresentationFee>;
+type DataCollectionTimeInstance = InstanceType<typeof DataCollectionTime>;
+type ReportWritingTimeInstance = InstanceType<typeof ReportWritingTime>;
+type ClientPresentationTimeInstance = InstanceType<typeof ClientPresentationTime>;
 
 type DwellingAdjustmentWithTimesValues = InstanceType<typeof DwellingAdjustment> & {
   dataValues: {
-    DataCollection: DataCollectionInstance[],
-    ReportWriting: ReportWritingInstance[],
-    ClientPresentation: ClientPresentationInstance[];
+    DataCollectionFee: DataCollectionFeeInstance[],
+    ReportWritingFee: ReportWritingFeeInstance[],
+    ClientPresentationFee: ClientPresentationFeeInstance[];
+    DataCollectionTime: DataCollectionTimeInstance[],
+    ReportWritingTime: ReportWritingTimeInstance[],
+    ClientPresentationTime: ClientPresentationTimeInstance[];
   };
 };
 
@@ -54,25 +60,40 @@ router.get('/tc/:id', async (req: Request, res: Response) => {
   try {
     const TimesValuesByDwellingAdjustmentID = (await DwellingAdjustment.findByPk(id, {
       attributes: {
-        exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId'],},
+        exclude: [ 'data_collection_time_id', 'report_writing_time_id', 'client_presentation_time_id', 'dataCollectionTimeId', 'reportWritingTimeId', 'clientPresentationTimeId', 'data_collection_fee_id', 'report_writing_fee_id', 'client_presentation_fee_id', 'dataCollectionFeeId', 'reportWritingFeeId', 'clientPresentationFeeId' ], },
       include: [
         {
-          model: DataCollection,
-          as: 'data_colleciton',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          model: DataCollectionFee,
+          as: 'data_collection_fee',
+          attributes: ['base_fee', 'rate_over_base_fee'],
         },
         {
-          model: ReportWriting,
-          as: 'report_writing',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          model: ReportWritingFee,
+          as: 'report_writing_fee',
+          attributes: ['base_fee', 'rate_over_base_fee'],
         },
         {
-          model: ClientPresentation,
-          as: 'client_presentation',
-          attributes: ['on_site', 'base_sq_ft', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+          model: ClientPresentationFee,
+          as: 'client_presentation_fee',
+          attributes: ['base_fee', 'rate_over_base_fee'],
+        },
+        {
+          model: DataCollectionTime,
+          as: 'data_collection_time',
+          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+        },
+        {
+          model: ReportWritingTime,
+          as: 'report_writing_time',
+          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
+        },
+        {
+          model: ClientPresentationTime,
+          as: 'client_presentation_time',
+          attributes: ['on_site', 'base_time', 'rate_over_base_time'],
         },
       ],
-    })) as DwellingAdjustmentWithTimesValues;
+  })) as DwellingAdjustmentWithTimesValues;
     
     if (TimesValuesByDwellingAdjustmentID) {
       console.log('TimeContentFetch on DwellingAdjustmentsRoutes.ts', TimesValuesByDwellingAdjustmentID);

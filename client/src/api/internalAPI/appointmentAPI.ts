@@ -46,6 +46,7 @@ const retrieveBaseServiceByID = async (id: number | null): Promise<ServiceData> 
       }
     });
     const data = await response.json();
+    // console.log('data on appointmentAPI.ts', data)
     if (!response.ok) {
       throw new Error('Invalid user API response, check network tab!');
     }

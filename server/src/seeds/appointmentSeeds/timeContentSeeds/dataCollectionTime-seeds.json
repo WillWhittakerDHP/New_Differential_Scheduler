@@ -1,0 +1,39 @@
+[
+  {
+    "on_site": true,
+    "base_sq_ft": 400,
+    "base_time": 30,
+    "rate_over_base_time": 150
+  },
+  {
+    "on_site": true,
+    "base_sq_ft": 600,
+    "base_time": 45,
+    "rate_over_base_time": 200
+  },
+  {
+    "on_site": true,
+    "base_sq_ft": 600,
+    "base_time": 30,
+    "rate_over_base_time": 150
+  },
+  {
+    "on_site": true,
+    "base_sq_ft": 0,
+    "base_time": 30,
+    "rate_over_base_time": 0
+    
+  },
+  {
+    "on_site": true,
+    "base_sq_ft": 600,
+    "base_time": 100, 
+    "rate_over_base_time": 150
+  },
+  {
+    "on_site": true,
+    "base_sq_ft": 600,
+    "base_time": 15, 
+    "rate_over_base_time": 100
+  }
+]

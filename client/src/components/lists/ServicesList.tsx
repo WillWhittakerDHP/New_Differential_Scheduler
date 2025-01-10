@@ -4,6 +4,7 @@ import { AppointmentContext } from '../AppointmentContext';
 import { retrieveServicesForUserTypeByID, retrieveBaseServiceByID } from '../../api/internalAPI/appointmentAPI';
 
 import type { ServiceData } from '../../interfaces/apiInterfaces';
+import { Appointment } from '../../interfaces/appointmentInterfaces';
 
 // Define the props for the component
 interface ServicesListProps {
@@ -50,35 +51,65 @@ interface ServicesListProps {
       try {
     if(thisService) {
       const data = await retrieveBaseServiceByID(thisService.id);
-      const service: ServiceData = JSON.parse(JSON.stringify(data));
-      console.log('service from ServicesList.tsx', service)
-          const availableAdditionalServices =  service.AdditionalServices;
-          if (availableAdditionalServices !== undefined && availableAdditionalServices !== null)
-          setAvailableAdditionalServices(availableAdditionalServices);
-          const availableAvailabilityOptions =  service.AvailabilityOptions;
-          if (availableAvailabilityOptions !== undefined && availableAvailabilityOptions !== null)
-          setAvailableAvailabilityOptions(availableAvailabilityOptions);
-          const availableDwellingAdjustments =  service.DwellingAdjustments;
-          if (availableDwellingAdjustments !== undefined && availableDwellingAdjustments !== null)
-          setDwellingAdjustments(availableDwellingAdjustments);
-        } else {
-          throw new Error()
-        }
-      } catch (error) {
-        console.error('Error fetching Service types:', error);
+      const availableAdditionalServices =  data.AdditionalServices;
+      if (availableAdditionalServices !== undefined && availableAdditionalServices !== null)
+        setAvailableAdditionalServices(availableAdditionalServices);
+      const availableAvailabilityOptions =  data.AvailabilityOptions;
+      if (availableAvailabilityOptions !== undefined && availableAvailabilityOptions !== null)
+        setAvailableAvailabilityOptions(availableAvailabilityOptions);
+      const availableDwellingAdjustments =  data.DwellingAdjustments;
+      if (availableDwellingAdjustments !== undefined && availableDwellingAdjustments !== null)
+        setDwellingAdjustments(availableDwellingAdjustments);
+      } else {
+        throw new Error()
       }
-    };
+    } catch (error) {
+      console.error('Error fetching Service types:', error);
+    }
+  };
   
     useEffect(() => {
       fetchServiceByID();
-    }, [thisService, setAvailableAdditionalServices, setAvailableAvailabilityOptions, setDwellingAdjustments]);
+      // updateThisAppointment();
+    }, [
+      thisService,
+      setAvailableAdditionalServices,
+      setAvailableAvailabilityOptions,
+      setDwellingAdjustments,
+      setThisAppointment
+    ]);
 
-    // useEffect(() => {
-    //   setThisAppointment(
-    //     ...thisAppointment,
-    //     base_service: thisService
-    //   );
-    // }, [thisService, setThisAppointment])
+// const updateThisAppointment = async () => {
+//       if (thisService !== undefined) {
+//         console.log(thisService.timeFeeContent.base_sq_ft);
+//         setThisAppointment((prev) => {
+//           if (prev) {
+//             return new Appointment(
+//               prev.home_sq_ft,
+//               {
+//                 ...prev.base_service, // Preserve other base_service properties
+//                 base_sq_ft: thisService.timeFeeContent.base_sq_ft, // Update base_sq_ft
+//               },
+//               prev.dwelling_type,
+//               prev.additional_services,
+//               prev.availability_options,
+//               prev.data_collection_time,
+//               prev.report_writing_time,
+//               prev.client_presentation_time,
+//               prev.base_service_fee,
+//               prev.dwelling_type_fee,
+//               prev.add_service_fees,
+//               prev.avail_option_fees
+//             );
+//           }
+//           return undefined; // If prev is undefined, return undefined
+//         });
+//         console.log('settingstate for thisAppointnment', thisAppointment);
+//       }
+//     }
+    
+    
+    
 
   return (
     <Container className="mt-4">

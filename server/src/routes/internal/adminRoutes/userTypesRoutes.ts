@@ -34,20 +34,6 @@ router.get('/:id', async (req: Request, res: Response) => {
   }  
 });  
 
-// // POST /UserTypes - Create a new UserType
-// router.post('/', async (req: Request, res: Response) => {
-//   const { name } = req.body;
-//   try {
-//     const newUserType = await UserType.create({
-//       name = name;
-//     });  
-//     res.status(201).json(newUserType);
-//   } catch (error: any) {
-//     res.status(400).json({
-//       message: error.message
-//     });  
-//   }  
-// });  
 
 // PUT /UserTypes/:id - Update a UserType by ID
 router.put('/:id', async (req: Request, res: Response) => {

@@ -1,50 +1,32 @@
 [
   {
-    "on_site": true,
     "base_sq_ft": 600,
-    "base_time": 60, 
-    "rate_over_base_time": 100, 
     "base_fee": 50, 
     "rate_over_base_fee": 10
   },
   {
-    "on_site": true,
     "base_sq_ft": 600,
-    "base_time": 60, 
-    "rate_over_base_time": 150, 
     "base_fee": 50, 
     "rate_over_base_fee": 100
   },
   {
-    "on_site": false,
     "base_sq_ft": 600,
-    "base_time": 75, 
-    "rate_over_base_time": 100, 
     "base_fee": 125,
     "rate_over_base_fee": 200
   
   },
   {
-    "on_site": false,
     "base_sq_ft": 600,
-    "base_time": 175,
-    "rate_over_base_time": 0, 
     "base_fee": 0, 
     "rate_over_base_fee": 0
   },
   {
-    "on_site": false,
     "base_sq_ft": 600,
-    "base_time": 30, 
-    "rate_over_base_time": 50, 
     "base_fee": 50, 
     "rate_over_base_fee": 120
   },
   {
-    "on_site": false,
     "base_sq_ft": 600,
-    "base_time": 100,
-    "rate_over_base_time": 100,
     "base_fee": 100, 
     "rate_over_base_fee": 100
   }

@@ -1,3 +1,5 @@
+import { AppointmentPart } from "./appointmentInterfaces";
+
 export interface UserTypeData {
   id: number | null;
   name: string | null;
@@ -8,31 +10,36 @@ export interface UserTypeData {
 }
 
 export interface ServiceData {
-  id: number | null;
-  name: string | null;
-  description: string | null;
-  visibility: boolean | null;
-  AdditionalServices?: AdditionalServiceData[] | null;
+  id: number;
+  name: string;
+  description: string;
+  visibility: boolean;
+  timeFeeContent: AppointmentPart;
+  AdditionalServices?: 
+  AdditionalServiceData[] | null;
   AvailabilityOptions?: AvailabilityOptionData[] | null;
   DwellingAdjustments?: DwellingAdjustmentData[] | null;
 }
 
 export interface AdditionalServiceData {
-  id: number | null;
-  name: string | null;
-  visibility: boolean | null;
-  description: string | null;
+  id: number;
+  name: string;
+  description: string;
+  visibility: boolean;
+  timeFeeContent: AppointmentPart;
 }
 
 export interface AvailabilityOptionData {
-  id: number | null;
-  name: string | null;
-  visibility: boolean | null;
-  description: string | null;
+  id: number;
+  name: string;
+  description: string;
+  visibility: boolean;
+  timeFeeContent: AppointmentPart;
 }
 
 export interface DwellingAdjustmentData {
-  id: number | null;
-  name: string | null;
-  visibility: boolean | null;
+  id: number;
+  name: string;
+  visibility: boolean;
+  timeFeeContent: AppointmentPart;
 }

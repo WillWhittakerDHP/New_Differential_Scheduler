@@ -1,24 +1,28 @@
 [
   {
-    "name": "Minimize Time On-site", 
+    "name": "Minimize Time On-site",  
+    "base_sq_ft": 300,
     "visibility": true,
     "description": "stuff about this service", 
     "differential_scheduling": true
   },
   {
-    "name": "Additional Client Time",
+    "name": "Additional Client Time", 
+    "base_sq_ft": 300,
     "visibility": true,
     "description": "stuff about this service", 
     "differential_scheduling": true
   },
   {
-    "name": "Client will not be present", 
+    "name": "Client will not be present",  
+    "base_sq_ft": 300,
     "visibility": true,
     "description": "stuff about this service", 
     "differential_scheduling": true
   },
   {
-    "name": "First-time buyers", 
+    "name": "First-time buyers",  
+    "base_sq_ft": 300,
     "visibility": true,
     "description": "stuff about this service", 
     "differential_scheduling": true

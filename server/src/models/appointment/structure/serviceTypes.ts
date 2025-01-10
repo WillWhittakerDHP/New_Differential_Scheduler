@@ -27,9 +27,13 @@ InferCreationAttributes<Service>
   declare differential_scheduling: boolean;
   declare description: string;
   declare visibility: boolean;
-  declare data_collection_id?: number; // Foreign key
-  declare report_writing_id?: number; // Foreign key
-  declare client_presentation_id?: number; // Foreign key
+  declare base_sq_ft: number;
+  declare data_collection_time_id?: number; // Foreign key
+  declare report_writing_time_id?: number; // Foreign key
+  declare client_presentation_time_id?: number; // Foreign key
+  declare data_collection_fee_id?: number; // Foreign key
+  declare report_writing_fee_id?: number; // Foreign key
+  declare client_presentation_fee_id?: number; // Foreign key
   declare AdditionalServices?: AdditionalService[];
   declare AvailabilityOptions?: AvailabilityOption[];
   declare DwellingAdjustments?: DwellingAdjustment[];
@@ -62,36 +66,59 @@ export function ServiceFactory(sequelize: Sequelize) {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
-      description: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       visibility: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
-      data_collection_id: {
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      base_sq_ft: {
+        type: DataTypes.INTEGER,
+      },
+      data_collection_time_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'data_collection', // Matches table name
+          model: 'data_collection_time', // Matches table name
           key: 'id',
         },
       },
-      report_writing_id: {
+      report_writing_time_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'report_writing', // Matches table name
+          model: 'report_writing_time', // Matches table name
           key: 'id',
         },
       },
-      client_presentation_id: {
+      client_presentation_time_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'client_presentation', // Matches table name
+          model: 'client_presentation_time', // Matches table name
           key: 'id',
         },
       },
-    },
+      data_collection_fee_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'data_collection_fee', // Matches table name
+          key: 'id',
+        },
+      },
+      report_writing_fee_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'report_writing_fee', // Matches table name
+          key: 'id',
+        },
+      },
+      client_presentation_fee_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'client_presentation_fee', // Matches table name
+          key: 'id',
+        },
+      },    },
     {
       sequelize,
       timestamps: false,

@@ -1,21 +1,26 @@
 [
-  { "name": "condo",
+  { "name": "condo", 
+  "base_sq_ft": 300,
     "visibility": true,
     "description": "something about condos"
   },
-  { "name": "co-op",
+  { "name": "co-op", 
+  "base_sq_ft": 300,
     "visibility": true,
     "description": "something about co-ops"
   }, 
-  { "name": "town-house",
+  { "name": "town-house", 
+  "base_sq_ft": 300,
     "visibility": true,
     "description": "something about townhouses"
   }, 
-  { "name": "single family home",
+  { "name": "single family home", 
+  "base_sq_ft": 300,
     "visibility": true,
     "description": "something about sfhs"
   }, 
-  { "name": "multi-family home",
+  { "name": "multi-family home", 
+  "base_sq_ft": 300,
     "visibility": true,
     "description": "something about mfhs"
   }

@@ -1,20 +1,24 @@
 [
   { "name": "Blue Tape", 
+    "base_sq_ft": 300,
     "visibility": true, 
     "description": "stuff about Blue Tape",
     "differential_scheduling": true
   },
   { "name": "Radon", 
+    "base_sq_ft": 300,
     "visibility": true, 
     "description": "stuff about Radon",
     "differential_scheduling": true
   },
   { "name": "Reinspection", 
+  "base_sq_ft": 300,
     "visibility": true, 
     "description": "stuff about Reinspections",
     "differential_scheduling": true
   },
   { "name": "Accessory Dwelling Units", 
+  "base_sq_ft": 300, 
     "visibility": true, 
     "description": "ADUs",
     "differential_scheduling": true
