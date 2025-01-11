@@ -188,7 +188,6 @@ router.get('/ao/:id', async (req: Request, res: Response) => {
       attributes: { 
         exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId'], },
         include: [
-          { attributes: ['base_sq_ft'],},
           {
             model: DataCollection,
             as: 'data_collection',

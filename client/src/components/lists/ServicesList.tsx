@@ -1,14 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, Row, Card } from 'react-bootstrap';
 import { AppointmentContext } from '../AppointmentContext';
-import { retrieveServicesForUserTypeByID, 
-  // retrieveAssociatedPartsByServiceID, 
-  retrieveBaseServiceByID } from '../../api/internalAPI/appointmentAPI';
+import { retrieveServicesForUserTypeByID, retrieveBaseServiceByID } from '../../api/internalAPI/appointmentAPI';
 
 import type { ServiceData } from '../../interfaces/apiInterfaces';
-import { 
-  // FeePart, TimePart, 
-  AppointmentBlock, AppointmentPart, Appointment } from '../../interfaces/appointmentInterfaces';
+import { AppointmentBlock, PartTimes, AppointmentPart, Appointment } from '../../interfaces/appointmentInterfaces';
 
 // Define the props for the component
 interface ServicesListProps {
@@ -79,8 +75,28 @@ interface ServicesListProps {
                 data.client_presentation.rate_over_base_time,
                 data.client_presentation.base_fee,
                 data.client_presentation.rate_over_base_fee
+              ),
+              new PartTimes(
+                0,
+                0,
+                0,
+                0
               )
             );
+
+            // Calculate times for the newBaseService based on home_sq_ft
+            const calculatedTimes: PartTimes = newBaseService.calculatePartTimes(
+              thisAppointment!.home_sq_ft || 0,
+              newBaseService
+            );
+
+          // Update the times field in newBaseService
+          newBaseService.times = calculatedTimes;
+
+          // Log to verify the calculated times
+          console.log("Calculated PartTimes:", calculatedTimes);
+          console.log("Updated AppointmentPart:", newBaseService);
+
             
             // Set additional services, availability options, and dwelling adjustments
             const availableAdditionalServices = data.AdditionalServices;
@@ -102,7 +118,6 @@ interface ServicesListProps {
             setThisAppointment((prev) => {
               if ( prev !== undefined ){
               const updatedBaseServiceFee = prev.calculatePartFee(newBaseService);
-              console.log(updatedBaseServiceFee);
               const updatedAppointment = prev
                 ? new Appointment(
                     prev.home_sq_ft,
@@ -122,17 +137,17 @@ interface ServicesListProps {
                     0, // Provide default values if prev is undefined
                     newBaseService,
                     undefined,
-                    [],
-                    [],
+                    undefined,
+                    undefined,
                     0,
                     0,
                     0,
                     0,
                     0,
-                    [],
-                    []
+                    0,
+                    0
                   );
-    
+                  updatedAppointment.updateTimes();
               console.log("Updated Appointment:", updatedAppointment);
               return updatedAppointment;
             }});

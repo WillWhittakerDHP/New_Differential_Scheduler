@@ -39,25 +39,6 @@ const retrieveServicesForUserTypeByID = async (id: number | null): Promise<UserT
   }
 }
 
-// const retrieveAssociatedPartsByServiceID = async (id: number | null): Promise<ServiceData> => {
-//   try {
-//     const response = await fetch(`internal/appointment/bs/${id}`, {
-//       headers: {
-//         'Content-Type': 'application/json',
-//       }
-//     });
-//     const data = await response.json();
-//     // console.log('data on appointmentAPI.ts', data)
-//     if (!response.ok) {
-//       throw new Error('Invalid user API response, check network tab!');
-//     }
-//     return data;
-//   } catch (err) { 
-//     console.log('Error from data retrieval:', err);
-//     return {} as ServiceData;
-//   }
-// };
-
 const retrieveBaseServiceByID = async (id: number | null): Promise<ServiceData> => {
   try {
     const response = await fetch(`internal/appointment/bs/${id}`, {
@@ -115,7 +96,7 @@ const retrieveAvailabilityOptionByID = async (id: number | null): Promise<Availa
 
 const retrieveDwellingAdjustmentByID = async (id: number | null): Promise<DwellingAdjustmentData> => {
   try {
-    const response = await fetch(`internal/appointment/ad/${id}`, {
+    const response = await fetch(`internal/appointment/da/${id}`, {
       headers: {
         'Content-Type': 'application/json',
       }

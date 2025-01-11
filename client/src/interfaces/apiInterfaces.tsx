@@ -29,9 +29,9 @@ export interface AdditionalServiceData {
   description: string;
   visibility: boolean;
   base_sq_ft: number;
-  data_collection: AppointmentPart;
-  report_writing: AppointmentPart;
-  client_presentation: AppointmentPart;
+  data_collection: AppointmentBlock;
+  report_writing: AppointmentBlock;
+  client_presentation: AppointmentBlock;
 }
 
 export interface AvailabilityOptionData {
@@ -40,9 +40,9 @@ export interface AvailabilityOptionData {
   description: string;
   visibility: boolean;
   base_sq_ft: number;
-  data_collection: AppointmentPart;
-  report_writing: AppointmentPart;
-  client_presentation: AppointmentPart;
+  data_collection: AppointmentBlock;
+  report_writing: AppointmentBlock;
+  client_presentation: AppointmentBlock;
 }
 
 export interface DwellingAdjustmentData {
@@ -50,7 +50,7 @@ export interface DwellingAdjustmentData {
   name: string;
   visibility: boolean;
   base_sq_ft: number;
-  data_collection: AppointmentPart;
-  report_writing: AppointmentPart;
-  client_presentation: AppointmentPart;
+  data_collection: AppointmentBlock;
+  report_writing: AppointmentBlock;
+  client_presentation: AppointmentBlock;
 }
