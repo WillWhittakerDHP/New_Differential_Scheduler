@@ -27,8 +27,8 @@ interface AppointmentContextType {
   thisAvailabilityOption: AvailabilityOptionData | undefined;
   setThisAvailabilityOption: React.Dispatch<React.SetStateAction<AvailabilityOptionData | undefined>>;
 
-  dwellingAdjustments: DwellingAdjustmentData[];
-  setDwellingAdjustments: React.Dispatch<React.SetStateAction<DwellingAdjustmentData[]>>;
+  availableDwellingAdjustments: DwellingAdjustmentData[];
+  setAvailableDwellingAdjustments: React.Dispatch<React.SetStateAction<DwellingAdjustmentData[]>>;
   thisDwellingAdjustment: DwellingAdjustmentData | undefined;
   setThisDwellingAdjustment: React.Dispatch<React.SetStateAction<DwellingAdjustmentData | undefined>>;
 
@@ -54,7 +54,7 @@ export const AppointmentProvider = ({ children }: { children: ReactNode }) => {
   const [thisAdditionalService, setThisAdditionalService] = useState<AdditionalServiceData | undefined>();
   const [availableAvailabilityOptions, setAvailableAvailabilityOptions] = useState<AvailabilityOptionData[]>([]);
   const [thisAvailabilityOption, setThisAvailabilityOption] = useState<AvailabilityOptionData | undefined>();
-  const [dwellingAdjustments, setDwellingAdjustments] = useState<DwellingAdjustmentData[]>([]);
+  const [availableDwellingAdjustments, setAvailableDwellingAdjustments] = useState<DwellingAdjustmentData[]>([]);
   const [thisDwellingAdjustment, setThisDwellingAdjustment] = useState<DwellingAdjustmentData | undefined>();
   const [serviceDescriptions, setServiceDescriptions] = useState<DescriptionsData[]>([]);
   // const [thisAddress, setThisAddress] = useState<Address>();
@@ -67,7 +67,7 @@ export const AppointmentProvider = ({ children }: { children: ReactNode }) => {
   
   
   return (
-    <AppointmentContext.Provider value={{ thisAppointment, setThisAppointment, userTypes, setUserTypes, thisUserType, setThisUserType, availableServices, setAvailableServices, thisService, setThisService, availableAdditionalServices, setAvailableAdditionalServices, thisAdditionalService, setThisAdditionalService, availableAvailabilityOptions, setAvailableAvailabilityOptions, thisAvailabilityOption, setThisAvailabilityOption, dwellingAdjustments, setDwellingAdjustments, thisDwellingAdjustment, setThisDwellingAdjustment, serviceDescriptions, setServiceDescriptions
+    <AppointmentContext.Provider value={{ thisAppointment, setThisAppointment, userTypes, setUserTypes, thisUserType, setThisUserType, availableServices, setAvailableServices, thisService, setThisService, availableAdditionalServices, setAvailableAdditionalServices, thisAdditionalService, setThisAdditionalService, availableAvailabilityOptions, setAvailableAvailabilityOptions, thisAvailabilityOption, setThisAvailabilityOption, availableDwellingAdjustments, setAvailableDwellingAdjustments, thisDwellingAdjustment, setThisDwellingAdjustment, serviceDescriptions, setServiceDescriptions
     // , thisAddress, setThisAddress, thisProperty, setThisProperty
     }}>
       {children}

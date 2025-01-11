@@ -25,6 +25,7 @@ InferCreationAttributes<Service>
   declare differential_scheduling: boolean;
   declare description: string;
   declare visibility: boolean;
+  declare base_sq_ft: number;
   declare data_collection_id?: number; // Foreign key
   declare report_writing_id?: number; // Foreign key
   declare client_presentation_id?: number; // Foreign key
@@ -74,6 +75,10 @@ export function ServiceFactory(sequelize: Sequelize) {
       },
       description: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      base_sq_ft: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       data_collection_id: {

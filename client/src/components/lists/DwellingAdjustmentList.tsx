@@ -17,7 +17,7 @@ const DwellingAdjustmentsList: React.FC<DwellingAdjustmentsProps> = () => {
     throw new Error('DwellingAdjustmentsList must be used within an AppointmentProvider');
   }
 
-  const { dwellingAdjustments, thisDwellingAdjustment,setThisDwellingAdjustment } = context;
+  const { availableDwellingAdjustments, thisDwellingAdjustment,setThisDwellingAdjustment } = context;
 
   const handlePropertyTypeSelect = (selectedDwellingAdjustment: DwellingAdjustmentData) => {
     setThisDwellingAdjustment(selectedDwellingAdjustment);
@@ -49,8 +49,8 @@ const DwellingAdjustmentsList: React.FC<DwellingAdjustmentsProps> = () => {
     <Container className="mt-4">
       <h4 className="mt-4">Select Your Property Type from DwellingAdjustmentstList.tsx</h4>
       <Row>
-        {dwellingAdjustments && dwellingAdjustments.length > 0 ? (
-          dwellingAdjustments.map((DwellingAdjustment) => (
+        {availableDwellingAdjustments && availableDwellingAdjustments.length > 0 ? (
+          availableDwellingAdjustments.map((DwellingAdjustment) => (
             <Button
             key={DwellingAdjustment.id}
             onClick={() => handlePropertyTypeSelect(DwellingAdjustment)}

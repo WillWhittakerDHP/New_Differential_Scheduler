@@ -16,11 +16,9 @@ InferAttributes<FeeTime>,
 InferCreationAttributes<FeeTime>
 > {
   declare id: CreationOptional<number>;
-  declare base_sq_ft: number;
   declare DataCollection?: FeeTime[]; // Foreign key
   declare ReportWriting?: FeeTime[]; // Foreign key
   declare ClientPresentation?: FeeTime[]; // Foreign key
-
 
   declare getFeeTimeable: BelongsToManyGetAssociationsMixin<FeeTimeable>;
   declare getFeeTimeables: BelongsToManyGetAssociationsMixin<FeeTimeable[]>;
@@ -40,9 +38,6 @@ export function FeeTimeFactory(sequelize: Sequelize) {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-      },
-      base_sq_ft: {
-        type: DataTypes.INTEGER,
       },
     },
     {

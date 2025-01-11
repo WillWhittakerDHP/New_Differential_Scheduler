@@ -22,6 +22,7 @@ export class AvailabilityOption extends Model<
   declare differential_scheduling: boolean;
   declare visibility: boolean;
   declare description: string;
+  declare base_sq_ft: number;
   declare data_collection_id?: number; // Foreign key
   declare report_writing_id?: number; // Foreign key
   declare client_presentation_id?: number; // Foreign key
@@ -67,6 +68,10 @@ export function AvailabilityOptionFactory(sequelize: Sequelize) {
       },
       description: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      base_sq_ft: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       data_collection_id: {

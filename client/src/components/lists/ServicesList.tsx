@@ -1,16 +1,18 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, Row, Card } from 'react-bootstrap';
 import { AppointmentContext } from '../AppointmentContext';
-import { retrieveServicesForUserTypeByID, retrieveBaseServiceByID } from '../../api/internalAPI/appointmentAPI';
+import { retrieveServicesForUserTypeByID, 
+  // retrieveAssociatedPartsByServiceID, 
+  retrieveBaseServiceByID } from '../../api/internalAPI/appointmentAPI';
 
 import type { ServiceData } from '../../interfaces/apiInterfaces';
 import { 
   // FeePart, TimePart, 
-  AppointmentPart, Appointment } from '../../interfaces/appointmentInterfaces';
+  AppointmentBlock, AppointmentPart, Appointment } from '../../interfaces/appointmentInterfaces';
 
 // Define the props for the component
 interface ServicesListProps {
-  //   Services: ServiceTypeData[] | null;
+  //   Services: ServiceData[] | null;
   }
   
   const ServicesList: React.FC<ServicesListProps> = () => {
@@ -20,7 +22,7 @@ interface ServicesListProps {
     throw new Error('ServicesList must be used within an AppointmentProvider');
   }
 
-  const { thisUserType, availableServices, thisService, thisAppointment, setThisAppointment, setThisService, setAvailableServices, setAvailableAdditionalServices, setAvailableAvailabilityOptions, setDwellingAdjustments
+  const { thisUserType, availableServices, thisService, thisAppointment, setThisAppointment, setThisService, setAvailableServices, setAvailableAdditionalServices, setAvailableAvailabilityOptions, setAvailableDwellingAdjustments
   } = context;
 
   // Fetch Service types
@@ -48,67 +50,109 @@ interface ServicesListProps {
   };
   
   // Fetch Associated AdditionalServices, AdditionalServices, and DwellingAdjustments
-  const fetchServiceByID = async () => {
-    if (thisService !== undefined)
-      try {
-    if(thisService) {
-      const data = await retrieveBaseServiceByID(thisService.id);
-      // const newAppointmentPart: AppointmentPart = {
-      //   name: data.name,
-      //   feePart: newFeePart,
-      //   base_sq_ft: data.base_sq_ft,
-      //   timePart: newTimePart,
-      //   // Add other relevant fields if required by AppointmentPart
-      // };
-      const availableAdditionalServices =  data.AdditionalServices;
-      if (availableAdditionalServices !== undefined && availableAdditionalServices !== null)
-        setAvailableAdditionalServices(availableAdditionalServices);
-      const availableAvailabilityOptions =  data.AvailabilityOptions;
-      if (availableAvailabilityOptions !== undefined && availableAvailabilityOptions !== null)
-        setAvailableAvailabilityOptions(availableAvailabilityOptions);
-      const availableDwellingAdjustments =  data.DwellingAdjustments;
-      if (availableDwellingAdjustments !== undefined && availableDwellingAdjustments !== null)
-        setDwellingAdjustments(availableDwellingAdjustments);
-        // setThisAppointment((prev) => {
-        //   if (prev) {
-        //     return new Appointment(
-        //       prev.home_sq_ft,
-        //       {
-        //         ...prev.base_service, // Preserve other base_service properties
-        //         name: data.name,
-        //         base_sq_ft: newBaseSqFt, // Update base_sq_ft
-        //       },
-        //       prev.dwelling_type,
-        //       prev.additional_services,
-        //       prev.availability_options,
-        //       prev.data_collection_time,
-        //       prev.report_writing_time,
-        //       prev.client_presentation_time,
-        //       prev.base_service_fee,
-        //       prev.dwelling_type_fee,
-        //       prev.add_service_fees,
-        //       prev.avail_option_fees
-          //   );
-          // }
-          // return undefined; // If prev is undefined, return undefined
-        // });
-        // console.log(thisAppointment)
-      } else {
-        throw new Error()
+  const fetchBaseServiceByID = async () => {
+      if (thisService !== undefined) {
+        try {
+          if (thisService) {
+            const data = await retrieveBaseServiceByID(thisService.id);
+            // Construct newBaseService as an AppointmentPart
+            const newBaseService = new AppointmentPart(
+              data.name,
+              data.base_sq_ft,
+              new AppointmentBlock(
+                data.data_collection.on_site,
+                data.data_collection.base_time,
+                data.data_collection.rate_over_base_time,
+                data.data_collection.base_fee,
+                data.data_collection.rate_over_base_fee
+              ),
+              new AppointmentBlock(
+                data.report_writing.on_site,
+                data.report_writing.base_time,
+                data.report_writing.rate_over_base_time,
+                data.report_writing.base_fee,
+                data.report_writing.rate_over_base_fee
+              ),
+              new AppointmentBlock(
+                data.client_presentation.on_site,
+                data.client_presentation.base_time,
+                data.client_presentation.rate_over_base_time,
+                data.client_presentation.base_fee,
+                data.client_presentation.rate_over_base_fee
+              )
+            );
+            
+            // Set additional services, availability options, and dwelling adjustments
+            const availableAdditionalServices = data.AdditionalServices;
+            if (availableAdditionalServices !== undefined && availableAdditionalServices !== null) {
+              setAvailableAdditionalServices(availableAdditionalServices);
+            }
+            
+            const availableAvailabilityOptions = data.AvailabilityOptions;
+            if (availableAvailabilityOptions !== undefined && availableAvailabilityOptions !== null) {
+              setAvailableAvailabilityOptions(availableAvailabilityOptions);
+            }
+            
+            const availableDwellingAdjustments = data.DwellingAdjustments;
+            if (availableDwellingAdjustments !== undefined && availableDwellingAdjustments !== null) {
+              setAvailableDwellingAdjustments(availableDwellingAdjustments);
+            }
+            
+            // Update thisAppointment with the new AppointmentPart
+            setThisAppointment((prev) => {
+              if ( prev !== undefined ){
+              const updatedBaseServiceFee = prev.calculatePartFee(newBaseService);
+              console.log(updatedBaseServiceFee);
+              const updatedAppointment = prev
+                ? new Appointment(
+                    prev.home_sq_ft,
+                    newBaseService,
+                    prev.dwelling_type,
+                    prev.additional_services,
+                    prev.availability_options,
+                    prev.data_collection_time,
+                    prev.report_writing_time,
+                    prev.client_presentation_time,
+                    updatedBaseServiceFee,
+                    prev.dwelling_type_fee,
+                    prev.add_service_fees,
+                    prev.avail_option_fees
+                  )
+                : new Appointment(
+                    0, // Provide default values if prev is undefined
+                    newBaseService,
+                    undefined,
+                    [],
+                    [],
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    [],
+                    []
+                  );
+    
+              console.log("Updated Appointment:", updatedAppointment);
+              return updatedAppointment;
+            }});
+          } else {
+            throw new Error();
+          }
+        } catch (error) {
+          console.error('Error fetching Service types:', error);
+        }
       }
-    } catch (error) {
-      console.error('Error fetching Service types:', error);
-    }
-  };
-  
+    };
+    
     useEffect(() => {
-      fetchServiceByID();
+      fetchBaseServiceByID();
+      console.log(thisAppointment);
     }, [
       thisService,
       setAvailableAdditionalServices,
       setAvailableAvailabilityOptions,
-      setDwellingAdjustments,
-      setThisAppointment
+      setAvailableDwellingAdjustments,
     ]);
     
 
