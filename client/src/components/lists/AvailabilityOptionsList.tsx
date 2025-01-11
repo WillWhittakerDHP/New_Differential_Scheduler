@@ -25,7 +25,7 @@ const AvailabilityOptionsList: React.FC<AvailabilityOptionsProps> = () => {
   };
 
 
-  // Fetch Associated AdditionalServices, AdditionalServices, and AvailabilityOptions
+  // Fetch Associated AvailabilityOptions, AvailabilityOptions, and AvailabilityOptions
   const fetchAvailabilityOptionByID = async () => {
     if (thisAvailabilityOption !== undefined) {
       try {
@@ -78,25 +78,37 @@ const AvailabilityOptionsList: React.FC<AvailabilityOptionsProps> = () => {
           console.log("Updated AppointmentPart:", newAvailabilityOption);
 
             
+
           // Update thisAppointment with the new AppointmentPart
           setThisAppointment((prev) => {
-            if ( prev !== undefined ){
-            const updatedAvailabilityOptionFee = prev.calculatePartFee(newAvailabilityOption);
-            console.log(updatedAvailabilityOptionFee);
+              if (prev !== undefined) {
+                // Calculate the fee for the new additional service
+                const newPartFee = prev.calculatePartFee(newAvailabilityOption) ?? 0;
+                console.log("New Additional Service Fee:", newPartFee);
+            
+                // Append the new additional service to the existing array
+                const updatedAvailabilityOptions = [...(prev.additional_services ?? []), newAvailabilityOption];
+            
+                // Append the new fee to the existing fee array
+                const updatedAvailabilityOptionFees = [...(prev.add_service_fees ?? []), newPartFee];
+            
+            
+                // Append the new additional service to the existing array
+            console.log(updatedAvailabilityOptionFees);
             const updatedAppointment = prev
               ? new Appointment(
                   prev.home_sq_ft,
                   prev.base_service,
                   prev.dwelling_type,
                   prev.additional_services,
-                  newAvailabilityOption,
+                  updatedAvailabilityOptions,
                   prev.data_collection_time,
                   prev.report_writing_time,
                   prev.client_presentation_time,
                   prev.base_service_fee,
-                  prev.add_service_fees,
                   prev.dwelling_type_fee,
-                  updatedAvailabilityOptionFee,
+                  prev.add_service_fees,
+                  updatedAvailabilityOptionFees,
                 )
               : new Appointment(
                   0, // Provide default values if prev is undefined
@@ -109,8 +121,8 @@ const AvailabilityOptionsList: React.FC<AvailabilityOptionsProps> = () => {
                   0,
                   0,
                   0,
-                  0,
-                  0
+                  [0],
+                  [0]
                 );
                 updatedAppointment.updateTimes();
                 console.log("Updated Appointment:", updatedAppointment);

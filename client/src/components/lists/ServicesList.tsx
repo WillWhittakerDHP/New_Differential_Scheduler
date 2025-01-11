@@ -94,7 +94,7 @@ interface ServicesListProps {
           newBaseService.times = calculatedTimes;
 
           // Log to verify the calculated times
-          console.log("Calculated PartTimes:", calculatedTimes);
+          // console.log("Calculated PartTimes:", calculatedTimes);
           console.log("Updated AppointmentPart:", newBaseService);
 
             
@@ -144,8 +144,8 @@ interface ServicesListProps {
                     0,
                     0,
                     0,
-                    0,
-                    0
+                    [],
+                    [],
                   );
                   updatedAppointment.updateTimes();
               console.log("Updated Appointment:", updatedAppointment);

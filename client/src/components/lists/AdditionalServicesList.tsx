@@ -81,22 +81,33 @@ const AdditionalServicesList: React.FC<AdditionalServicesProps> = () => {
 
           // Update thisAppointment with the new AppointmentPart
           setThisAppointment((prev) => {
-            if ( prev !== undefined ){
-            const updatedAdditionalServiceFee = prev.calculatePartFee(newAdditionalService);
-            console.log(updatedAdditionalServiceFee);
+              if (prev !== undefined) {
+                // Calculate the fee for the new additional service
+                const newPartFee = prev.calculatePartFee(newAdditionalService) ?? 0;
+                console.log("New Additional Service Fee:", newPartFee);
+            
+                // Append the new additional service to the existing array
+                const updatedAdditionalServices = [...(prev.additional_services ?? []), newAdditionalService];
+            
+                // Append the new fee to the existing fee array
+                const updatedAdditionalServiceFees = [...(prev.add_service_fees ?? []), newPartFee];
+            
+            
+                // Append the new additional service to the existing array
+            console.log(updatedAdditionalServiceFees);
             const updatedAppointment = prev
               ? new Appointment(
                   prev.home_sq_ft,
                   prev.base_service,
                   prev.dwelling_type,
-                  newAdditionalService,
+                  updatedAdditionalServices,
                   prev.availability_options,
                   prev.data_collection_time,
                   prev.report_writing_time,
                   prev.client_presentation_time,
                   prev.base_service_fee,
                   prev.dwelling_type_fee,
-                  updatedAdditionalServiceFee,
+                  updatedAdditionalServiceFees,
                   prev.avail_option_fees,
                 )
               : new Appointment(
@@ -110,8 +121,8 @@ const AdditionalServicesList: React.FC<AdditionalServicesProps> = () => {
                   0,
                   0,
                   0,
-                  0,
-                  0
+                  [0],
+                  []
                 );
                 updatedAppointment.updateTimes();
                 console.log("Updated Appointment:", updatedAppointment);

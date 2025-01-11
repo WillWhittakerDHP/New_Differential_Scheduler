@@ -111,8 +111,8 @@ const DwellingAdjustmentsList: React.FC<DwellingAdjustmentsProps> = () => {
                   0,
                   0,
                   0,
-                  0, 
-                  0
+                  [], 
+                  []
                 );
                 updatedAppointment.updateTimes();
             console.log("Updated Appointment:", updatedAppointment);
