@@ -1,153 +1,149 @@
-import React, { useContext, useEffect } from 'react';
-import { AppointmentContext } from '../components/AppointmentContext';
-import { Container, Row, Card } from 'react-bootstrap';
-import { AdditionalServiceData, AvailabilityOptionData, DwellingAdjustmentData, ServiceData } from '../interfaces/apiInterfaces';
+import React, { useContext, useCallback, useEffect } from 'react';
+import { AdminContext, AdminProvider } from '../components/AdminContext';
+import ServiceEditor from '../components/forms/serviceEditor';
+import { ADMIN_ROUTES } from '../constants/apiRoutes.js';
 
-interface SectionProps {
-  title: string;
-  data: Array<ServiceData | AdditionalServiceData | AvailabilityOptionData | DwellingAdjustmentData>; // Adjust to your data's actual structure
-  type: string;
-  handleUpdate: (type: string, id: number, field: string, value: any) => void;
-}
+const AdminPageContent = () => {
+    const context = useContext(AdminContext);
+    if (!context) {
+        throw new Error('AdminPageContent must be used within an AdminProvider');
+    }
 
+    const {
+        allServices,
+        setAllServices,
+        allAdditionalServices,
+        setAllAdditionalServices,
+        allDwellingAdjustments,
+        setAllDwellingAdjustments,
+        allAvailabilityOptions,
+        setAllAvailabilityOptions,
+    } = context;
 
-const AdminPage = () => {
-  const context = useContext(AppointmentContext);
-  if (!context) {
-    throw new Error('ServicesList must be used within an AppointmentProvider');
-  }
+    // Fetch all data once on mount
+    const fetchAllData = useCallback(async () => {
+        try {
+            const [services, additionalServices, dwellingAdjustments, availabilityOptions] =
+                await Promise.all([
+                    fetch('/internal/admin/serviceTypes').then((res) => res.json()),
+                    fetch('/internal/admin/additionalServiceTypes').then((res) => res.json()),
+                    fetch('/internal/admin/dwellingAdjustmentTypes').then((res) => res.json()),
+                    fetch('/internal/admin/availabilityOptionTypes').then((res) => res.json()),
+                ]);
 
-  const { allUserTypes, setAllUserTypes, allServices, setAllServices, allAdditionalServices, setAllAdditionalServices, allAvailabilityOptions, setAllAvailabilityOptions, allDwellingAdjustments, setAllDwellingAdjustments
-  } = context;
-  
-    const Section: React.FC<SectionProps> = ({ title, data, type, handleUpdate }) => {
-      return (
-          <div>
-              <h2>{title}</h2>
-              <table>
-                  <thead>
-                      <tr>
-                          {data.length > 0 && Object.keys(data[0]).map((key) => (
-                              <th key={key}>{key}</th>
-                          ))}
-                          <th>Actions</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      {data.map((item) => (
-                          <tr key={item.id}>
-                              {Object.entries(item).map(([key, value]) => (
-                                  <td key={key}>
-                                      <input
-                                          type={typeof value === 'number' ? 'number' : 'text'}
-                                          value={value}
-                                          onChange={(e) =>
-                                            handleUpdate(type, item.id, key, typeof value === 'number' ? Number(e.target.value) : e.target.value)
-                                        }                                        
-                                      />
-                                  </td>
-                              ))}
-                          </tr>
-                      ))}
-                  </tbody>
-              </table>
-          </div>
-      );
-  };
-  
+            setAllServices(services);
+            setAllAdditionalServices(additionalServices);
+            setAllDwellingAdjustments(dwellingAdjustments);
+            setAllAvailabilityOptions(availabilityOptions);
+        } catch (error) {
+            console.error('Error fetching admin data:', error);
+        }
+    }, [setAllServices, setAllAdditionalServices, setAllDwellingAdjustments, setAllAvailabilityOptions]);
 
-    // Fetch data when the component mounts
     useEffect(() => {
         fetchAllData();
-    }, []);
+    }, [fetchAllData]);
 
-    const fetchAllData = async () => {
-        // Fetch services, additional services, dwelling adjustments, and availability
-        // Simulate API calls
-        const fetchedServices = await fetch('/api/services').then(res => res.json());
-        const fetchedAdditionalServices = await fetch('/api/additional-services').then(res => res.json());
-        const fetchedDwellingAdjustments = await fetch('/api/dwelling-adjustments').then(res => res.json());
-        const fetchedAvailabilityOptions = await fetch('/api/availability').then(res => res.json());
-
-        setAllServices(fetchedServices);
-        setAllAdditionalServices(fetchedAdditionalServices);
-        setAllDwellingAdjustments(fetchedDwellingAdjustments);
-        setAllAvailabilityOptions(fetchedAvailabilityOptions);
+    // Handle Save for Individual Sections
+    const handleSave = async (type: keyof typeof ADMIN_ROUTES, id: number) => {
+        const endpoint = `${ADMIN_ROUTES[type]}/${id}`;
+        
+        let dataToUpdate;
+        const arrayToSearch =
+            type === 'serviceTypes' ? allServices
+            : type === 'additionalServiceTypes' ? allAdditionalServices
+            : type === 'dwellingAdjustmentTypes' ? allDwellingAdjustments
+            : type === 'availabilityOptionTypes' ? allAvailabilityOptions
+            : null;
+    
+        if (!arrayToSearch) {
+            console.error(`Unknown type: ${type}`);
+            return;
+        }
+        
+        dataToUpdate = arrayToSearch.find((item) => {
+            // console.log(`Comparing item.id (${item.id}) with id (${id})`);
+            return item.id === id;
+        });
+    
+        if (!dataToUpdate) {
+            console.error(`No data found for ID: ${id} in ${type}`);
+            return;
+        }
+        
+        try {
+            const response = await fetch(endpoint, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataToUpdate),
+            });
+    
+            if (response.ok) {
+                alert(`Data with ID ${id} updated successfully!`);
+            } else {
+                console.error(`Failed to update data:`, response.statusText);
+            }
+        } catch (error) {
+            console.error(`Error updating data:`, error);
+        }
     };
-
-    const handleUpdate = (
-      type: string,
-      id: number,
-      updatedField: string,
-      value: string | number
-  ): void => {
-      const updateState = (data: Array<Record<string, any>>, setData: React.Dispatch<React.SetStateAction<any>>) => {
-          const updatedData = data.map(item =>
-              item.id === id ? { ...item, [updatedField]: value } : item
-          );
-          setData(updatedData);
-      };
-  
-      switch (type) {
-          case 'service':
-              updateState(allServices, setAllServices);
-              break;
-          case 'additionalService':
-              updateState(allAdditionalServices, setAllAdditionalServices);
-              break;
-          case 'dwellingAdjustment':
-              updateState(allDwellingAdjustments, setAllDwellingAdjustments);
-              break;
-          case 'availability':
-              updateState(allAvailabilityOptions, setAllAvailabilityOptions);
-              break;
-          default:
-              break;
-      }
-  };
-  
-
-    const handleSubmit = async () => {
-        // Make API calls to save all changes
-        await Promise.all([
-            fetch('/api/services', { method: 'PUT', body: JSON.stringify(allServices) }),
-            fetch('/api/additional-services', { method: 'PUT', body: JSON.stringify(allAdditionalServices) }),
-            fetch('/api/dwelling-adjustments', { method: 'PUT', body: JSON.stringify(allDwellingAdjustments) }),
-            fetch('/api/availability', { method: 'PUT', body: JSON.stringify(allAvailabilityOptions) })
-        ]);
-        alert('Data updated successfully!');
-    };
+    
 
     return (
         <div>
             <h1>Admin Page</h1>
-            
-            <Section 
-            title="Services" 
-            data={allServices} 
-            type="service" 
-            handleUpdate={handleUpdate} 
+            <ServiceEditor
+                handleSave={handleSave}
             />
-            <Section 
-            title="Additional Services" 
-            data={allAdditionalServices} 
-            type="additionalService" 
-            handleUpdate={handleUpdate} 
+            {/* <Section
+                title="Additional Services"
+                data={allAdditionalServices}
+                type="additionalService"
+                handleUpdate={(type, id, field, value) => {
+                    const updatedData = allAdditionalServices.map((item) =>
+                        item.id === id ? { ...item, [field]: value } : item
+                    );
+                    setAllAdditionalServices(updatedData);
+                }}
+                handleSave={handleSave}
             />
-            <Section 
-            title="Dwelling Adjustments" 
-            data={allDwellingAdjustments} 
-            type="dwellingAdjustment" 
-            handleUpdate={handleUpdate} />
-            <Section 
-            title="Availability Options" 
-            data={allAvailabilityOptions} 
-            type="availability" 
-            handleUpdate={handleUpdate} />
-            
-            <button onClick={handleSubmit}>Save Changes</button>
+
+            <Section
+                title="Dwelling Adjustments"
+                data={allDwellingAdjustments}
+                type="dwellingAdjustment"
+                handleUpdate={(type, id, field, value) => {
+                    const updatedData = allDwellingAdjustments.map((item) =>
+                        item.id === id ? { ...item, [field]: value } : item
+                    );
+                    setAllDwellingAdjustments(updatedData);
+                }}
+                handleSave={handleSave}
+            />
+
+            <Section
+                title="Availability Options"
+                data={allAvailabilityOptions}
+                type="availability"
+                handleUpdate={(type, id, field, value) => {
+                    const updatedData = allAvailabilityOptions.map((item) =>
+                        item.id === id ? { ...item, [field]: value } : item
+                    );
+                    setAllAvailabilityOptions(updatedData);
+                }}
+                handleSave={handleSave}
+            /> */}
         </div>
     );
 };
 
-export default AdminPage
+const AdminPage =() => {
+    return (
+    <AdminProvider>
+        <AdminPageContent />
+    </AdminProvider>);
+};
+
+export default AdminPage;

@@ -9,8 +9,8 @@ const router = Router();
 
 router.use('/serviceTypes', ServiceRouter);
 router.use('/userTypes', UserTypesRouter);
-router.use('/additionalServices', AdditionalServicesRouter);
-router.use('/availabilityOptions', AvailabilityOptionRouter);
-router.use('/dwellingAdjustments', DwellingAdjustmentRouter);
+router.use('/additionalServiceTypes', AdditionalServicesRouter);
+router.use('/availabilityOptionTypes', AvailabilityOptionRouter);
+router.use('/dwellingAdjustmentTypes', DwellingAdjustmentRouter);
 
 export { router as AdminRouter };

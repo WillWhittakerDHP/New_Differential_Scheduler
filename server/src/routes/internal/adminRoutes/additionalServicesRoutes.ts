@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
-import { ClientPresentation, DataCollection, ReportWriting, AdditionalService } from '../../../models/index.js';
+import { AdditionalService, ClientPresentation, DataCollection, ReportWriting } from '../../../models/index.js';
 
 const router = Router();
 
-// GET ALL additionalServices /internal/appointment/service/admin/additionalServices/
+// GET ALL additionalServices /internal/appointment/additionalService/admin/additionalServices/
 router.get('/', async (_req: Request, res: Response) => {
   try {
     const additionalService = await AdditionalService.findAll();

@@ -13,12 +13,12 @@ interface Property{
   foundationAccess?: string;
 }
 
-interface PartFee {
-  base_service_fee: number;
-  dwelling_type_fee: number;
-  add_service_fees: number;
-  avail_option_fees: number;
-}
+// interface PartFee {
+//   base_service_fee: number;
+//   dwelling_type_fee: number;
+//   add_service_fees: number;
+//   avail_option_fees: number;
+// }
 
 export class PartTimes {
   constructor(

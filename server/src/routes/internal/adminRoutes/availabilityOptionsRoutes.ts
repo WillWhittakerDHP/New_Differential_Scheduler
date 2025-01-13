@@ -1,13 +1,13 @@
 import { Router, Request, Response } from 'express';
-import { ClientPresentation, DataCollection, ReportWriting, AvailabilityOption } from '../../../models/index.js';
+import { AvailabilityOption, ClientPresentation, DataCollection, ReportWriting } from '../../../models/index.js';
 
 const router = Router();
 
-// GET ALL AvailabilityOptions /internal/appointment/service/admin/availabilityOptions/
+// GET ALL availabilityOptionss /internal/appointment/availabilityOptions/admin/availabilityOptionss/
 router.get('/', async (_req: Request, res: Response) => {
   try {
-    const availabilityOption = await AvailabilityOption.findAll();
-    res.json(availabilityOption);
+    const availabilityOptions = await AvailabilityOption.findAll();
+    res.json(availabilityOptions);
   } catch (error: any) {
     res.status(500).json({
       message: error.message

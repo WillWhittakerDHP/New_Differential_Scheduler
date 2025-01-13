@@ -8,8 +8,8 @@ type DataCollectionInstance = InstanceType<typeof DataCollection>;
 type ReportWritingInstance = InstanceType<typeof ReportWriting>;
 type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
 type AdditionalServiceInstance = InstanceType<typeof AdditionalService>;
-type AvailabilityOptionInstance = InstanceType<typeof AdditionalService>;
-type DwellingAdjustmentInstance = InstanceType<typeof AdditionalService>;
+type AvailabilityOptionInstance = InstanceType<typeof AvailabilityOption>;
+type DwellingAdjustmentInstance = InstanceType<typeof DwellingAdjustment>;
 
 type BaseServiceByID = InstanceType<typeof Service> & {
   dataValues: {

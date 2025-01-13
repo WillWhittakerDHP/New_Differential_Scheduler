@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
-import { ClientPresentation, DataCollection, ReportWriting, DwellingAdjustment } from '../../../models/index.js';
+import { DwellingAdjustment, ClientPresentation, DataCollection, ReportWriting } from '../../../models/index.js';
 
 const router = Router();
 
-// GET ALL dwellingAdjustments /internal/appointment/service/admin/dwellingAdjustments/
+// GET ALL dwellingAdjustments /internal/appointment/dwellingAdjustment/admin/dwellingAdjustments/
 router.get('/', async (_req: Request, res: Response) => {
   try {
     const dwellingAdjustment = await DwellingAdjustment.findAll();
