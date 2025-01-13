@@ -11,7 +11,7 @@ import PropertyPage from './pages/propertyPage.tsx';
 import ServiceSelectionPage from './pages/serviceSelectionPage.tsx';
 import SummaryPage from './pages/summaryPage.tsx';
 import { AppointmentProvider } from './components/AppointmentContext.tsx';
-// import AdminPage from '/pages/adminPage.tsx';
+import AdminPage from './pages/adminPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -44,10 +44,10 @@ const router = createBrowserRouter([
         path: '/Summary',
         element: <SummaryPage />,
       }, 
-      // {
-      //   path: '/Controller',
-      //   element: <AdminPage />,
-      // }, 
+      {
+        path: '/Controller',
+        element: <AdminPage />,
+      }, 
     ],
   },
 ], 

@@ -4,10 +4,6 @@ import {inspectorTimes, clientTimes} from "../utils/availability/timeData.js"
 
 import AvailabilityOptionsList from '../components/lists/AvailabilityOptionsList.js';
 
-// import {getRandomData} from "../data/timeData.js"
-
-// const inspectorTimes = {daysMap : getRandomData()}
-// const clientTimes = {daysMap : getRandomData()}
 const AvailabilityPage = () => {
     const navigate = useNavigate(); // Initialize navigate for navigation
 

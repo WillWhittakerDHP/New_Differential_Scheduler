@@ -69,6 +69,14 @@ const Navbar = () => {
       >
         Summary 
       </Link>
+      <Link
+        to='/controller'
+        className={
+          currentPage === '/controller' ? 'nav-link active' : 'nav-link'
+        }
+      >
+        Admin
+      </Link>
     </div>
   );
 };

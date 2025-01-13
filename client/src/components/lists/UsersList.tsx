@@ -16,13 +16,13 @@ const UsersList: React.FC<UsersListProps> = () => {
     throw new Error('UsersList must be used within an AppointmentProvider');
   }
 
-  const { userTypes, setUserTypes, thisUserType, setThisUserType } = context;
+  const { availableUserTypes, setAvailableUserTypes, thisUserType, setThisUserType } = context;
 
   // Fetch user types
   const fetchAllVisibleUserTypes = async () => {
       try {
         const data = await retrieveVisibleUserTypes();
-        setUserTypes(data);
+        setAvailableUserTypes(data);
         
       } catch (error) {
         console.error('Error fetching user types:', error);
@@ -31,7 +31,7 @@ const UsersList: React.FC<UsersListProps> = () => {
     
     useEffect(() => { 
       fetchAllVisibleUserTypes(); 
-    }, [setUserTypes]);
+    }, [setAvailableUserTypes]);
   
   const handleUserTypeSelect = (selectedUserType: UserTypeData) => {
     setThisUserType(selectedUserType);
@@ -42,15 +42,15 @@ const UsersList: React.FC<UsersListProps> = () => {
       {/* User Type Selection */}
       <h4 className="mt-4">Select Your Role from UsersList.tsx</h4>
       <Row>
-        {userTypes && userTypes.length > 0 ? (
-          userTypes.map((userType) => (
+        {availableUserTypes && availableUserTypes.length > 0 ? (
+          availableUserTypes.map((availableUserType) => (
             <Card
-              key={userType.id}
-              onClick={() => handleUserTypeSelect(userType)}
+              key={availableUserType.id}
+              onClick={() => handleUserTypeSelect(availableUserType)}
               style={{ cursor: 'pointer' }}
             >
-              <Card.Title>{userType.name}</Card.Title>
-              <Card.Text>{userType.description}</Card.Text>
+              <Card.Title>{availableUserType.name}</Card.Title>
+              <Card.Text>{availableUserType.description}</Card.Text>
             </Card>
           ))
         ) : (

@@ -7,27 +7,34 @@ interface AppointmentContextType {
   thisAppointment: Appointment | undefined;
   setThisAppointment: React.Dispatch<React.SetStateAction<Appointment | undefined>>;
 
-  userTypes: UserTypeData[];
-  setUserTypes: React.Dispatch<React.SetStateAction<UserTypeData[]>>;
+  allUserTypes: UserTypeData[];
+  setAllUserTypes: React.Dispatch<React.SetStateAction<UserTypeData[]>>;
+  availableUserTypes: UserTypeData[];
+  setAvailableUserTypes: React.Dispatch<React.SetStateAction<UserTypeData[]>>;
   thisUserType: UserTypeData | undefined;
   setThisUserType: React.Dispatch<React.SetStateAction<UserTypeData | undefined>>;
 
+  allServices: ServiceData[];
+  setAllServices: React.Dispatch<React.SetStateAction<ServiceData[]>>;
   availableServices: ServiceData[];
   setAvailableServices: React.Dispatch<React.SetStateAction<ServiceData[]>>;
   thisService: ServiceData | undefined;
   setThisService: React.Dispatch<React.SetStateAction<ServiceData | undefined>>;
 
-  availableAdditionalServices: AdditionalServiceData[];
+  allAdditionalServices: AdditionalServiceData[];
+  setAllAdditionalServices: React.Dispatch<React.SetStateAction<AdditionalServiceData[]>>;availableAdditionalServices: AdditionalServiceData[];
   setAvailableAdditionalServices: React.Dispatch<React.SetStateAction<AdditionalServiceData[]>>;
   thisAdditionalService: AdditionalServiceData | undefined;
   setThisAdditionalService: React.Dispatch<React.SetStateAction<AdditionalServiceData | undefined>>;
 
-  availableAvailabilityOptions: AvailabilityOptionData[];
+  allAvailabilityOptions: AvailabilityOptionData[];
+  setAllAvailabilityOptions: React.Dispatch<React.SetStateAction<AvailabilityOptionData[]>>;availableAvailabilityOptions: AvailabilityOptionData[];
   setAvailableAvailabilityOptions: React.Dispatch<React.SetStateAction<AvailabilityOptionData[]>>;
   thisAvailabilityOption: AvailabilityOptionData | undefined;
   setThisAvailabilityOption: React.Dispatch<React.SetStateAction<AvailabilityOptionData | undefined>>;
 
-  availableDwellingAdjustments: DwellingAdjustmentData[];
+  allDwellingAdjustments: DwellingAdjustmentData[];
+  setAllDwellingAdjustments: React.Dispatch<React.SetStateAction<DwellingAdjustmentData[]>>;availableDwellingAdjustments: DwellingAdjustmentData[];
   setAvailableDwellingAdjustments: React.Dispatch<React.SetStateAction<DwellingAdjustmentData[]>>;
   thisDwellingAdjustment: DwellingAdjustmentData | undefined;
   setThisDwellingAdjustment: React.Dispatch<React.SetStateAction<DwellingAdjustmentData | undefined>>;
@@ -46,15 +53,19 @@ export const AppointmentContext = createContext<AppointmentContextType | null>(n
 
 export const AppointmentProvider = ({ children }: { children: ReactNode }) => {
   const [thisAppointment, setThisAppointment] = useState<Appointment | undefined>();
-  const [userTypes, setUserTypes] = useState<UserTypeData[]>([]);
+  const [allUserTypes, setAllUserTypes] = useState<UserTypeData[]>([]);
+  const [availableUserTypes, setAvailableUserTypes] = useState<UserTypeData[]>([]);
   const [thisUserType, setThisUserType] = useState<UserTypeData | undefined>();
+  const [allServices, setAllServices] = useState<ServiceData[]>([]);
   const [availableServices, setAvailableServices] = useState<ServiceData[]>([]);
   const [thisService, setThisService] = useState<ServiceData | undefined>();
+  const [allAdditionalServices, setAllAdditionalServices] = useState<AdditionalServiceData[]>([]);
   const [availableAdditionalServices, setAvailableAdditionalServices] = useState<AdditionalServiceData[]>([]);
   const [thisAdditionalService, setThisAdditionalService] = useState<AdditionalServiceData | undefined>();
+  const [allAvailabilityOptions, setAllAvailabilityOptions] = useState<AvailabilityOptionData[]>([]);
   const [availableAvailabilityOptions, setAvailableAvailabilityOptions] = useState<AvailabilityOptionData[]>([]);
   const [thisAvailabilityOption, setThisAvailabilityOption] = useState<AvailabilityOptionData | undefined>();
-  const [availableDwellingAdjustments, setAvailableDwellingAdjustments] = useState<DwellingAdjustmentData[]>([]);
+  const [allDwellingAdjustments, setAllDwellingAdjustments] = useState<DwellingAdjustmentData[]>([]);const [availableDwellingAdjustments, setAvailableDwellingAdjustments] = useState<DwellingAdjustmentData[]>([]);
   const [thisDwellingAdjustment, setThisDwellingAdjustment] = useState<DwellingAdjustmentData | undefined>();
   const [serviceDescriptions, setServiceDescriptions] = useState<DescriptionsData[]>([]);
   // const [thisAddress, setThisAddress] = useState<Address>();
@@ -67,7 +78,7 @@ export const AppointmentProvider = ({ children }: { children: ReactNode }) => {
   
   
   return (
-    <AppointmentContext.Provider value={{ thisAppointment, setThisAppointment, userTypes, setUserTypes, thisUserType, setThisUserType, availableServices, setAvailableServices, thisService, setThisService, availableAdditionalServices, setAvailableAdditionalServices, thisAdditionalService, setThisAdditionalService, availableAvailabilityOptions, setAvailableAvailabilityOptions, thisAvailabilityOption, setThisAvailabilityOption, availableDwellingAdjustments, setAvailableDwellingAdjustments, thisDwellingAdjustment, setThisDwellingAdjustment, serviceDescriptions, setServiceDescriptions
+    <AppointmentContext.Provider value={{ thisAppointment, setThisAppointment, allUserTypes, setAllUserTypes, availableUserTypes, setAvailableUserTypes, thisUserType, setThisUserType, allServices, setAllServices,  availableServices, setAvailableServices, thisService, setThisService,  allAdditionalServices, setAllAdditionalServices,availableAdditionalServices, setAvailableAdditionalServices, thisAdditionalService, setThisAdditionalService, allAvailabilityOptions, setAllAvailabilityOptions,availableAvailabilityOptions, setAvailableAvailabilityOptions, thisAvailabilityOption, setThisAvailabilityOption, allDwellingAdjustments, setAllDwellingAdjustments,availableDwellingAdjustments, setAvailableDwellingAdjustments, thisDwellingAdjustment, setThisDwellingAdjustment, serviceDescriptions, setServiceDescriptions
     // , thisAddress, setThisAddress, thisProperty, setThisProperty
     }}>
       {children}
