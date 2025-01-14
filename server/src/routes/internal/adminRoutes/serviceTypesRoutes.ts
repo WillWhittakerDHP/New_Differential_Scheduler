@@ -3,37 +3,6 @@ import { Service, AdditionalService, AvailabilityOption, DwellingAdjustment, Cli
 
 const router = Router();
 
-// GET ALL services /internal/appointment/service/admin/services/
-router.get('/', async (_req: Request, res: Response) => {
-  try {
-    const service = await Service.findAll();
-    res.json(service);
-  } catch (error: any) {
-    res.status(500).json({
-      message: error.message
-    });  
-  }  
-});  
-
-// // GET an service by ID /internal/appointment/service/admin/services/:id
-// router.get('/:id', async (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   try {
-//     const service = await Service.findByPk(id);
-//     if(service) {
-//       res.json(service);
-//     } else {
-//       res.status(404).json({
-//         message: 'service not found'
-//       });  
-//     }  
-//   } catch (error: any) {
-//     res.status(500).json({
-//       message: error.message
-//     });  
-//   }  
-// });  
-
 type DataCollectionInstance = InstanceType<typeof DataCollection>;
 type ReportWritingInstance = InstanceType<typeof ReportWriting>;
 type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
@@ -41,7 +10,7 @@ type AdditionalServiceInstance = InstanceType<typeof AdditionalService>;
 type AvailabilityOptionInstance = InstanceType<typeof AvailabilityOption>;
 type DwellingAdjustmentInstance = InstanceType<typeof DwellingAdjustment>;
 
-type BaseServiceByID = InstanceType<typeof Service> & {
+type ServiceByID = InstanceType<typeof Service> & {
   dataValues: {
     AvailabilityOptions: AvailabilityOptionInstance[];
     AdditionalServices: AdditionalServiceInstance[];
@@ -52,30 +21,26 @@ type BaseServiceByID = InstanceType<typeof Service> & {
   };
 };
 
-// GET BaseServiceByID
-router.get('/bs/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
+// GET ALL services /internal/appointment/service/admin/services/
+router.get('/', async (_req: Request, res: Response) => {
   try {
-    const BaseServiceByID = (await Service.findByPk(id, {
-        include: [
+    const services = await Service.findAll({
+      include: [
         {
           model: AdditionalService,
           as: 'AdditionalServices',
-          where: { visibility: true },
           attributes: ['id', 'name'],
           through: { attributes: [] },
         },
         {
           model: AvailabilityOption,
           as: 'AvailabilityOptions',
-          where: { visibility: true },
           attributes: ['id', 'name'],
           through: { attributes: [] },
         },
         {
           model: DwellingAdjustment,
           as: 'DwellingAdjustments',
-          where: { visibility: true },
           attributes: ['id', 'name'],
           through: { attributes: [] },
         },
@@ -95,42 +60,124 @@ router.get('/bs/:id', async (req: Request, res: Response) => {
             attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
       ],
-    })) as BaseServiceByID;
-    // console.log('baseServiceByID', BaseServiceByID);
-    if (BaseServiceByID) {
-      res.json(BaseServiceByID);
+  });
+    res.json(services);
+  } catch (error: any) {
+    res.status(500).json({
+      message: error.message
+    });  
+  }  
+});  
+
+
+// GET ServiceByID
+router.get('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const ServiceByID = (await Service.findByPk(id, {
+        include: [
+        {
+          model: AdditionalService,
+          as: 'AdditionalServices',
+          attributes: ['id', 'name'],
+          through: { attributes: [] },
+        },
+        {
+          model: AvailabilityOption,
+          as: 'AvailabilityOptions',
+          attributes: ['id', 'name'],
+          through: { attributes: [] },
+        },
+        {
+          model: DwellingAdjustment,
+          as: 'DwellingAdjustments',
+          attributes: ['id', 'name'],
+          through: { attributes: [] },
+        },
+        {
+          model: DataCollection,
+          as: 'data_collection',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+        {
+          model: ReportWriting,
+          as: 'report_writing',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+        {
+          model: ClientPresentation,
+          as: 'client_presentation',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+      ],
+    })) as ServiceByID;
+    // console.log('ServiceByID', ServiceByID);
+    if (ServiceByID) {
+      res.json(ServiceByID);
     } else {
-      res.status(404).json({ message: 'BaseServiceByID not found' });
+      res.status(404).json({ message: 'ServiceByID not found' });
     }  
   } catch (error: any) {
-    res.status(500).json({ 'Error fetching BaseServiceByID on StructureRoutes.ts:': error.message });
+    res.status(500).json({ 'Error fetching ServiceByID on StructureRoutes.ts:': error.message });
   }
 });
 
 // PUT /Services/:id - Update a Service by ID
 router.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, description, visibility, base_sq_ft } = req.body;
+  const { serviceData, 
+    additionalServices, 
+    dataCollectionData, reportWritingData, clientPresentationData } = req.body;
+
   try {
-    const service = await Service.findByPk(id);
-    if(service) {
-      service.name = name;
-      service.description = description;
-      service.visibility = visibility;
-      service.base_sq_ft = base_sq_ft;
-      await service.save();
-      res.json(service);
-    } else {
-      res.status(404).json({
-        message: 'Service not found'
-      });  
-    }  
-  } catch (error: any) {
-    res.status(400).json({
-      message: error.message
-    });  
-  }  
-});  
+    const service = await Service.findByPk(id, {
+      include: [{ model: AdditionalService, as: 'AdditionalServices' }],
+  });
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+    
+    // Update Service fields
+    await service.update(serviceData);
+    
+    // Update DataCollection if it exists
+    if (dataCollectionData) {
+      const dataCollection = await DataCollection.findByPk(service.data_collection_id);
+      if (dataCollection) {
+        await dataCollection.update(dataCollectionData);
+      }
+    }
+    
+    // Update reportWriting if it exists
+    if (reportWritingData) {
+      const reportWriting = await ReportWriting.findByPk(service.data_collection_id);
+      if (reportWriting) {
+        await reportWriting.update(reportWritingData);
+      }
+    }
+
+    // Update clientPresentation if it exists
+    if (clientPresentationData) {
+      const clientPresentation = await ClientPresentation.findByPk(service.data_collection_id);
+      if (clientPresentation) {
+        await clientPresentation.update(clientPresentationData);
+      }
+    }
+
+    if (additionalServices) {
+      await service.setAdditionalServices(additionalServices); // Updates associations
+  }
+
+    // Return success message
+    return res.json({ message: 'Service and DataCollection updated successfully' });
+
+  } catch (error) {
+    console.error('Error in PUT /Services/:id:', error);
+    return res.status(500).json({ message: 'Error updating service or DataCollection' });
+  }
+});
+
+
 
 // CREATE a new service /internal/appointment/service/admin/services/
 router.post('/', async (req: Request, res: Response) => {
@@ -185,19 +232,6 @@ router.delete('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// GET AllServices
-router.get('/users', async (_req: Request, res: Response) => {
-  try {
-    const VisibleServices = await Service.findAll({
-      order: ['id'],
-      attributes: ['id', 'name', 'icon', 'description', 'visibility'],
-      raw: true,
-    });  
-    res.json(VisibleServices);
-  } catch (err) {
-    console.error('Error fetching Users on ServicesRoutes.ts:', err);
-  }  
-})    
 
 // GET ALL additionalServices /internal/appointment/service/admin/additionalServices/
 router.get('/as', async (_req: Request, res: Response) => {
@@ -223,32 +257,6 @@ router.get('/ao', async (_req: Request, res: Response) => {
   }  
 });  
 
-
-// // GET ServicesForServiceByID
-// router.get('/services', async (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   try {
-//     const ServicesForServiceByID = await Service.findByPk(id,{
-//       include: [{ 
-//         model: Service,
-//         as: 'Services',
-//         where: {
-//           visibility: true,
-//         },  
-//         attributes: ['id', 'name', 'description'],
-//         through: { attributes: [] }
-//       }],  
-//     });  
-//     if (ServicesForServiceByID) {
-//       const ServiceServices = (ServicesForServiceByID.dataValues.Services || []).map(service => service.get({ plain: true }));
-//       res.json(ServiceServices);
-//     } else {
-//       res.status(404).json({ message: 'Services not found' });
-//     }  
-//   } catch (error: any) {
-//     res.status(500).json({ 'Error fetching Users on StructureRoutes.ts:': error.message });
-//   }  
-// })  
 
 
 export { router as ServiceRouter };

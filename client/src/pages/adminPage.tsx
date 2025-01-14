@@ -1,7 +1,10 @@
 import React, { useContext, useCallback, useEffect } from 'react';
-import { AdminContext, AdminProvider } from '../components/AdminContext';
+import { AdminContext, AdminProvider } from '../constants_and_context/AdminContext.js';
 import ServiceEditor from '../components/forms/serviceEditor';
-import { ADMIN_ROUTES } from '../constants/apiRoutes.js';
+import { ADMIN_ROUTES } from '../constants_and_context/apiRoutes.js';
+import AdditionalServiceEditor from '../components/forms/additionalServiceEditor.js';
+import AvailabilityOptionEditor from '../components/forms/availabilityOptionEditor.js';
+import DwellingAdjustmentEditor from '../components/forms/additionalServiceEditor copy.js';
 
 const AdminPageContent = () => {
     const context = useContext(AdminContext);
@@ -97,44 +100,15 @@ const AdminPageContent = () => {
             <ServiceEditor
                 handleSave={handleSave}
             />
-            {/* <Section
-                title="Additional Services"
-                data={allAdditionalServices}
-                type="additionalService"
-                handleUpdate={(type, id, field, value) => {
-                    const updatedData = allAdditionalServices.map((item) =>
-                        item.id === id ? { ...item, [field]: value } : item
-                    );
-                    setAllAdditionalServices(updatedData);
-                }}
+            <AdditionalServiceEditor
                 handleSave={handleSave}
-            />
-
-            <Section
-                title="Dwelling Adjustments"
-                data={allDwellingAdjustments}
-                type="dwellingAdjustment"
-                handleUpdate={(type, id, field, value) => {
-                    const updatedData = allDwellingAdjustments.map((item) =>
-                        item.id === id ? { ...item, [field]: value } : item
-                    );
-                    setAllDwellingAdjustments(updatedData);
-                }}
-                handleSave={handleSave}
-            />
-
-            <Section
-                title="Availability Options"
-                data={allAvailabilityOptions}
-                type="availability"
-                handleUpdate={(type, id, field, value) => {
-                    const updatedData = allAvailabilityOptions.map((item) =>
-                        item.id === id ? { ...item, [field]: value } : item
-                    );
-                    setAllAvailabilityOptions(updatedData);
-                }}
-                handleSave={handleSave}
-            /> */}
+            />            
+            <AvailabilityOptionEditor
+            handleSave={handleSave}
+            />            
+            <DwellingAdjustmentEditor
+            handleSave={handleSave}
+        />  
         </div>
     );
 };

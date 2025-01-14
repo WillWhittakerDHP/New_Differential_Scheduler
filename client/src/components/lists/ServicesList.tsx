@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, Row, Card } from 'react-bootstrap';
-import { AppointmentContext } from '../AppointmentContext';
+import { AppointmentContext } from '../../constants_and_context/AppointmentContext';
 import { retrieveServicesForUserTypeByID, retrieveBaseServiceByID } from '../../api/internalAPI/appointmentAPI';
 
 import type { ServiceData } from '../../interfaces/apiInterfaces';

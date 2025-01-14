@@ -6,6 +6,7 @@ import {
   CreationOptional,
   BelongsToManyAddAssociationMixin,
   BelongsToManyGetAssociationsMixin,
+  BelongsToManySetAssociationsMixin,
   Sequelize,
 } from 'sequelize';
 
@@ -33,6 +34,11 @@ InferCreationAttributes<Service>
   declare AvailabilityOptions?: AvailabilityOption[];
   declare DwellingAdjustments?: DwellingAdjustment[];
 
+  declare setAdditionalServices: BelongsToManySetAssociationsMixin<
+  AdditionalService,
+  number
+>;
+
   declare getServiceable: BelongsToManyGetAssociationsMixin<Serviceable>;
   declare getServiceables: BelongsToManyGetAssociationsMixin<Serviceable[]>;
   
@@ -41,15 +47,6 @@ InferCreationAttributes<Service>
   Serviceable[],
   Serviceable['service_id'][]
   >;
-
-  // declare getFeeTime: BelongsToManyGetAssociationsMixin<FeeTime>;
-  // declare getFeeTimes: BelongsToManyGetAssociationsMixin<FeeTime[]>;
-  
-  // declare addFeeTime: BelongsToManyAddAssociationMixin<FeeTime, FeeTime['id']>;
-  // declare addFeeTimes: BelongsToManyAddAssociationMixin<
-  // FeeTime[],
-  // FeeTime['id'][]
-  // >;
 
 }
 

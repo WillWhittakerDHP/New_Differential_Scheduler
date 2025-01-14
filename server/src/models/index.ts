@@ -1,30 +1,30 @@
 import { sequelize } from '../config/connection.js';
 
 // Appointment Content
-import { ServiceFactory } from './appointment/structure/serviceTypes.js';
 import { ServiceableFactory } from './appointment/structure/serviceables.js';
+import { ServiceFactory } from './appointment/structure/serviceTypes.js';
 import { UserTypeFactory } from './appointment/structure/userTypes.js';
 import { DwellingAdjustmentFactory } from './appointment/structure/dwellingAdjustments.js';
 import { AdditionalServiceFactory } from './appointment/structure/additionalServices.js';
 import { AvailabilityOptionFactory } from './appointment/structure/availabilityOptions.js';
 // TimeBlocks
-import { FeeTimeFactory } from './appointment/structure/feeTime/feeTimes.js';
 import { FeeTimeableFactory } from './appointment/structure/feeTime/feeTimeables.js';
+import { FeeTimeFactory } from './appointment/structure/feeTime/feeTimes.js';
 import { DataCollectionFactory } from './appointment/structure/feeTime/dataCollection.js';
 import { ReportWritingFactory } from './appointment/structure/feeTime/reportWriting.js';
 import { ClientPresentationFactory } from './appointment/structure/feeTime/clientPresentation.js';
 
 
 // Appointment Content
-const Service = ServiceFactory(sequelize);
 const Serviceable = ServiceableFactory(sequelize);
+const Service = ServiceFactory(sequelize);
 const UserType = UserTypeFactory(sequelize);
 const DwellingAdjustment = DwellingAdjustmentFactory(sequelize);
 const AdditionalService = AdditionalServiceFactory(sequelize);
 const AvailabilityOption = AvailabilityOptionFactory(sequelize);
 // TimeBlocks
-const FeeTime = FeeTimeFactory(sequelize);
 const FeeTimeable = FeeTimeableFactory(sequelize);
+const FeeTime = FeeTimeFactory(sequelize);
 const DataCollection = DataCollectionFactory(sequelize);
 const ReportWriting = ReportWritingFactory(sequelize);
 const ClientPresentation = ClientPresentationFactory(sequelize);
@@ -54,25 +54,28 @@ UserType.belongsToMany(Service, {
 
 Service.belongsToMany(AdditionalService, {
   through: {
-    model: Serviceable,
-    unique: false,
+      model: Serviceable,
+      unique: false,
   },
   foreignKey: 'service_id',
+  otherKey: 'serviceable_id',
   as: 'AdditionalServices',
-  constraints: false,
+  // constraints: false,
 });
 AdditionalService.belongsToMany(Service, {
   through: {
-    model: Serviceable,
-    unique: false,
-    scope: {
-      serviceable_type: 'additional_service'
-    },
+      model: Serviceable,
+      unique: false,
+      scope: {
+          serviceable_type: 'additional_service',
+      },
   },
   foreignKey: 'serviceable_id',
+  otherKey: 'service_id',
   as: 'Services',
-  constraints: false,
+  // constraints: false,
 });
+
 
 
 Service.belongsToMany(AvailabilityOption, {
@@ -292,14 +295,14 @@ Service.belongsToMany(FeeTime, {
 
 export { 
   Service,
-  Serviceable,
   UserType, 
   DwellingAdjustment, 
   AdditionalService, 
   AvailabilityOption,
+  Serviceable,
   FeeTime,
-  FeeTimeable,
   DataCollection,
   ClientPresentation,
-  ReportWriting  
+  ReportWriting,  
+  FeeTimeable
 };

@@ -1,4 +1,4 @@
-interface SectionProps {
+interface EditorProps {
     title: string;
     data: Array<Record<string, any>>;
     type: string;
@@ -6,7 +6,7 @@ interface SectionProps {
     handleSave: (type: string, id: number) => void; // Required prop for saving individual rows
 }
 
-const Section: React.FC<SectionProps> = ({ title, data, type, handleUpdate, handleSave }) => {
+const Editor: React.FC<EditorProps> = ({ title, data, type, handleUpdate, handleSave }) => {
     return (
         <div>
             <h2>{title}</h2>
@@ -59,4 +59,4 @@ const Section: React.FC<SectionProps> = ({ title, data, type, handleUpdate, hand
     );
 };
 
-export default Section
+export default Editor

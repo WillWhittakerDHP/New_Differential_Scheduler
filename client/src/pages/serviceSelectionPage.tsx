@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 // import { Container, Row, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'; 
 
-import { AppointmentContext } from '../components/AppointmentContext';
+import { AppointmentContext } from "../constants_and_context/AppointmentContext";
 
 import UsersList from '../components/lists/UsersList';
 import ServicesList from '../components/lists/ServicesList';

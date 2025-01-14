@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, Row, Button } from 'react-bootstrap';
-import { AppointmentContext } from '../AppointmentContext';
+import { AppointmentContext } from '../../constants_and_context/AppointmentContext';
 import { retrieveAvailabilityOptionByID } from '../../api/internalAPI/appointmentAPI';
 
 import type { AvailabilityOptionData } from '../../interfaces/apiInterfaces';
