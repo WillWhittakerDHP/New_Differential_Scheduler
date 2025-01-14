@@ -1,4 +1,4 @@
-import { AppointmentBlock, AppointmentPart } from "./appointmentInterfaces";
+import { AppointmentBlock } from "./appointmentInterfaces";
 
 export interface UserTypeData {
   id: number | null;

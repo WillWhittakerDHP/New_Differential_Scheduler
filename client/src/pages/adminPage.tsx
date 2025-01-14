@@ -1,123 +1,106 @@
-import React, { useContext, useCallback, useEffect } from 'react';
-import { AdminContext, AdminProvider } from '../constants_and_context/AdminContext.js';
-import ServiceEditor from '../components/forms/serviceEditor';
+import React, { useContext, useMemo } from 'react';
+import { AdminContext, AdminContextType, AdminProvider } from '../constants_and_context/AdminContext.js';
 import { ADMIN_ROUTES } from '../constants_and_context/apiRoutes.js';
-import AdditionalServiceEditor from '../components/forms/additionalServiceEditor.js';
-import AvailabilityOptionEditor from '../components/forms/availabilityOptionEditor.js';
-import DwellingAdjustmentEditor from '../components/forms/additionalServiceEditor copy.js';
+import GenericEditor from '../components/forms/genericEditor.js';
+
+import { UserTypeData, ServiceData, AdditionalServiceData, AvailabilityOptionData, DwellingAdjustmentData } from '../interfaces/apiInterfaces.js';
 
 const AdminPageContent = () => {
     const context = useContext(AdminContext);
+
+    // Check if the context exists
     if (!context) {
         throw new Error('AdminPageContent must be used within an AdminProvider');
     }
 
-    const {
-        allServices,
-        setAllServices,
-        allAdditionalServices,
-        setAllAdditionalServices,
-        allDwellingAdjustments,
-        setAllDwellingAdjustments,
-        allAvailabilityOptions,
-        setAllAvailabilityOptions,
-    } = context;
+    const userTypeFields = useMemo(() => ['name', 'description', 'visibility'] as (keyof UserTypeData)[], []);
+    const serviceTypeFields = useMemo(() => ['name', 'description', 'visibility', 'base_sq_ft'] as (keyof ServiceData)[], []);
+    const dwellingAdjustmentFields = useMemo(() => ['name', 'visibility', 'base_sq_ft'] as (keyof DwellingAdjustmentData)[], []);
+    const additionalServiceFields = useMemo(() => ['name', 'description', 'visibility', 'base_sq_ft'] as (keyof AdditionalServiceData)[], []);
+    const availabilityOptionFields = useMemo(() => ['name', 'description', 'visibility', 'base_sq_ft'] as (keyof AvailabilityOptionData)[], []);
 
-    // Fetch all data once on mount
-    const fetchAllData = useCallback(async () => {
-        try {
-            const [services, additionalServices, dwellingAdjustments, availabilityOptions] =
-                await Promise.all([
-                    fetch('/internal/admin/serviceTypes').then((res) => res.json()),
-                    fetch('/internal/admin/additionalServiceTypes').then((res) => res.json()),
-                    fetch('/internal/admin/dwellingAdjustmentTypes').then((res) => res.json()),
-                    fetch('/internal/admin/availabilityOptionTypes').then((res) => res.json()),
-                ]);
 
-            setAllServices(services);
-            setAllAdditionalServices(additionalServices);
-            setAllDwellingAdjustments(dwellingAdjustments);
-            setAllAvailabilityOptions(availabilityOptions);
-        } catch (error) {
-            console.error('Error fetching admin data:', error);
-        }
-    }, [setAllServices, setAllAdditionalServices, setAllDwellingAdjustments, setAllAvailabilityOptions]);
+    interface AssociationType {
+        type: keyof typeof ADMIN_ROUTES; // Valid keys from ADMIN_ROUTES
+        label: string; // Label for the UI
+        key: keyof AdminContextType['associationData']; // Must match keys in associationData
+    }
 
-    useEffect(() => {
-        fetchAllData();
-    }, [fetchAllData]);
-
-    // Handle Save for Individual Sections
-    const handleSave = async (type: keyof typeof ADMIN_ROUTES, id: number) => {
-        const endpoint = `${ADMIN_ROUTES[type]}/${id}`;
-        
-        let dataToUpdate;
-        const arrayToSearch =
-            type === 'serviceTypes' ? allServices
-            : type === 'additionalServiceTypes' ? allAdditionalServices
-            : type === 'dwellingAdjustmentTypes' ? allDwellingAdjustments
-            : type === 'availabilityOptionTypes' ? allAvailabilityOptions
-            : null;
-    
-        if (!arrayToSearch) {
-            console.error(`Unknown type: ${type}`);
-            return;
-        }
-        
-        dataToUpdate = arrayToSearch.find((item) => {
-            // console.log(`Comparing item.id (${item.id}) with id (${id})`);
-            return item.id === id;
-        });
-    
-        if (!dataToUpdate) {
-            console.error(`No data found for ID: ${id} in ${type}`);
-            return;
-        }
-        
-        try {
-            const response = await fetch(endpoint, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(dataToUpdate),
-            });
-    
-            if (response.ok) {
-                alert(`Data with ID ${id} updated successfully!`);
-            } else {
-                console.error(`Failed to update data:`, response.statusText);
-            }
-        } catch (error) {
-            console.error(`Error updating data:`, error);
-        }
-    };
-    
+    const userTypeAssociations: AssociationType[] = useMemo(() => [
+        { 
+            type: 'serviceTypes', 
+            label: 'Associated Services', 
+            key: 'serviceTypes' },
+    ], []);
+    const serviceTypeAssociations: AssociationType[] = useMemo (() => [
+        {
+            type: 'additionalServiceTypes',
+            label: 'Additional Services',
+            key: 'additionalServiceTypes',
+        },
+        {
+            type: 'availabilityOptionTypes',
+            label: 'Availability Options',
+            key: 'availabilityOptionTypes',
+        },
+    ], [])
 
     return (
         <div>
             <h1>Admin Page</h1>
-            <ServiceEditor
-                handleSave={handleSave}
+
+            {/* User Type Editor */}
+            <GenericEditor
+                type="userTypes"
+                entityName="User Type"
+                fields={userTypeFields}
+                hasAppointmentBlocks={false}
+                associations={userTypeAssociations}
+                
             />
-            <AdditionalServiceEditor
-                handleSave={handleSave}
-            />            
-            <AvailabilityOptionEditor
-            handleSave={handleSave}
-            />            
-            <DwellingAdjustmentEditor
-            handleSave={handleSave}
-        />  
+
+            {/* Service Type Editor */}
+            <GenericEditor
+                type="serviceTypes"
+                entityName="Service"
+                fields={serviceTypeFields}
+                hasAppointmentBlocks={true}
+                associations={serviceTypeAssociations}
+            />
+
+            {/* Dwelling Adjustment Editor */}
+            <GenericEditor
+                type="dwellingAdjustmentTypes"
+                entityName="Dwelling Adjustment"
+                hasAppointmentBlocks={true}
+                fields={dwellingAdjustmentFields}
+            />
+
+            {/* Additional Service Editor */}
+            <GenericEditor
+                type="additionalServiceTypes"
+                entityName="Additional Service"
+                hasAppointmentBlocks={true}
+                fields={additionalServiceFields}
+            />
+
+            {/* Availability Option Editor */}
+            <GenericEditor
+                type="availabilityOptionTypes"
+                entityName="Availability Options"
+                hasAppointmentBlocks={true}
+                fields={availabilityOptionFields}
+            />
         </div>
     );
 };
 
-const AdminPage =() => {
+const AdminPage = () => {
     return (
-    <AdminProvider>
-        <AdminPageContent />
-    </AdminProvider>);
+        <AdminProvider>
+            <AdminPageContent />
+        </AdminProvider>
+    );
 };
 
 export default AdminPage;

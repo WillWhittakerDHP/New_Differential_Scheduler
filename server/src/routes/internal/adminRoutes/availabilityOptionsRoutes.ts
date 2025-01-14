@@ -6,7 +6,25 @@ const router = Router();
 // GET ALL availabilityOptionss /internal/appointment/availabilityOptions/admin/availabilityOptionss/
 router.get('/', async (_req: Request, res: Response) => {
   try {
-    const availabilityOptions = await AvailabilityOption.findAll();
+    const availabilityOptions = await AvailabilityOption.findAll({
+      include: [
+        {
+          model: DataCollection,
+          as: 'data_collection',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+        {
+          model: ReportWriting,
+          as: 'report_writing',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+        {
+          model: ClientPresentation,
+          as: 'client_presentation',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+      ]
+    });
     res.json(availabilityOptions);
   } catch (error: any) {
     res.status(500).json({

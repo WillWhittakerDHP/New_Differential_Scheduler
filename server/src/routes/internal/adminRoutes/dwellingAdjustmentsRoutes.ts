@@ -6,7 +6,25 @@ const router = Router();
 // GET ALL dwellingAdjustments /internal/appointment/dwellingAdjustment/admin/dwellingAdjustments/
 router.get('/', async (_req: Request, res: Response) => {
   try {
-    const dwellingAdjustment = await DwellingAdjustment.findAll();
+    const dwellingAdjustment = await DwellingAdjustment.findAll({
+      include: [
+        {
+          model: DataCollection,
+          as: 'data_collection',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+        {
+          model: ReportWriting,
+          as: 'report_writing',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+        {
+          model: ClientPresentation,
+          as: 'client_presentation',
+            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+        },
+      ]
+    });
     res.json(dwellingAdjustment);
   } catch (error: any) {
     res.status(500).json({

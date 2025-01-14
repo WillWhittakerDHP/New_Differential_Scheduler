@@ -8,8 +8,9 @@ export const API_ROUTES = {
 };
 
 export const ADMIN_ROUTES = {
-      serviceTypes: '/internal/admin/serviceTypes',
-      additionalServiceTypes: '/internal/admin/additionalServiceTypes',
-      dwellingAdjustmentTypes: '/internal/admin/dwellingAdjustmentTypes',
-      availabilityOptionTypes: '/internal/admin/availabilityOptionTypes',
+  userTypes: 'internal/admin/userTypes',
+  serviceTypes: '/internal/admin/serviceTypes',
+  additionalServiceTypes: '/internal/admin/additionalServiceTypes',
+  dwellingAdjustmentTypes: '/internal/admin/dwellingAdjustmentTypes',
+  availabilityOptionTypes: '/internal/admin/availabilityOptionTypes',
 };

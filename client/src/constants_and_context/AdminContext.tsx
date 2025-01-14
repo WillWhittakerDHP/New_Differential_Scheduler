@@ -1,63 +1,70 @@
-import React, { createContext, useState, ReactNode, useEffect } from 'react';
-import type { UserTypeData, ServiceData, DwellingAdjustmentData, AdditionalServiceData, AvailabilityOptionData } from '../interfaces/apiInterfaces';
-// import { DescriptionsData } from '../interfaces/detailInterfaces';
+import React, { createContext, useState, ReactNode } from 'react';
+import useFetch from '../hooks/useFetch';
+import { ADMIN_ROUTES } from './apiRoutes';
+import {
+  AdditionalServiceData,
+  AvailabilityOptionData,
+  DwellingAdjustmentData,
+  ServiceData,
+  UserTypeData,
+} from '../interfaces/apiInterfaces';
 
-interface AdminContextType {
-  userType: UserTypeData | undefined;
-  setUserType: React.Dispatch<React.SetStateAction<UserTypeData | undefined>>;
-  allUserTypes: UserTypeData[];
-  setAllUserTypes: React.Dispatch<React.SetStateAction<UserTypeData[]>>;
-
-  service: ServiceData | undefined;
-  setService: React.Dispatch<React.SetStateAction<ServiceData | undefined>>;
-  allServices: ServiceData[];
-  setAllServices: React.Dispatch<React.SetStateAction<ServiceData[]>>;
-
-  additionalService: AdditionalServiceData | undefined;
-  setAdditionalService: React.Dispatch<React.SetStateAction<AdditionalServiceData | undefined>>;
-  allAdditionalServices: AdditionalServiceData[];
-  setAllAdditionalServices: React.Dispatch<React.SetStateAction<AdditionalServiceData[]>>;
-
-  availabilityOption: AvailabilityOptionData | undefined;
-  setAvailabilityOption: React.Dispatch<React.SetStateAction<AvailabilityOptionData | undefined>>;
-  allAvailabilityOptions: AvailabilityOptionData[];
-  setAllAvailabilityOptions: React.Dispatch<React.SetStateAction<AvailabilityOptionData[]>>;
-
-  dwellingAdjustment: DwellingAdjustmentData | undefined;
-  setDwellingAdjustment: React.Dispatch<React.SetStateAction<DwellingAdjustmentData | undefined>>;
-  allDwellingAdjustments: DwellingAdjustmentData[];
-  setAllDwellingAdjustments: React.Dispatch<React.SetStateAction<DwellingAdjustmentData[]>>;
-
-  // serviceDescriptions: DescriptionsData[];
-  // setServiceDescriptions: React.Dispatch<React.SetStateAction<DescriptionsData[]>>;
-
+export interface AdminContextType {
+    fetchedUserTypes: UserTypeData[];
+    fetchedServices: ServiceData[];
+    fetchedDwellingAdjustments: DwellingAdjustmentData[];
+    fetchedAdditionalServices: AdditionalServiceData[];
+    fetchedAvailabilityOptions: AvailabilityOptionData[];
+    loading: boolean;
+    error: string | null;
+    associationData: Record<keyof typeof ADMIN_ROUTES, any[]>; // Corrected type[];
 }
 
-export const AdminContext = createContext<AdminContextType | null>(null);
+export const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
-export const AdminProvider = ({ children }: { children: ReactNode }) => {
-  const [userType, setUserType] = useState<UserTypeData>();
-  const [allUserTypes, setAllUserTypes] = useState<UserTypeData[]>([]);
-  const [service, setService] = useState<ServiceData>();
-  const [allServices, setAllServices] = useState<ServiceData[]>([]);
-  const [additionalService, setAdditionalService] = useState<AdditionalServiceData>();
-  const [allAdditionalServices, setAllAdditionalServices] = useState<AdditionalServiceData[]>([]);
-  const [availabilityOption, setAvailabilityOption] = useState<AvailabilityOptionData>();
-  const [allAvailabilityOptions, setAllAvailabilityOptions] = useState<AvailabilityOptionData[]>([]);
-  const [dwellingAdjustment, setDwellingAdjustment] = useState<DwellingAdjustmentData>();
-  const [allDwellingAdjustments, setAllDwellingAdjustments] = useState<DwellingAdjustmentData[]>([]);
-  // const [description, setDescription] = useState<DescriptionsData>();
-  // const [allDescriptions, setAllDescriptions] = useState<DescriptionsData[]>([]);
+export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const { data: fetchedUserTypes, loading: loadingUserTypes, error: errorUserTypes } = useFetch<UserTypeData[]>(ADMIN_ROUTES.userTypes);
+  const { data: fetchedServices, loading: loadingServices, error: errorServices } = useFetch<ServiceData[]>(ADMIN_ROUTES.serviceTypes);
+  const { data: fetchedDwellingAdjustments, loading: loadingDwellingAdjustments, error: errorDwellingAdjustments } = useFetch<DwellingAdjustmentData[]>(ADMIN_ROUTES.dwellingAdjustmentTypes);
+  const { data: fetchedAdditionalServices, loading: loadingAdditionalServices, error: errorAdditionalServices } = useFetch<AdditionalServiceData[]>(ADMIN_ROUTES.additionalServiceTypes);
+  const { data: fetchedAvailabilityOptions, loading: loadingAvailabilityOptions, error: errorAvailabilityOptions } = useFetch<AvailabilityOptionData[]>(ADMIN_ROUTES.availabilityOptionTypes);
+
+  // Consolidated loading and error states
+  const loading = loadingUserTypes || loadingServices || loadingDwellingAdjustments || loadingAdditionalServices || loadingAvailabilityOptions;
+  const error = errorUserTypes || errorServices || errorDwellingAdjustments || errorAdditionalServices || errorAvailabilityOptions;
+
+  const associationData = Object.keys(ADMIN_ROUTES).reduce((acc, key) => {
+    acc[key as keyof typeof ADMIN_ROUTES] =
+      key === 'serviceTypes'
+        ? fetchedServices || []
+        : key === 'additionalServiceTypes'
+        ? fetchedAdditionalServices || []
+        : key === 'availabilityOptionTypes'
+        ? fetchedAvailabilityOptions || []        
+        : key === 'dwellingAdjustmentTypes'
+        ? fetchedDwellingAdjustments || []        
+        : key === 'userTypes'
+        ? fetchedUserTypes || []
+        : [];
+    return acc;
+  }, {} as Record<keyof typeof ADMIN_ROUTES, any[]>);
   
-  // useEffect(() => {
-  //   const admin = new Admin();
-  //   setThisAdmin(admin);
-  // }, []);
-  
-  
-  return (
-    <AdminContext.Provider value={{userType, setUserType, allUserTypes, setAllUserTypes, service, setService, allServices, setAllServices, additionalService, setAdditionalService, allAdditionalServices, setAllAdditionalServices, availabilityOption, setAvailabilityOption, allAvailabilityOptions, setAllAvailabilityOptions, dwellingAdjustment, setDwellingAdjustment, allDwellingAdjustments, setAllDwellingAdjustments }}>
-      {children}
-    </AdminContext.Provider>
+
+
+  // Memoize the context value
+  const contextValue = React.useMemo(
+    () => ({
+      fetchedUserTypes: fetchedUserTypes || [],
+      fetchedServices: fetchedServices || [],
+      fetchedDwellingAdjustments: fetchedDwellingAdjustments || [],
+      fetchedAdditionalServices: fetchedAdditionalServices || [],
+      fetchedAvailabilityOptions: fetchedAvailabilityOptions || [],
+      loading,
+      error,
+      associationData
+    }),
+    [fetchedUserTypes, fetchedServices, fetchedDwellingAdjustments, fetchedAdditionalServices, fetchedAvailabilityOptions, loading, error, associationData]
   );
+
+  return <AdminContext.Provider value={contextValue}>{children}</AdminContext.Provider>;
 };
