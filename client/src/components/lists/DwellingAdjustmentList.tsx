@@ -4,15 +4,14 @@ import { AppointmentContext } from '../../constants_and_context/AppointmentConte
 import { retrieveDwellingAdjustmentByID } from '../../api/internalAPI/appointmentAPI';
 
 import type { DwellingAdjustmentData } from '../../interfaces/apiInterfaces';
-import { AppointmentBlock, PartTimes, AppointmentPart, Appointment } from '../../interfaces/appointmentInterfaces';
-
+import { AppointmentBlock, AppointmentPart, Appointment } from '../../interfaces/appointmentInterfaces';
 
 // Define the props for the component
-interface DwellingAdjustmentsProps {
-//   DwellingAdjustments: DwellingAdjustmentData[] | null;
-}
-
-const DwellingAdjustmentsList: React.FC<DwellingAdjustmentsProps> = () => {
+interface DwellingAdjustmentsListProps {
+  //   Services: DwellingAdjustmentData[] | null;
+  }
+  
+  const DwellingAdjustmentsList: React.FC<DwellingAdjustmentsListProps> = () => {
   // Access the context
   const context = useContext(AppointmentContext);
   if (!context) {
@@ -21,12 +20,12 @@ const DwellingAdjustmentsList: React.FC<DwellingAdjustmentsProps> = () => {
 
   const { availableDwellingAdjustments, thisDwellingAdjustment, thisAppointment, setThisDwellingAdjustment, setThisAppointment} = context;
 
-  const handlePropertyTypeSelect = (selectedDwellingAdjustment: DwellingAdjustmentData) => {
+  const handleDwellingAdjustmentTypeSelect = (selectedDwellingAdjustment: DwellingAdjustmentData) => {
     setThisDwellingAdjustment(selectedDwellingAdjustment);
   };
 
 
-  // Fetch Associated AdditionalServices, AdditionalServices, and DwellingAdjustments
+  // Fetch Associated DwellingAdjustments, DwellingAdjustments, and DwellingAdjustments
   const fetchDwellingAdjustmentByID = async () => {
     if (thisDwellingAdjustment !== undefined) {
       try {
@@ -56,49 +55,39 @@ const DwellingAdjustmentsList: React.FC<DwellingAdjustmentsProps> = () => {
               data.client_presentation.rate_over_base_time,
               data.client_presentation.base_fee,
               data.client_presentation.rate_over_base_fee
-            ),
-              new PartTimes(
-                0,
-                0,
-                0,
-                0
               )
             );
 
-            // Calculate times for the newDwellingAdjustment based on home_sq_ft
-            const calculatedTimes: PartTimes = newDwellingAdjustment.calculatePartTimes(
-              thisAppointment!.home_sq_ft || 0,
-              newDwellingAdjustment
-            );
-
-          // Update the times field in newDwellingAdjustment
-          newDwellingAdjustment.times = calculatedTimes;
-
-          // Log to verify the calculated times
-          console.log("Calculated PartTimes:", calculatedTimes);
-          console.log("Updated AppointmentPart:", newDwellingAdjustment);
+      // Calculate times for the newBaseService based on home_sq_ft
+      newDwellingAdjustment.calculateTimes(thisAppointment?.home_sq_ft || 0);
+  
+      // Log to verify the calculated times
+      console.log("Updated AppointmentPart with calculated times:", newDwellingAdjustment);
 
 
-          
+            
+
           // Update thisAppointment with the new AppointmentPart
           setThisAppointment((prev) => {
-            if ( prev !== undefined ){
-            const updatedDwellingAdjustmentFee = prev.calculatePartFee(newDwellingAdjustment);
-            console.log(updatedDwellingAdjustmentFee);
+              if (prev !== undefined) {
+                // Calculate the fee for the new additional service
+                const updatedDwellingAdjustmentFee = prev.calculatePartFee(newDwellingAdjustment);
+            
+                // Append the new additional service to the existing array
             const updatedAppointment = prev
               ? new Appointment(
-                  prev.home_sq_ft,
-                  prev.base_service,
-                  newDwellingAdjustment,
-                  prev.additional_services,
-                  prev.availability_options,
-                  prev.data_collection_time,
-                  prev.report_writing_time,
-                  prev.client_presentation_time,
-                  prev.base_service_fee,
-                  updatedDwellingAdjustmentFee,
-                  prev.add_service_fees,
-                  prev.avail_option_fees
+                prev.home_sq_ft,
+                prev.base_service,
+                newDwellingAdjustment,
+                prev.additional_services,
+                prev.availability_options,
+                prev.data_collection,
+                prev.report_writing,
+                prev.client_presentation,
+                prev.base_service_fee,
+                updatedDwellingAdjustmentFee,
+                prev.add_service_fees,
+                prev.avail_option_fees
                 )
               : new Appointment(
                   0, // Provide default values if prev is undefined
@@ -106,16 +95,16 @@ const DwellingAdjustmentsList: React.FC<DwellingAdjustmentsProps> = () => {
                   newDwellingAdjustment,
                   undefined,
                   undefined,
+                  undefined,
+                  undefined,
+                  undefined,
                   0,
                   0,
-                  0,
-                  0,
-                  0,
-                  [], 
-                  []
+                  [0],
+                  [0]
                 );
                 updatedAppointment.updateTimes();
-            console.log("Updated Appointment:", updatedAppointment);
+                console.log("Updated Appointment:", updatedAppointment);
             return updatedAppointment;
           }});
         } else {
@@ -134,15 +123,16 @@ const DwellingAdjustmentsList: React.FC<DwellingAdjustmentsProps> = () => {
     thisDwellingAdjustment,
   ]);
 
+
   return (
     <Container className="mt-4">
-      <h4 className="mt-4">Select Your Property Type from DwellingAdjustmentstList.tsx</h4>
+      <h4 className="mt-4">Select Your Availability Option from DwellingAdjustmentstList.tsx</h4>
       <Row>
         {availableDwellingAdjustments && availableDwellingAdjustments.length > 0 ? (
           availableDwellingAdjustments.map((DwellingAdjustment) => (
             <Button
             key={DwellingAdjustment.id}
-            onClick={() => handlePropertyTypeSelect(DwellingAdjustment)}
+            onClick={() => handleDwellingAdjustmentTypeSelect(DwellingAdjustment)}
             style={{ cursor: 'pointer' }}
             // variant={thisDwellingAdjustment.includes(type) ? "primary" : "outline-primary"}
             className="m-2">
@@ -150,11 +140,11 @@ const DwellingAdjustmentsList: React.FC<DwellingAdjustmentsProps> = () => {
             </Button>
           ))
         ) : (
-          <p>Loading Dwelling Adjustments...</p>
+          <p>Loading Availability Options...</p>
         )}
       </Row>
     </Container>
     );
-  };
-  
-  export default DwellingAdjustmentsList;
+};
+
+export default DwellingAdjustmentsList;

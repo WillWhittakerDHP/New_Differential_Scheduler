@@ -4,14 +4,14 @@ import { AppointmentContext } from '../../constants_and_context/AppointmentConte
 import { retrieveAvailabilityOptionByID } from '../../api/internalAPI/appointmentAPI';
 
 import type { AvailabilityOptionData } from '../../interfaces/apiInterfaces';
-import { AppointmentBlock, AppointmentPart, PartTimes, Appointment } from '../../interfaces/appointmentInterfaces';
+import { AppointmentBlock, AppointmentPart, Appointment } from '../../interfaces/appointmentInterfaces';
 
 // Define the props for the component
-interface AvailabilityOptionsProps {
-//   AvailabilityOptions: AvailabilityOptionData[] | null;
-}
-
-const AvailabilityOptionsList: React.FC<AvailabilityOptionsProps> = () => {
+interface AvailabilityOptionsListProps {
+  //   Services: AvailabilityOptionData[] | null;
+  }
+  
+  const AvailabilityOptionsList: React.FC<AvailabilityOptionsListProps> = () => {
   // Access the context
   const context = useContext(AppointmentContext);
   if (!context) {
@@ -55,27 +55,15 @@ const AvailabilityOptionsList: React.FC<AvailabilityOptionsProps> = () => {
               data.client_presentation.rate_over_base_time,
               data.client_presentation.base_fee,
               data.client_presentation.rate_over_base_fee
-              ),
-              new PartTimes(
-                0,
-                0,
-                0,
-                0
               )
             );
 
-            // Calculate times for the newAvailabilityOption based on home_sq_ft
-            const calculatedTimes: PartTimes = newAvailabilityOption.calculatePartTimes(
-              thisAppointment!.home_sq_ft || 0,
-              newAvailabilityOption
-            );
+      // Calculate times for the newBaseService based on home_sq_ft
+      newAvailabilityOption.calculateTimes(thisAppointment?.home_sq_ft || 0);
+  
+      // Log to verify the calculated times
+      console.log("Updated AppointmentPart with calculated times:", newAvailabilityOption);
 
-          // Update the times field in newAvailabilityOption
-          newAvailabilityOption.times = calculatedTimes;
-
-          // Log to verify the calculated times
-          console.log("Calculated PartTimes:", calculatedTimes);
-          console.log("Updated AppointmentPart:", newAvailabilityOption);
 
             
 
@@ -97,18 +85,18 @@ const AvailabilityOptionsList: React.FC<AvailabilityOptionsProps> = () => {
             console.log(updatedAvailabilityOptionFees);
             const updatedAppointment = prev
               ? new Appointment(
-                  prev.home_sq_ft,
-                  prev.base_service,
-                  prev.dwelling_type,
-                  prev.additional_services,
-                  updatedAvailabilityOptions,
-                  prev.data_collection_time,
-                  prev.report_writing_time,
-                  prev.client_presentation_time,
-                  prev.base_service_fee,
-                  prev.dwelling_type_fee,
-                  prev.add_service_fees,
-                  updatedAvailabilityOptionFees,
+                prev.home_sq_ft,
+                prev.base_service,
+                prev.dwelling_type,
+                prev.additional_services,
+                updatedAvailabilityOptions,
+                prev.data_collection,
+                prev.report_writing,
+                prev.client_presentation,
+                prev.base_service_fee,
+                prev.dwelling_type_fee,
+                prev.add_service_fees,
+                updatedAvailabilityOptionFees,
                 )
               : new Appointment(
                   0, // Provide default values if prev is undefined
@@ -116,9 +104,9 @@ const AvailabilityOptionsList: React.FC<AvailabilityOptionsProps> = () => {
                   newAvailabilityOption,
                   undefined,
                   undefined,
-                  0,
-                  0,
-                  0,
+                  undefined,
+                  undefined,
+                  undefined,
                   0,
                   0,
                   [0],

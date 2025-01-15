@@ -4,7 +4,7 @@ import { AppointmentContext } from '../../constants_and_context/AppointmentConte
 import { retrieveServicesForUserTypeByID, retrieveBaseServiceByID } from '../../api/internalAPI/appointmentAPI';
 
 import type { ServiceData } from '../../interfaces/apiInterfaces';
-import { AppointmentBlock, PartTimes, AppointmentPart, Appointment } from '../../interfaces/appointmentInterfaces';
+import { AppointmentBlock, AppointmentPart, Appointment } from '../../interfaces/appointmentInterfaces';
 
 // Define the props for the component
 interface ServicesListProps {
@@ -47,118 +47,91 @@ interface ServicesListProps {
   
   // Fetch Associated AdditionalServices, AdditionalServices, and DwellingAdjustments
   const fetchBaseServiceByID = async () => {
-      if (thisService !== undefined) {
-        try {
-          if (thisService) {
-            const data = await retrieveBaseServiceByID(thisService.id);
-            // Construct newBaseService as an AppointmentPart
-            const newBaseService = new AppointmentPart(
-              data.name,
-              data.base_sq_ft,
-              new AppointmentBlock(
-                data.data_collection.on_site,
-                data.data_collection.base_time,
-                data.data_collection.rate_over_base_time,
-                data.data_collection.base_fee,
-                data.data_collection.rate_over_base_fee
-              ),
-              new AppointmentBlock(
-                data.report_writing.on_site,
-                data.report_writing.base_time,
-                data.report_writing.rate_over_base_time,
-                data.report_writing.base_fee,
-                data.report_writing.rate_over_base_fee
-              ),
-              new AppointmentBlock(
-                data.client_presentation.on_site,
-                data.client_presentation.base_time,
-                data.client_presentation.rate_over_base_time,
-                data.client_presentation.base_fee,
-                data.client_presentation.rate_over_base_fee
-              ),
-              new PartTimes(
-                0,
-                0,
-                0,
-                0
-              )
-            );
-
-            // Calculate times for the newBaseService based on home_sq_ft
-            const calculatedTimes: PartTimes = newBaseService.calculatePartTimes(
-              thisAppointment!.home_sq_ft || 0,
-              newBaseService
-            );
-
-          // Update the times field in newBaseService
-          newBaseService.times = calculatedTimes;
-
-          // Log to verify the calculated times
-          // console.log("Calculated PartTimes:", calculatedTimes);
-          console.log("Updated AppointmentPart:", newBaseService);
-
-            
-            // Set additional services, availability options, and dwelling adjustments
-            const availableAdditionalServices = data.AdditionalServices;
-            if (availableAdditionalServices !== undefined && availableAdditionalServices !== null) {
-              setAvailableAdditionalServices(availableAdditionalServices);
-            }
-            
-            const availableAvailabilityOptions = data.AvailabilityOptions;
-            if (availableAvailabilityOptions !== undefined && availableAvailabilityOptions !== null) {
-              setAvailableAvailabilityOptions(availableAvailabilityOptions);
-            }
-            
-            const availableDwellingAdjustments = data.DwellingAdjustments;
-            if (availableDwellingAdjustments !== undefined && availableDwellingAdjustments !== null) {
-              setAvailableDwellingAdjustments(availableDwellingAdjustments);
-            }
-            
-            // Update thisAppointment with the new AppointmentPart
-            setThisAppointment((prev) => {
-              if ( prev !== undefined ){
-              const updatedBaseServiceFee = prev.calculatePartFee(newBaseService);
-              const updatedAppointment = prev
-                ? new Appointment(
-                    prev.home_sq_ft,
-                    newBaseService,
-                    prev.dwelling_type,
-                    prev.additional_services,
-                    prev.availability_options,
-                    prev.data_collection_time,
-                    prev.report_writing_time,
-                    prev.client_presentation_time,
-                    updatedBaseServiceFee,
-                    prev.dwelling_type_fee,
-                    prev.add_service_fees,
-                    prev.avail_option_fees
-                  )
-                : new Appointment(
-                    0, // Provide default values if prev is undefined
-                    newBaseService,
-                    undefined,
-                    undefined,
-                    undefined,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    [],
-                    [],
-                  );
-                  updatedAppointment.updateTimes();
-              console.log("Updated Appointment:", updatedAppointment);
-              return updatedAppointment;
-            }});
-          } else {
-            throw new Error();
-          }
-        } catch (error) {
-          console.error('Error fetching Service types:', error);
-        }
+    if (!thisService) return;
+  
+    try {
+      const data = await retrieveBaseServiceByID(thisService.id);
+  
+      // Construct the newBaseService as an AppointmentPart
+      const newBaseService = new AppointmentPart(
+        data.name,
+        data.base_sq_ft,
+        new AppointmentBlock(
+          data.data_collection.on_site,
+          data.data_collection.base_time,
+          data.data_collection.rate_over_base_time,
+          data.data_collection.base_fee,
+          data.data_collection.rate_over_base_fee
+        ),
+        new AppointmentBlock(
+          data.report_writing.on_site,
+          data.report_writing.base_time,
+          data.report_writing.rate_over_base_time,
+          data.report_writing.base_fee,
+          data.report_writing.rate_over_base_fee
+        ),
+        new AppointmentBlock(
+          data.client_presentation.on_site,
+          data.client_presentation.base_time,
+          data.client_presentation.rate_over_base_time,
+          data.client_presentation.base_fee,
+          data.client_presentation.rate_over_base_fee
+        )
+      );
+  
+      // Calculate times for the newBaseService based on home_sq_ft
+      newBaseService.calculateTimes(thisAppointment?.home_sq_ft || 0);
+  
+      // Log to verify the calculated times
+      console.log("Updated AppointmentPart with calculated times:", newBaseService);
+  
+      // Update the available additional services
+      if (data.AdditionalServices) {
+        setAvailableAdditionalServices(data.AdditionalServices);
       }
-    };
+  
+      // Update the available availability options
+      if (data.AvailabilityOptions) {
+        setAvailableAvailabilityOptions(data.AvailabilityOptions);
+      }
+  
+      // Update the available dwelling adjustments
+      if (data.DwellingAdjustments) {
+        setAvailableDwellingAdjustments(data.DwellingAdjustments);
+      }
+  
+      // Update thisAppointment with the new base service
+      setThisAppointment((prev) => {
+        if (!prev) return;
+  
+        const updatedBaseServiceFee = prev.calculatePartFee(newBaseService);
+  
+        const updatedAppointment = new Appointment(
+          prev.home_sq_ft,
+          newBaseService,
+          prev.dwelling_type,
+          prev.additional_services,
+          prev.availability_options,
+          prev.data_collection,
+          prev.report_writing,
+          prev.client_presentation,
+          updatedBaseServiceFee,
+          prev.dwelling_type_fee,
+          prev.add_service_fees,
+          prev.avail_option_fees
+        );
+  
+        // Update aggregated times in the appointment
+        updatedAppointment.updateTimes();
+  
+        console.log("Updated Appointment:", updatedAppointment);
+        return updatedAppointment;
+      });
+    } catch (error) {
+      console.error("Error fetching Service types:", error);
+    }
+  };
+  
     
     useEffect(() => {
       fetchBaseServiceByID();
