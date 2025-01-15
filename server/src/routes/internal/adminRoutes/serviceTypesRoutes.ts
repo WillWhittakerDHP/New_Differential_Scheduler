@@ -1,11 +1,11 @@
 import { Router, Request, Response } from 'express';
-import { Service, AdditionalService, AvailabilityOption, DwellingAdjustment, ClientPresentation, DataCollection, ReportWriting } from '../../../models/index.js';
+import { Service, AdditionalService, AvailabilityOption, DwellingAdjustment, FormalPresentation, DataCollection, ReportWriting } from '../../../models/index.js';
 
 const router = Router();
 
 type DataCollectionInstance = InstanceType<typeof DataCollection>;
 type ReportWritingInstance = InstanceType<typeof ReportWriting>;
-type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
+type FormalPresentationInstance = InstanceType<typeof FormalPresentation>;
 type AdditionalServiceInstance = InstanceType<typeof AdditionalService>;
 type AvailabilityOptionInstance = InstanceType<typeof AvailabilityOption>;
 type DwellingAdjustmentInstance = InstanceType<typeof DwellingAdjustment>;
@@ -17,7 +17,7 @@ type ServiceByID = InstanceType<typeof Service> & {
     DwellingAdjustments: DwellingAdjustmentInstance[];
     DataCollection: DataCollectionInstance[],
     ReportWriting: ReportWritingInstance[],
-    ClientPresentation: ClientPresentationInstance[];
+    FormalPresentation: FormalPresentationInstance[];
   };
 };
 
@@ -55,8 +55,8 @@ router.get('/', async (_req: Request, res: Response) => {
             attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
         {
-          model: ClientPresentation,
-          as: 'client_presentation',
+          model: FormalPresentation,
+          as: 'formal_presentation',
             attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
       ],
@@ -105,8 +105,8 @@ router.get('/:id', async (req: Request, res: Response) => {
             attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
         {
-          model: ClientPresentation,
-          as: 'client_presentation',
+          model: FormalPresentation,
+          as: 'formal_presentation',
             attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
       ],
@@ -127,7 +127,7 @@ router.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const { serviceData, 
     additionalServices, 
-    dataCollectionData, reportWritingData, clientPresentationData } = req.body;
+    dataCollectionData, reportWritingData, FormalPresentationData } = req.body;
 
   try {
     const service = await Service.findByPk(id, {
@@ -156,11 +156,11 @@ router.put('/:id', async (req: Request, res: Response) => {
       }
     }
 
-    // Update clientPresentation if it exists
-    if (clientPresentationData) {
-      const clientPresentation = await ClientPresentation.findByPk(service.data_collection_id);
-      if (clientPresentation) {
-        await clientPresentation.update(clientPresentationData);
+    // Update FormalPresentation if it exists
+    if (FormalPresentationData) {
+      const formalPresentation = await FormalPresentation.findByPk(service.data_collection_id);
+      if (formalPresentation) {
+        await formalPresentation.update(FormalPresentationData);
       }
     }
 

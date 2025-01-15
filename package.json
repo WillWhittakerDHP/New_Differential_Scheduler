@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@sequelize/core": "^7.0.0-alpha.43",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "gapi-script": "^1.2.0",
     "googleapis": "^144.0.0",

@@ -1,6 +1,6 @@
 import { sequelize } from "../config/connection.js";
 
-import { UserType, Service, AdditionalService, AvailabilityOption, DwellingAdjustment, FeeTime, DataCollection, ReportWriting, ClientPresentation } from "../models/index.js";
+import { UserType, Service, AdditionalService, AvailabilityOption, DwellingAdjustment, FeeTime, DataCollection, ReportWriting, FormalPresentation } from "../models/index.js";
 
 import serviceSeedData from './appointmentSeeds/structureSeeds/service-seeds.json' with { type: 'json' };
 import userTypeSeedData from './appointmentSeeds/structureSeeds/userType-seeds.json' with { type: 'json' };
@@ -12,7 +12,7 @@ import dwellingAdjustmentSeedData from './appointmentSeeds/structureSeeds/dwelli
 import feeTimeSeedData from './appointmentSeeds/feeTimeSeeds/feeTime-seeds.json' with { type: 'json' };
 import dataCollectionSeedData from './appointmentSeeds/feeTimeSeeds/dataCollection-seeds.json' with { type: 'json' };
 import reportWritingSeedData from './appointmentSeeds/feeTimeSeeds/reportWriting-seeds.json' with { type: 'json' };
-import clientPresentationSeedData from './appointmentSeeds/feeTimeSeeds/clientPresentation-seeds.json' with { type: 'json' };
+import formalPresentationSeedData from './appointmentSeeds/feeTimeSeeds/formalPresentation-seeds.json' with { type: 'json' };
 
 
 
@@ -58,20 +58,20 @@ export const seedAll = async () => {
       
         console.log('\n----- REPORTWRITING SEEDING COMPLETE -----\n');
       
-        console.log('\n----- Seeding ClientPresentations ... -----\n');
+        console.log('\n----- Seeding formalPresentations ... -----\n');
         
-        const clientPresentations = await ClientPresentation.bulkCreate(clientPresentationSeedData, {
+        const formalPresentations = await FormalPresentation.bulkCreate(formalPresentationSeedData, {
         returning: true,
         validate: true,
       });
       
-      for (const clientPresentation of clientPresentations) {
-        console.log('\n----- Associating FeeTimes for', clientPresentation.id);
+      for (const formalPresentation of formalPresentations) {
+        console.log('\n----- Associating FeeTimes for', formalPresentation.id);
         const randomFeeTimes = feeTimes.slice(Math.floor(Math.random() * feeTimes.length));
-        await clientPresentation.addFeeTimes(randomFeeTimes);
+        await formalPresentation.addFeeTimes(randomFeeTimes);
         }
       
-      console.log('\n----- CLIENTPRESENTATION SEEDING COMPLETE -----\n'); 
+      console.log('\n----- formalPresentation SEEDING COMPLETE -----\n'); 
   
     console.log('\n----- FEETIME SEEDING COMPLETE -----\n');
 
@@ -152,9 +152,9 @@ export const seedAll = async () => {
           const reportWriting = reportWritings[Math.floor(Math.random() * reportWritings.length)];    
           await service.update({ report_writing_id: reportWriting.id }); 
           
-          console.log('\n----- Associating ClientPresentations for', service.name);
-          const clientPresentation = clientPresentations[Math.floor(Math.random() * clientPresentations.length)];    
-          await service.update({ client_presentation_id: clientPresentation.id }); 
+          console.log('\n----- Associating formalPresentations for', service.name);
+          const formalPresentation = formalPresentations[Math.floor(Math.random() * formalPresentations.length)];    
+          await service.update({ formal_presentation_id: formalPresentation.id }); 
         }
         
         for (const additionalService of additionalServices) {
@@ -166,9 +166,9 @@ export const seedAll = async () => {
           const reportWriting = reportWritings[Math.floor(Math.random() * reportWritings.length)];    
           await additionalService.update({ report_writing_id: reportWriting.id }); 
           
-          console.log('\n----- Associating ClientPresentations for', additionalService.name);
-          const clientPresentation = clientPresentations[Math.floor(Math.random() * clientPresentations.length)];    
-          await additionalService.update({ client_presentation_id: clientPresentation.id }); 
+          console.log('\n----- Associating formalPresentations for', additionalService.name);
+          const formalPresentation = formalPresentations[Math.floor(Math.random() * formalPresentations.length)];    
+          await additionalService.update({ formal_presentation_id: formalPresentation.id }); 
         }
         for (const availabilityOption of availabilityOptions) {
           console.log('\n----- Associating DataCollections for', availabilityOption.name);
@@ -179,9 +179,9 @@ export const seedAll = async () => {
           const reportWriting = reportWritings[Math.floor(Math.random() * reportWritings.length)];    
           await availabilityOption.update({ report_writing_id: reportWriting.id }); 
           
-          console.log('\n----- Associating ClientPresentations for', availabilityOption.name);
-          const clientPresentation = clientPresentations[Math.floor(Math.random() * clientPresentations.length)];    
-          await availabilityOption.update({ client_presentation_id: clientPresentation.id }); 
+          console.log('\n----- Associating formalPresentations for', availabilityOption.name);
+          const formalPresentation = formalPresentations[Math.floor(Math.random() * formalPresentations.length)];    
+          await availabilityOption.update({ formal_presentation_id: formalPresentation.id }); 
         }
         for (const dwellingAdjustment of dwellingAdjustments) {
           console.log('\n----- Associating DataCollections for', dwellingAdjustment.name);
@@ -192,9 +192,9 @@ export const seedAll = async () => {
           const reportWriting = reportWritings[Math.floor(Math.random() * reportWritings.length)];    
           await dwellingAdjustment.update({ report_writing_id: reportWriting.id }); 
           
-          console.log('\n----- Associating ClientPresentations for', dwellingAdjustment.name);
-          const clientPresentation = clientPresentations[Math.floor(Math.random() * clientPresentations.length)];    
-          await dwellingAdjustment.update({ client_presentation_id: clientPresentation.id }); 
+          console.log('\n----- Associating formalPresentations for', dwellingAdjustment.name);
+          const formalPresentation = formalPresentations[Math.floor(Math.random() * formalPresentations.length)];    
+          await dwellingAdjustment.update({ formal_presentation_id: formalPresentation.id }); 
         }
         
         console.log('\n----- SEEDING COMPLETE -----\n');

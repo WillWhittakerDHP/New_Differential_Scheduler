@@ -52,12 +52,12 @@ interface DwellingAdjustmentsListProps {
               data.report_writing.rate_over_base_fee
             ),
             new AppointmentBlock(
-              data.client_presentation.on_site,
-              data.client_presentation.client_present,
-              data.client_presentation.base_time,
-              data.client_presentation.rate_over_base_time,
-              data.client_presentation.base_fee,
-              data.client_presentation.rate_over_base_fee
+              data.formal_presentation.on_site,
+              data.formal_presentation.client_present,
+              data.formal_presentation.base_time,
+              data.formal_presentation.rate_over_base_time,
+              data.formal_presentation.base_fee,
+              data.formal_presentation.rate_over_base_fee
               )
             );
 
@@ -86,7 +86,7 @@ interface DwellingAdjustmentsListProps {
                 prev.availability_options,
                 prev.data_collection,
                 prev.report_writing,
-                prev.client_presentation,
+                prev.formal_presentation,
                 prev.base_service_fee,
                 updatedDwellingAdjustmentFee,
                 prev.add_service_fees,

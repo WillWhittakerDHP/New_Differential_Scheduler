@@ -1,12 +1,12 @@
 import { Router, Request, Response } from 'express';
-import { UserType, Service, AdditionalService, AvailabilityOption, DwellingAdjustment, ClientPresentation, DataCollection, ReportWriting } from '../../models/index.js';
+import { UserType, Service, AdditionalService, AvailabilityOption, DwellingAdjustment, FormalPresentation, DataCollection, ReportWriting } from '../../models/index.js';
 
 
 const router = Router();
 
 type DataCollectionInstance = InstanceType<typeof DataCollection>;
 type ReportWritingInstance = InstanceType<typeof ReportWriting>;
-type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
+type FormalPresentationInstance = InstanceType<typeof FormalPresentation>;
 type AdditionalServiceInstance = InstanceType<typeof AdditionalService>;
 type AvailabilityOptionInstance = InstanceType<typeof AvailabilityOption>;
 type DwellingAdjustmentInstance = InstanceType<typeof DwellingAdjustment>;
@@ -18,28 +18,28 @@ type BaseServiceByID = InstanceType<typeof Service> & {
     DwellingAdjustments: DwellingAdjustmentInstance[];
     DataCollection: DataCollectionInstance[],
     ReportWriting: ReportWritingInstance[],
-    ClientPresentation: ClientPresentationInstance[];
+    FormalPresentation: FormalPresentationInstance[];
   };
 };
 type AdditionalServiceByID = InstanceType<typeof AdditionalService> & {
   dataValues: {
     DataCollection: DataCollectionInstance[],
     ReportWriting: ReportWritingInstance[],
-    ClientPresentation: ClientPresentationInstance[];
+    FormalPresentation: FormalPresentationInstance[];
   };
 };
 type AvailabilityOptionByID = InstanceType<typeof AvailabilityOption> & {
   dataValues: {
     DataCollection: DataCollectionInstance[],
     ReportWriting: ReportWritingInstance[],
-    ClientPresentation: ClientPresentationInstance[];
+    FormalPresentation: FormalPresentationInstance[];
   };
 };
 type DwellingAdjustmentByID = InstanceType<typeof DwellingAdjustment> & {
   dataValues: {
     DataCollection: DataCollectionInstance[],
     ReportWriting: ReportWritingInstance[],
-    ClientPresentation: ClientPresentationInstance[];
+    FormalPresentation: FormalPresentationInstance[];
   };
 };
 
@@ -54,7 +54,7 @@ router.get('/', async (_req: Request, res: Response) => {
     });  
     res.json(VisibleUserTypes);
   } catch (err) {
-    console.error('Error fetching Users on StructureRoutes.ts:', err);
+    console.error('Error fetching Users on appointmentRoutes.ts:', err);
   }  
 })    
 
@@ -81,7 +81,7 @@ router.get('/:id', async (req: Request, res: Response) => {
       res.status(404).json({ message: 'Services not found' });
     }  
   } catch (error: any) {
-    res.status(500).json({ 'Error fetching Users on StructureRoutes.ts:': error.message });
+    res.status(500).json({ 'Error fetching Users on appointmentRoutes.ts:': error.message });
   }  
 })  
 
@@ -93,7 +93,7 @@ router.get('/bs/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const BaseServiceByID = (await Service.findByPk(id, {
-      attributes: { exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId'], },
+      attributes: { exclude: [ 'data_collection_id', 'report_writing_id', 'formal_presentation_id', 'dataCollectionId', 'reportWritingId', 'formalPresentationId'], },
         include: [
         {
           model: AdditionalService,
@@ -127,8 +127,8 @@ router.get('/bs/:id', async (req: Request, res: Response) => {
             attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
         {
-          model: ClientPresentation,
-          as: 'client_presentation',
+          model: FormalPresentation,
+          as: 'formal_presentation',
             attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
       ],
@@ -140,7 +140,7 @@ router.get('/bs/:id', async (req: Request, res: Response) => {
       res.status(404).json({ message: 'BaseServiceByID not found' });
     }  
   } catch (error: any) {
-    res.status(500).json({ 'Error fetching BaseServiceByID on StructureRoutes.ts:': error.message });
+    res.status(500).json({ 'Error fetching BaseServiceByID on appointmentRoutes.ts:': error.message });
   }
 });
 
@@ -150,7 +150,8 @@ router.get('/as/:id', async (req: Request, res: Response) => {
   try {
     const AdditionalServiceByID = (await AdditionalService.findByPk(id, {
       attributes: { 
-        exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId'], },        include: [
+        exclude: [ 'data_collection_id', 'report_writing_id', 'formal_presentation_id', 'dataCollectionId', 'reportWritingId', 'formalPresentationId'], },        
+        include: [
           {
             model: DataCollection,
             as: 'data_collection',
@@ -162,8 +163,8 @@ router.get('/as/:id', async (req: Request, res: Response) => {
               attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
           {
-            model: ClientPresentation,
-            as: 'client_presentation',
+            model: FormalPresentation,
+            as: 'formal_presentation',
               attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
       ],
@@ -176,7 +177,7 @@ router.get('/as/:id', async (req: Request, res: Response) => {
       res.status(404).json({ message: 'AdditionalServiceByID not found' });
     }  
   } catch (error: any) {
-    res.status(500).json({ 'Error fetching AdditionalServiceByID on StructureRoutes.ts:': error.message });
+    res.status(500).json({ 'Error fetching AdditionalServiceByID on appointmentRoutes.ts:': error.message });
   }
 });
 
@@ -186,7 +187,7 @@ router.get('/ao/:id', async (req: Request, res: Response) => {
   try {
     const AvailabilityOptionByID = (await AvailabilityOption.findByPk(id, {
       attributes: { 
-        exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId'], },
+        exclude: [ 'data_collection_id', 'report_writing_id', 'formal_presentation_id', 'dataCollectionId', 'reportWritingId', 'formalPresentationId'], },
         include: [
           {
             model: DataCollection,
@@ -199,8 +200,8 @@ router.get('/ao/:id', async (req: Request, res: Response) => {
               attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
           {
-            model: ClientPresentation,
-            as: 'client_presentation',
+            model: FormalPresentation,
+            as: 'formal_presentation',
               attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
       ],
@@ -213,7 +214,7 @@ router.get('/ao/:id', async (req: Request, res: Response) => {
       res.status(404).json({ message: 'AvailabilityOptionByID not found' });
     }  
   } catch (error: any) {
-    res.status(500).json({ 'Error fetching AvailabilityOptionByID on StructureRoutes.ts:': error.message });
+    res.status(500).json({ 'Error fetching AvailabilityOptionByID on appointmentRoutes.ts:': error.message });
   }
 });
 
@@ -223,7 +224,7 @@ router.get('/da/:id', async (req: Request, res: Response) => {
   try {
     const DwellingAdjustmentByID = (await DwellingAdjustment.findByPk(id, {
       attributes: { 
-        exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId'], },
+        exclude: [ 'data_collection_id', 'report_writing_id', 'formal_presentation_id', 'dataCollectionId', 'reportWritingId', 'formalPresentationId'], },
         include: [
           {
             model: DataCollection,
@@ -236,8 +237,8 @@ router.get('/da/:id', async (req: Request, res: Response) => {
               attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
           {
-            model: ClientPresentation,
-            as: 'client_presentation',
+            model: FormalPresentation,
+            as: 'formal_presentation',
               attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
       ],
@@ -250,7 +251,7 @@ router.get('/da/:id', async (req: Request, res: Response) => {
       res.status(404).json({ message: 'DwellingAdjustmentByID not found' });
     }  
   } catch (error: any) {
-    res.status(500).json({ 'Error fetching DwellingAdjustmentByID on StructureRoutes.ts:': error.message });
+    res.status(500).json({ 'Error fetching DwellingAdjustmentByID on appointmentRoutes.ts:': error.message });
   }
 });
 

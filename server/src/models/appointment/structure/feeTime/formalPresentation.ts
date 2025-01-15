@@ -11,9 +11,9 @@ import {
 
 import { FeeTime } from './feeTimes';
 
-export class ClientPresentation extends Model<
-  InferAttributes<ClientPresentation>,
-  InferCreationAttributes<ClientPresentation>
+export class FormalPresentation extends Model<
+  InferAttributes<FormalPresentation>,
+  InferCreationAttributes<FormalPresentation>
 > {
   declare id: CreationOptional<number>;
   declare on_site: boolean;
@@ -32,8 +32,8 @@ export class ClientPresentation extends Model<
     FeeTime['id'][]
   >;}
 
-export function ClientPresentationFactory(sequelize: Sequelize): typeof ClientPresentation {
-  ClientPresentation.init(
+export function FormalPresentationFactory(sequelize: Sequelize): typeof FormalPresentation {
+  FormalPresentation.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -70,11 +70,11 @@ export function ClientPresentationFactory(sequelize: Sequelize): typeof ClientPr
       timestamps: false,
       underscored: true,
       schema: 'public',
-      modelName: 'client_presentation',
-      tableName: 'client_presentation',
+      modelName: 'formal_presentation',
+      tableName: 'formal_presentation',
       freezeTableName: true,
     }
   );
 
-  return ClientPresentation;
+  return FormalPresentation;
 }

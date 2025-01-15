@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { AdditionalService, ClientPresentation, DataCollection, ReportWriting } from '../../../models/index.js';
+import { AdditionalService, FormalPresentation, DataCollection, ReportWriting } from '../../../models/index.js';
 
 const router = Router();
 
@@ -19,8 +19,8 @@ router.get('/', async (_req: Request, res: Response) => {
             attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
         {
-          model: ClientPresentation,
-          as: 'client_presentation',
+          model: FormalPresentation,
+          as: 'formal_presentation',
             attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
       ]}
@@ -54,13 +54,13 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 type DataCollectionInstance = InstanceType<typeof DataCollection>;
 type ReportWritingInstance = InstanceType<typeof ReportWriting>;
-type ClientPresentationInstance = InstanceType<typeof ClientPresentation>;
+type FormalPresentationInstance = InstanceType<typeof FormalPresentation>;
 
 type additionalServiceWithTimesValues = InstanceType<typeof AdditionalService> & {
   dataValues: {
     DataCollection: DataCollectionInstance[],
     ReportWriting: ReportWritingInstance[],
-    ClientPresentation: ClientPresentationInstance[];
+    FormalPresentation: FormalPresentationInstance[];
   };
 };
 
@@ -71,7 +71,7 @@ router.get('/tc/:id', async (req: Request, res: Response) => {
   try {
     const TimesValuesByadditionalServiceID = (await AdditionalService.findByPk(id, {
       attributes: {
-        exclude: [ 'data_collection_id', 'report_writing_id', 'client_presentation_id', 'dataCollectionId', 'reportWritingId', 'clientPresentationId' ], },
+        exclude: [ 'data_collection_id', 'report_writing_id', 'formal_presentation_id', 'dataCollectionId', 'reportWritingId', 'FormalPresentationId' ], },
         include: [
           {
             model: DataCollection,
@@ -84,8 +84,8 @@ router.get('/tc/:id', async (req: Request, res: Response) => {
             attributes: ['base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
           {
-            model: ClientPresentation,
-            as: 'client_presentation',
+            model: FormalPresentation,
+            as: 'formal_presentation',
             attributes: ['base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
         ],

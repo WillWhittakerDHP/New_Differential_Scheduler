@@ -22,5 +22,10 @@
     "visibility": true, 
     "description": "ADUs",
     "differential_scheduling": true
-  }
-]
+  },
+  { "name": "Additional PResentation", 
+  "base_sq_ft": 300, 
+    "visibility": true, 
+    "description": "Addtitional Presentation for parents or loved ones",
+    "differential_scheduling": true
+  }]

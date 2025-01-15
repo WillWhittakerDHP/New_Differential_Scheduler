@@ -4,7 +4,7 @@ import './index.css';
 
 import App from './App.tsx';
 import { AppointmentProvider } from './context/AppointmentContext';
-import AvailabilityPage from './pages/availabilityPage.tsx';
+// import AvailabilityPage from './pages/availabilityPage.tsx';
 import ErrorPage from './pages/errorPage.tsx';
 import ParticipantPage from './pages/participantPage.tsx';
 import LoginPage from './pages/loginPage.tsx';
@@ -28,10 +28,10 @@ const router = createBrowserRouter([
         path: '/PropertyDetails',
         element: <PropertyPage />,
       }, 
-      {
-        path: '/AppointmentAvailability',
-        element: <AvailabilityPage />,
-      }, 
+      // {
+      //   path: '/AppointmentAvailability',
+      //   element: <AvailabilityPage />,
+      // }, 
       {
         path: '/login',
         element: <LoginPage />,

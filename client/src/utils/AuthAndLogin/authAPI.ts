@@ -1,4 +1,4 @@
-import { UserLogin } from "../utils/AuthAndLogin/UserLogin";
+import { UserLogin } from "./UserLogin.js";
 
 const login = async (userInfo: UserLogin) => {
   try {

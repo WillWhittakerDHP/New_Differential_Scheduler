@@ -75,7 +75,7 @@ const GenericEditor = <T extends Record<string, any>>({
     // Handle appointment block changes
     const handleAppointmentBlockChange = (
         entityId: number,
-        blockType: 'data_collection' | 'report_writing' | 'client_presentation',
+        blockType: 'data_collection' | 'report_writing' | 'formal_presentation',
         field: keyof AppointmentBlock,
         value: string | number | boolean
     ) => {
@@ -154,7 +154,7 @@ const GenericEditor = <T extends Record<string, any>>({
     // Render appointment block fields
     const renderAppointmentBlockFields = (
         entity: T,
-        blockType: 'data_collection' | 'report_writing' | 'client_presentation'
+        blockType: 'data_collection' | 'report_writing' | 'formal_presentation'
     ) => {
         const block = entity[blockType];
         if (!block) return null;
@@ -359,7 +359,7 @@ const GenericEditor = <T extends Record<string, any>>({
                                         )}
                                         {renderAppointmentBlockFields(
                                             entity,
-                                            'client_presentation'
+                                            'formal_presentation'
                                         )}
                                     </>
                                 )}

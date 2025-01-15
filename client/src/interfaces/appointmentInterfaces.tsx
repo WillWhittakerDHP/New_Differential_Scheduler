@@ -21,7 +21,7 @@ export class PartTimes {
   constructor(
     public data_collection: SiteTime = new SiteTime(),
     public report_writing: SiteTime = new SiteTime(),
-    public client_presentation: SiteTime = new SiteTime(),
+    public formal_presentation: SiteTime = new SiteTime(),
   ) {}
 
   static calculatePartTimes(home_sq_ft: number, appointmentPart: AppointmentPart): PartTimes {
@@ -37,12 +37,12 @@ export class PartTimes {
 
     const dataCollectionTime = calculateBlockTime(appointmentPart.data_collection);
     const reportWritingTime = calculateBlockTime(appointmentPart.report_writing);
-    const clientPresentationTime = calculateBlockTime(appointmentPart.client_presentation);
+    const clientPresentationTime = calculateBlockTime(appointmentPart.formal_presentation);
 
     return new PartTimes(
       new SiteTime(dataCollectionTime, appointmentPart.data_collection.on_site, appointmentPart.data_collection.client_present),
       new SiteTime(reportWritingTime, appointmentPart.report_writing.on_site, appointmentPart.report_writing.client_present),
-      new SiteTime(clientPresentationTime, appointmentPart.client_presentation.on_site, appointmentPart.client_presentation.client_present),
+      new SiteTime(clientPresentationTime, appointmentPart.formal_presentation.on_site, appointmentPart.formal_presentation.client_present),
     );
   }
 }
@@ -55,7 +55,7 @@ export class AppointmentPart {
     public base_sq_ft: number,
     public data_collection: AppointmentBlock,
     public report_writing: AppointmentBlock,
-    public client_presentation: AppointmentBlock,
+    public formal_presentation: AppointmentBlock,
   ) {
     this.times = new PartTimes();
   }
@@ -74,19 +74,27 @@ export class Appointment {
     public availability_options: AppointmentPart[] = [],
     public data_collection: SiteTime = new SiteTime(),
     public report_writing: SiteTime = new SiteTime(),
-    public client_presentation: SiteTime = new SiteTime(),
+    public formal_presentation: SiteTime = new SiteTime(),
     public base_service_fee: number | undefined = 0,
     public dwelling_type_fee: number | undefined = 0,
     public add_service_fees: number[] = [], // Array for fees
     public avail_option_fees: number[] = [],
-    public full_fee: number | undefined = 0
+    public FullFee: number | undefined = 0,
+    public FullAppointmentDuration: number = 0,
+    public onSiteDuration: number = 0,
+    public formalPresentationDuration: number = 0,
+    public offSiteDuration: number = 0
   ) {}
 
   updateTimes(): void {
     // Reset totals
     this.data_collection = new SiteTime();
     this.report_writing = new SiteTime();
-    this.client_presentation = new SiteTime();
+    this.formal_presentation = new SiteTime();
+    this.FullAppointmentDuration = 0;
+    this.onSiteDuration = 0;
+    this.formalPresentationDuration = 0;
+    this.offSiteDuration = 0;
 
     // Calculate and aggregate times
     const allParts = [
@@ -100,21 +108,48 @@ export class Appointment {
       if (part) {
         part.calculateTimes(this.home_sq_ft || 0);
 
-        this.data_collection.totalTime += part.times.data_collection.totalTime;
-        this.data_collection.on_site = this.data_collection.on_site && part.times.data_collection.on_site;
-        this.data_collection.client_present = this.data_collection.client_present && part.times.data_collection.client_present;
+      // Accumulate full appointment duration
+      this.FullAppointmentDuration +=
+      part.times.data_collection.totalTime +
+      part.times.report_writing.totalTime +
+      part.times.formal_presentation.totalTime;
 
-        this.report_writing.totalTime += part.times.report_writing.totalTime;
-        this.report_writing.on_site = this.report_writing.on_site && part.times.report_writing.on_site;
-        this.report_writing.client_present = this.report_writing.client_present && part.times.report_writing.client_present;
+    // Accumulate on-site duration
+    if (part.times.data_collection.on_site) {
+      this.onSiteDuration += part.times.data_collection.totalTime;
+    }
+    if (part.times.report_writing.on_site) {
+      this.onSiteDuration += part.times.report_writing.totalTime;
+    }
+    if (part.times.formal_presentation.on_site) {
+      this.onSiteDuration += part.times.formal_presentation.totalTime;
+    }
 
-        this.client_presentation.totalTime += part.times.client_presentation.totalTime;
-        this.client_presentation.on_site = this.client_presentation.on_site && part.times.client_presentation.on_site;
-        this.client_presentation.client_present = this.client_presentation.client_present && part.times.client_presentation.client_present;
-      }
+    // Accumulate formal presentation duration
+    if (part.times.data_collection.client_present) {
+      this.formalPresentationDuration += part.times.data_collection.totalTime;
+    }
+    if (part.times.report_writing.client_present) {
+      this.formalPresentationDuration += part.times.report_writing.totalTime;
+    }
+    if (part.times.formal_presentation.client_present) {
+      this.formalPresentationDuration += part.times.formal_presentation.totalTime;
+    }
+
+    // Accumulate off-site duration (neither on-site nor client-present)
+    if (!part.times.data_collection.on_site && !part.times.data_collection.client_present) {
+      this.offSiteDuration += part.times.data_collection.totalTime;
+    }
+    if (!part.times.report_writing.on_site && !part.times.report_writing.client_present) {
+      this.offSiteDuration += part.times.report_writing.totalTime;
+    }
+    if (!part.times.formal_presentation.on_site && !part.times.formal_presentation.client_present) {
+      this.offSiteDuration += part.times.formal_presentation.totalTime;
+    }
+  }
     });
 
-    console.log("Updated Times:", this.data_collection, this.report_writing, this.client_presentation);
+    console.log("Updated Times:", this.data_collection, this.report_writing, this.formal_presentation);
   }
   calculateBlockFee(home_sq_ft: number, appointmentPart: AppointmentPart, appointmentBlock: AppointmentBlock): number {
     // console.log('calculateBlockFee');
@@ -135,7 +170,7 @@ export class Appointment {
         const partFee =
         this.calculateBlockFee(this.home_sq_ft, appointmentPart, appointmentPart.data_collection) +
         this.calculateBlockFee(this.home_sq_ft, appointmentPart, appointmentPart.report_writing) +
-        this.calculateBlockFee(this.home_sq_ft, appointmentPart, appointmentPart.client_presentation);
+        this.calculateBlockFee(this.home_sq_ft, appointmentPart, appointmentPart.formal_presentation);
         
         // console.log('Calculated partFee:', partFee);
         return partFee;

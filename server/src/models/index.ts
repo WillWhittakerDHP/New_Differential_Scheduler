@@ -12,7 +12,7 @@ import { FeeTimeableFactory } from './appointment/structure/feeTime/feeTimeables
 import { FeeTimeFactory } from './appointment/structure/feeTime/feeTimes.js';
 import { DataCollectionFactory } from './appointment/structure/feeTime/dataCollection.js';
 import { ReportWritingFactory } from './appointment/structure/feeTime/reportWriting.js';
-import { ClientPresentationFactory } from './appointment/structure/feeTime/clientPresentation.js';
+import { FormalPresentationFactory } from './appointment/structure/feeTime/formalPresentation.js';
 
 
 // Appointment Content
@@ -27,7 +27,7 @@ const FeeTimeable = FeeTimeableFactory(sequelize);
 const FeeTime = FeeTimeFactory(sequelize);
 const DataCollection = DataCollectionFactory(sequelize);
 const ReportWriting = ReportWritingFactory(sequelize);
-const ClientPresentation = ClientPresentationFactory(sequelize);
+const FormalPresentation = FormalPresentationFactory(sequelize);
 
 
 
@@ -174,28 +174,28 @@ DwellingAdjustment.belongsTo(ReportWriting);
 
 
 
-ClientPresentation.hasMany(Service, {
+FormalPresentation.hasMany(Service, {
   onDelete: 'CASCADE',
 });
-Service.belongsTo(ClientPresentation);
+Service.belongsTo(FormalPresentation);
 
 
-ClientPresentation.hasMany(AdditionalService, {
+FormalPresentation.hasMany(AdditionalService, {
   onDelete: 'CASCADE',
 }); 
-AdditionalService.belongsTo(ClientPresentation);
+AdditionalService.belongsTo(FormalPresentation);
 
 
-ClientPresentation.hasMany(AvailabilityOption, {
+FormalPresentation.hasMany(AvailabilityOption, {
   onDelete: 'CASCADE',
 });
-AvailabilityOption.belongsTo(ClientPresentation);
+AvailabilityOption.belongsTo(FormalPresentation);
 
 
-ClientPresentation.hasMany(DwellingAdjustment, {
+FormalPresentation.hasMany(DwellingAdjustment, {
   onDelete: 'CASCADE',
 });
-DwellingAdjustment.belongsTo(ClientPresentation);
+DwellingAdjustment.belongsTo(FormalPresentation);
 
 
 
@@ -244,21 +244,21 @@ ReportWriting.belongsToMany(FeeTime, {
 });
 
 
-FeeTime.belongsToMany(ClientPresentation, {
+FeeTime.belongsToMany(FormalPresentation, {
   through: {
     model: FeeTimeable,
     unique: false,
   },
   foreignKey: 'feeTime_id',
-  as: 'ClientPresentations',
+  as: 'FormalPresentations',
   constraints: false,
 });
-ClientPresentation.belongsToMany(FeeTime, {
+FormalPresentation.belongsToMany(FeeTime, {
   through: {
     model: FeeTimeable,
     unique: false,
     scope: {
-      feeTimeable_type: 'client_presentation'
+      feeTimeable_type: 'formal_presentation'
     },
   },
   foreignKey: 'feeTimeable_id',
@@ -282,7 +282,7 @@ Service.belongsToMany(FeeTime, {
     model: FeeTimeable,
     unique: false,
     scope: {
-      feeTimeable_type: 'client_presentation'
+      feeTimeable_type: 'formal_presentation'
     },
   },
   foreignKey: 'feeTimeable_id',
@@ -302,7 +302,7 @@ export {
   Serviceable,
   FeeTime,
   DataCollection,
-  ClientPresentation,
+  FormalPresentation,
   ReportWriting,  
   FeeTimeable
 };

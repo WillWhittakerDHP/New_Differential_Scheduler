@@ -29,7 +29,7 @@ InferCreationAttributes<Service>
   declare base_sq_ft: number;
   declare data_collection_id?: number; // Foreign key
   declare report_writing_id?: number; // Foreign key
-  declare client_presentation_id?: number; // Foreign key
+  declare formal_presentation_id?: number; // Foreign key
   declare AdditionalServices?: AdditionalService[];
   declare AvailabilityOptions?: AvailabilityOption[];
   declare DwellingAdjustments?: DwellingAdjustment[];
@@ -92,10 +92,10 @@ export function ServiceFactory(sequelize: Sequelize) {
           key: 'id',
         },
       },
-      client_presentation_id: {
+      formal_presentation_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'client_presentation', // Matches table name
+          model: 'formal_presentation', // Matches table name
           key: 'id',
         },
       },

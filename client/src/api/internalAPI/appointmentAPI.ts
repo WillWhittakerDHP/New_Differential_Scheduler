@@ -115,7 +115,6 @@ const retrieveDwellingAdjustmentByID = async (id: number | null): Promise<Dwelli
 export { 
   retrieveVisibleUserTypes, 
   retrieveServicesForUserTypeByID,
-  // retrieveAssociatedPartsByServiceID, 
   retrieveBaseServiceByID,
   retrieveAdditionalServiceByID,
   retrieveAvailabilityOptionByID,

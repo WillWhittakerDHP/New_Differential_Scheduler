@@ -1,27 +1,30 @@
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
 import type { UserTypeData, ServiceData, DwellingAdjustmentData, AdditionalServiceData, AvailabilityOptionData } from '../interfaces/apiInterfaces';
-import { Appointment, AppointmentBlock } from '../interfaces/appointmentInterfaces';
+import { Appointment, AppointmentPart } from '../interfaces/appointmentInterfaces';
 
-interface AggregatedAppointmentData {
+export interface AggregatedTimeData {
   dataCollection: {
     totalTime: number;
-    onSite: boolean;
+    on_site: boolean;
+    client_present: boolean;
   };
   reportWriting: {
     totalTime: number;
-    onSite: boolean;
+    on_site: boolean;
+    client_present: boolean;
   };
-  clientPresentation: {
+  formalPresentation: {
     totalTime: number;
-    onSite: boolean;
+    on_site: boolean;
+    client_present: boolean;
   };
 }
 
 interface AppointmentContextType {
   thisAppointment: Appointment | undefined;
   setThisAppointment: React.Dispatch<React.SetStateAction<Appointment | undefined>>;
-  aggregatedData: AggregatedAppointmentData;
-  setAggregatedData: () => Promise<void>; 
+  aggregatedTimeData: AggregatedTimeData;
+  setAggregatedTimeData: () => Promise<void>; 
 
   availableUserTypes: UserTypeData[];
   setAvailableUserTypes: React.Dispatch<React.SetStateAction<UserTypeData[]>>;
@@ -48,6 +51,15 @@ interface AppointmentContextType {
   thisDwellingAdjustment: DwellingAdjustmentData | undefined;
   setThisDwellingAdjustment: React.Dispatch<React.SetStateAction<DwellingAdjustmentData | undefined>>;
 
+  fullAppointmentDuration: number;
+  setFullAppointmentDuration: React.Dispatch<React.SetStateAction<number>>;
+  onSiteDuration: number;
+  setOnSiteDuration: React.Dispatch<React.SetStateAction<number>>;
+  formalPresentationDuration: number;
+  setFormalPresentationDuration: React.Dispatch<React.SetStateAction<number>>;
+  offSiteDuration: number;
+  setOffSiteDuration: React.Dispatch<React.SetStateAction<number>>;
+
   // thisAddress: Address | undefined;
   // setThisAddress: React.Dispatch<React.SetStateAction<Address | undefined>>;
 
@@ -59,60 +71,92 @@ export const AppointmentContext = createContext<AppointmentContextType | null>(n
 
 export const AppointmentProvider = ({ children }: { children: ReactNode }) => {
   const [thisAppointment, setThisAppointment] = useState<Appointment | undefined>();
-  const [aggregatedData, setAggregatedData] = useState<AggregatedAppointmentData>({
-    dataCollection: { totalTime: 0, onSite: true },
-    reportWriting: { totalTime: 0, onSite: true },
-    clientPresentation: { totalTime: 0, onSite: true },
+  const [aggregatedTimeData, setAggregatedTimeData] = useState<AggregatedTimeData>({
+    dataCollection: { totalTime: 0, on_site: true, client_present: false },
+    reportWriting: { totalTime: 0, on_site: false, client_present: false },
+    formalPresentation: { totalTime: 0, on_site: true, client_present: true  },
     });
 
-    const updateAggregatedData = async () => {
+    const updateAggregatedTimeData = async () => {
       if (!thisAppointment) return;
-  
-  // Helper function to check if all blocks are on-site
-  const areAllBlocksOnSite = (blocks: AppointmentBlock[]): boolean => {
-    return blocks.every((block) => block.on_site);
-  };
-
-  // Aggregated Data Collection
-  const allDataCollectionBlocks = [
-    thisAppointment.base_service?.data_collection,
-    thisAppointment.dwelling_type?.data_collection,
-    ...thisAppointment.additional_services.map((part) => part.data_collection),
-    ...thisAppointment.availability_options.map((part) => part.data_collection),
-  ].filter(Boolean); // Filter out undefined or null blocks
-
-  const allReportWritingBlocks = [
-    thisAppointment.base_service?.report_writing,
-    thisAppointment.dwelling_type?.report_writing,
-    ...thisAppointment.additional_services.map((part) => part.report_writing),
-    ...thisAppointment.availability_options.map((part) => part.report_writing),
-  ].filter(Boolean);
-
-  const allClientPresentationBlocks = [
-    thisAppointment.base_service?.client_presentation,
-    thisAppointment.dwelling_type?.client_presentation,
-    ...thisAppointment.additional_services.map((part) => part.client_presentation),
-    ...thisAppointment.availability_options.map((part) => part.client_presentation),
-  ].filter(Boolean);
-
-  const newAggregatedData = {
-    dataCollection: {
-      totalTime: allDataCollectionBlocks.reduce((sum, block) => sum + block!.base_time, 0),
-      onSite: areAllBlocksOnSite(allDataCollectionBlocks as AppointmentBlock[]),
-    },
-    reportWriting: {
-      totalTime: allReportWritingBlocks.reduce((sum, block) => sum + block!.base_time, 0),
-      onSite: areAllBlocksOnSite(allReportWritingBlocks as AppointmentBlock[]),
-    },
-    clientPresentation: {
-      totalTime: allClientPresentationBlocks.reduce((sum, block) => sum + block!.base_time, 0),
-      onSite: areAllBlocksOnSite(allClientPresentationBlocks as AppointmentBlock[]),
-    },
-  };
-
-  
-      setAggregatedData(newAggregatedData);
+    
+      const allParts = [
+        thisAppointment.base_service,
+        thisAppointment.dwelling_type,
+        ...thisAppointment.additional_services,
+        ...thisAppointment.availability_options,
+      ].filter(Boolean);
+    
+      const aggregatePartTimes = (callback: (part: AppointmentPart) => number) =>
+        allParts.reduce((sum, part) => sum + callback(part!), 0);
+    
+      const FullAppointmentDuration = aggregatePartTimes(
+        (part) =>
+          part.times.data_collection.totalTime +
+          part.times.report_writing.totalTime +
+          part.times.formal_presentation.totalTime
+      );
+    
+      const onSiteDuration = aggregatePartTimes(
+        (part) =>
+          (part.times.data_collection.on_site ? part.times.data_collection.totalTime : 0) +
+          (part.times.report_writing.on_site ? part.times.report_writing.totalTime : 0) +
+          (part.times.formal_presentation.on_site ? part.times.formal_presentation.totalTime : 0)
+      );
+    
+      const formalPresentationDuration = aggregatePartTimes(
+        (part) =>
+          (part.times.data_collection.client_present ? part.times.data_collection.totalTime : 0) +
+          (part.times.report_writing.client_present ? part.times.report_writing.totalTime : 0) +
+          (part.times.formal_presentation.client_present ? part.times.formal_presentation.totalTime : 0)
+      );
+    
+      const offSiteDuration = aggregatePartTimes(
+        (part) =>
+          (!part.times.data_collection.on_site && !part.times.data_collection.client_present
+            ? part.times.data_collection.totalTime
+            : 0) +
+          (!part.times.report_writing.on_site && !part.times.report_writing.client_present
+            ? part.times.report_writing.totalTime
+            : 0) +
+          (!part.times.formal_presentation.on_site && !part.times.formal_presentation.client_present
+            ? part.times.formal_presentation.totalTime
+            : 0)
+      );
+    
+      // Update aggregated time data
+      const newAggregatedTimeData = {
+        dataCollection: {
+          totalTime: aggregatePartTimes((part) => part?.times.data_collection.totalTime),
+          on_site: allParts.every((part) => part?.times.data_collection.on_site),
+          client_present: allParts.every((part) => part?.times.data_collection.client_present),
+        },
+        reportWriting: {
+          totalTime: aggregatePartTimes((part) => part?.times.report_writing.totalTime),
+          on_site: allParts.every((part) => part?.times.report_writing.on_site),
+          client_present: allParts.every((part) => part?.times.report_writing.client_present),
+        },
+        formalPresentation: {
+          totalTime: aggregatePartTimes((part) => part?.times.formal_presentation.totalTime),
+          on_site: allParts.every((part) => part?.times.formal_presentation.on_site),
+          client_present: allParts.every((part) => part?.times.formal_presentation.client_present),
+        },
+      };
+    
+      // Update state
+      setAggregatedTimeData(newAggregatedTimeData);
+      setFullAppointmentDuration(FullAppointmentDuration);
+      setOnSiteDuration(onSiteDuration);
+      setFormalPresentationDuration(formalPresentationDuration);
+      setOffSiteDuration(offSiteDuration);
     };
+
+  const [fullAppointmentDuration, setFullAppointmentDuration] = useState<number>(0);
+  const [onSiteDuration, setOnSiteDuration] = useState<number>(0);
+  const [formalPresentationDuration, setFormalPresentationDuration] = useState<number>(0);
+  const [offSiteDuration, setOffSiteDuration] = useState<number>(0);
+
+  
   const [availableUserTypes, setAvailableUserTypes] = useState<UserTypeData[]>([]);
   const [thisUserType, setThisUserType] = useState<UserTypeData | undefined>();
   const [availableServices, setAvailableServices] = useState<ServiceData[]>([]);
@@ -132,12 +176,12 @@ export const AppointmentProvider = ({ children }: { children: ReactNode }) => {
   }, []);
   
   useEffect(() => {
-    updateAggregatedData();
+    updateAggregatedTimeData();
   }, [thisAppointment, thisService, thisAdditionalService, thisAvailabilityOption, thisDwellingAdjustment]);
   
 
   return (
-    <AppointmentContext.Provider value={{ thisAppointment, setThisAppointment, aggregatedData, setAggregatedData: updateAggregatedData, availableUserTypes, setAvailableUserTypes, thisUserType, setThisUserType,  availableServices, setAvailableServices, thisService, setThisService, availableAdditionalServices, setAvailableAdditionalServices, thisAdditionalService, setThisAdditionalService, availableAvailabilityOptions, setAvailableAvailabilityOptions, thisAvailabilityOption, setThisAvailabilityOption,availableDwellingAdjustments, setAvailableDwellingAdjustments, thisDwellingAdjustment, setThisDwellingAdjustment }}>
+    <AppointmentContext.Provider value={{ thisAppointment, setThisAppointment, aggregatedTimeData, setAggregatedTimeData: updateAggregatedTimeData, fullAppointmentDuration, setFullAppointmentDuration, onSiteDuration, setOnSiteDuration, formalPresentationDuration, setFormalPresentationDuration, offSiteDuration, setOffSiteDuration, availableUserTypes, setAvailableUserTypes, thisUserType, setThisUserType,  availableServices, setAvailableServices, thisService, setThisService, availableAdditionalServices, setAvailableAdditionalServices, thisAdditionalService, setThisAdditionalService, availableAvailabilityOptions, setAvailableAvailabilityOptions, thisAvailabilityOption, setThisAvailabilityOption,availableDwellingAdjustments, setAvailableDwellingAdjustments, thisDwellingAdjustment, setThisDwellingAdjustment }}>
       {children}
     </AppointmentContext.Provider>
   );
