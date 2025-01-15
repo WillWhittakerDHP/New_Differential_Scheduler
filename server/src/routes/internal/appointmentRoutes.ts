@@ -119,17 +119,17 @@ router.get('/bs/:id', async (req: Request, res: Response) => {
         {
           model: DataCollection,
           as: 'data_collection',
-            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+            attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
         {
           model: ReportWriting,
           as: 'report_writing',
-            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+            attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
         {
           model: ClientPresentation,
           as: 'client_presentation',
-            attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+            attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
         },
       ],
     })) as BaseServiceByID;
@@ -154,17 +154,17 @@ router.get('/as/:id', async (req: Request, res: Response) => {
           {
             model: DataCollection,
             as: 'data_collection',
-              attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+              attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
           {
             model: ReportWriting,
             as: 'report_writing',
-              attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+              attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
           {
             model: ClientPresentation,
             as: 'client_presentation',
-              attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+              attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
       ],
     })) as AdditionalServiceByID;
@@ -191,17 +191,17 @@ router.get('/ao/:id', async (req: Request, res: Response) => {
           {
             model: DataCollection,
             as: 'data_collection',
-              attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+              attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
           {
             model: ReportWriting,
             as: 'report_writing',
-              attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+              attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
           {
             model: ClientPresentation,
             as: 'client_presentation',
-              attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+              attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
       ],
     })) as AvailabilityOptionByID;
@@ -228,17 +228,17 @@ router.get('/da/:id', async (req: Request, res: Response) => {
           {
             model: DataCollection,
             as: 'data_collection',
-              attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+              attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
           {
             model: ReportWriting,
             as: 'report_writing',
-              attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+              attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
           {
             model: ClientPresentation,
             as: 'client_presentation',
-              attributes: ['on_site', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
+              attributes: ['on_site', 'client_present', 'base_time', 'rate_over_base_time', 'base_fee', 'rate_over_base_fee'],
           },
       ],
     })) as DwellingAdjustmentByID;

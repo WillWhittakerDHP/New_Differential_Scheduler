@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { AdminContext, AdminContextType } from '../../constants_and_context/AdminContext';
-import { ADMIN_ROUTES } from '../../constants_and_context/apiRoutes';
+import { AdminContext, AdminContextType } from '../../context/AdminContext';
+import { ADMIN_ROUTES } from '../../api/internalAPI/apiRoutes';
 import { AppointmentBlock } from '../../interfaces/appointmentInterfaces';
 import useFetch from '../../hooks/useFetch';
 import ErrorBoundary from '../errorBoundary';
@@ -170,6 +170,19 @@ const GenericEditor = <T extends Record<string, any>>({
                                 entity.id,
                                 blockType,
                                 'on_site',
+                                e.target.checked
+                            )
+                        }
+                    />
+                </td>                <td>
+                    <input
+                        type="checkbox"
+                        checked={!!block.client_present}
+                        onChange={(e) =>
+                            handleAppointmentBlockChange(
+                                entity.id,
+                                blockType,
+                                'client_present',
                                 e.target.checked
                             )
                         }

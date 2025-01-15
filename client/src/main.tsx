@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 
 import App from './App.tsx';
-import { AppointmentProvider } from './constants_and_context/AppointmentContext.tsx';
+import { AppointmentProvider } from './context/AppointmentContext';
 import AvailabilityPage from './pages/availabilityPage.tsx';
 import ErrorPage from './pages/errorPage.tsx';
 import ParticipantPage from './pages/participantPage.tsx';

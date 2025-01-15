@@ -1,6 +1,7 @@
 export class AppointmentBlock {
   constructor(
     public on_site: boolean,
+    public client_present: boolean,
     public base_time: number,
     public rate_over_base_time: number,
     public base_fee: number,
@@ -11,7 +12,8 @@ export class AppointmentBlock {
 export class SiteTime {
   constructor(
     public totalTime: number = 0,
-    public onSite: boolean = true
+    public on_site: boolean = true,
+    public client_present: boolean = true,
   ) {}
 }
 
@@ -38,9 +40,9 @@ export class PartTimes {
     const clientPresentationTime = calculateBlockTime(appointmentPart.client_presentation);
 
     return new PartTimes(
-      new SiteTime(dataCollectionTime, appointmentPart.data_collection.on_site),
-      new SiteTime(reportWritingTime, appointmentPart.report_writing.on_site),
-      new SiteTime(clientPresentationTime, appointmentPart.client_presentation.on_site),
+      new SiteTime(dataCollectionTime, appointmentPart.data_collection.on_site, appointmentPart.data_collection.client_present),
+      new SiteTime(reportWritingTime, appointmentPart.report_writing.on_site, appointmentPart.report_writing.client_present),
+      new SiteTime(clientPresentationTime, appointmentPart.client_presentation.on_site, appointmentPart.client_presentation.client_present),
     );
   }
 }
@@ -99,13 +101,16 @@ export class Appointment {
         part.calculateTimes(this.home_sq_ft || 0);
 
         this.data_collection.totalTime += part.times.data_collection.totalTime;
-        this.data_collection.onSite = this.data_collection.onSite && part.times.data_collection.onSite;
+        this.data_collection.on_site = this.data_collection.on_site && part.times.data_collection.on_site;
+        this.data_collection.client_present = this.data_collection.client_present && part.times.data_collection.client_present;
 
         this.report_writing.totalTime += part.times.report_writing.totalTime;
-        this.report_writing.onSite = this.report_writing.onSite && part.times.report_writing.onSite;
+        this.report_writing.on_site = this.report_writing.on_site && part.times.report_writing.on_site;
+        this.report_writing.client_present = this.report_writing.client_present && part.times.report_writing.client_present;
 
         this.client_presentation.totalTime += part.times.client_presentation.totalTime;
-        this.client_presentation.onSite = this.client_presentation.onSite && part.times.client_presentation.onSite;
+        this.client_presentation.on_site = this.client_presentation.on_site && part.times.client_presentation.on_site;
+        this.client_presentation.client_present = this.client_presentation.client_present && part.times.client_presentation.client_present;
       }
     });
 

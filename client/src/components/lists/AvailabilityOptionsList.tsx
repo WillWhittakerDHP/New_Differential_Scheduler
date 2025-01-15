@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, Row, Button } from 'react-bootstrap';
-import { AppointmentContext } from '../../constants_and_context/AppointmentContext';
+import { AppointmentContext } from '../../context/AppointmentContext';
 import { retrieveAvailabilityOptionByID } from '../../api/internalAPI/appointmentAPI';
 
 import type { AvailabilityOptionData } from '../../interfaces/apiInterfaces';
@@ -37,6 +37,7 @@ interface AvailabilityOptionsListProps {
             data.base_sq_ft,
             new AppointmentBlock(
               data.data_collection.on_site,
+              data.data_collection.client_present,
               data.data_collection.base_time,
               data.data_collection.rate_over_base_time,
               data.data_collection.base_fee,
@@ -44,6 +45,7 @@ interface AvailabilityOptionsListProps {
             ),
             new AppointmentBlock(
               data.report_writing.on_site,
+              data.report_writing.client_present,
               data.report_writing.base_time,
               data.report_writing.rate_over_base_time,
               data.report_writing.base_fee,
@@ -51,6 +53,7 @@ interface AvailabilityOptionsListProps {
             ),
             new AppointmentBlock(
               data.client_presentation.on_site,
+              data.client_presentation.client_present,
               data.client_presentation.base_time,
               data.client_presentation.rate_over_base_time,
               data.client_presentation.base_fee,

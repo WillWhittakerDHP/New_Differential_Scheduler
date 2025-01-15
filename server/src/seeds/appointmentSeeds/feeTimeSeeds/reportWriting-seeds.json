@@ -1,6 +1,7 @@
 [
   {
     "on_site": true,
+    "client_present": true,
     "base_fee": 50,
     "rate_over_base_fee": 0,
     "base_time": 60, 
@@ -8,6 +9,7 @@
     },
   {
     "on_site": true,
+    "client_present": true,
     "base_fee": 50,
     "rate_over_base_fee": 0,
     "base_time": 60, 
@@ -15,6 +17,7 @@
     },
   {
     "on_site": false,
+    "client_present": true,
     "base_fee": 50,
     "rate_over_base_fee": 0,
     "base_time": 75, 
@@ -22,6 +25,7 @@
   },
   {
     "on_site": false,
+    "client_present": true,
     "base_fee": 50,
     "rate_over_base_fee": 0,
     "base_time": 175,
@@ -29,6 +33,7 @@
     },
   {
     "on_site": false,
+    "client_present": true,
     "base_fee": 50,
     "rate_over_base_fee": 0,
     "base_time": 30, 
@@ -36,6 +41,7 @@
     },
   {
     "on_site": false,
+    "client_present": true,
     "base_fee": 50,
     "rate_over_base_fee": 0,
     "base_time": 100,

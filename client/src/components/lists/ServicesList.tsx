@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, Row, Card } from 'react-bootstrap';
-import { AppointmentContext } from '../../constants_and_context/AppointmentContext';
+import { AppointmentContext } from '../../context/AppointmentContext';
 import { retrieveServicesForUserTypeByID, retrieveBaseServiceByID } from '../../api/internalAPI/appointmentAPI';
 
 import type { ServiceData } from '../../interfaces/apiInterfaces';
@@ -56,27 +56,30 @@ interface ServicesListProps {
       const newBaseService = new AppointmentPart(
         data.name,
         data.base_sq_ft,
-        new AppointmentBlock(
-          data.data_collection.on_site,
-          data.data_collection.base_time,
-          data.data_collection.rate_over_base_time,
-          data.data_collection.base_fee,
-          data.data_collection.rate_over_base_fee
-        ),
-        new AppointmentBlock(
-          data.report_writing.on_site,
-          data.report_writing.base_time,
-          data.report_writing.rate_over_base_time,
-          data.report_writing.base_fee,
-          data.report_writing.rate_over_base_fee
-        ),
-        new AppointmentBlock(
-          data.client_presentation.on_site,
-          data.client_presentation.base_time,
-          data.client_presentation.rate_over_base_time,
-          data.client_presentation.base_fee,
-          data.client_presentation.rate_over_base_fee
-        )
+            new AppointmentBlock(
+              data.data_collection.on_site,
+              data.data_collection.client_present,
+              data.data_collection.base_time,
+              data.data_collection.rate_over_base_time,
+              data.data_collection.base_fee,
+              data.data_collection.rate_over_base_fee
+            ),
+            new AppointmentBlock(
+              data.report_writing.on_site,
+              data.report_writing.client_present,
+              data.report_writing.base_time,
+              data.report_writing.rate_over_base_time,
+              data.report_writing.base_fee,
+              data.report_writing.rate_over_base_fee
+            ),
+            new AppointmentBlock(
+              data.client_presentation.on_site,
+              data.client_presentation.client_present,
+              data.client_presentation.base_time,
+              data.client_presentation.rate_over_base_time,
+              data.client_presentation.base_fee,
+              data.client_presentation.rate_over_base_fee
+              )
       );
   
       // Calculate times for the newBaseService based on home_sq_ft

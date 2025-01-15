@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from 'react-router-dom'; 
 
-import { AppointmentContext } from "../constants_and_context/AppointmentContext";
+import { AppointmentContext } from "../context/AppointmentContext";
 
 import DwellingAdjustmentsList from "../components/lists/DwellingAdjustmentList";
 // import AddressForm from "../components/forms/addressForm";

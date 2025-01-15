@@ -17,6 +17,7 @@ export class ClientPresentation extends Model<
 > {
   declare id: CreationOptional<number>;
   declare on_site: boolean;
+  declare client_present: boolean;
   declare base_time: number;
   declare rate_over_base_time: number;
   declare base_fee: number;
@@ -40,6 +41,10 @@ export function ClientPresentationFactory(sequelize: Sequelize): typeof ClientPr
         primaryKey: true,
       },
       on_site: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      client_present: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },

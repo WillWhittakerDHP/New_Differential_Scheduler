@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
-import { AdminContext, AdminContextType, AdminProvider } from '../constants_and_context/AdminContext.js';
-import { ADMIN_ROUTES } from '../constants_and_context/apiRoutes.js';
+import { AdminContext, AdminContextType, AdminProvider } from '../context/AdminContext.js';
+import { ADMIN_ROUTES } from '../api/internalAPI/apiRoutes.js';
 import GenericEditor from '../components/forms/genericEditor.js';
 
 import { UserTypeData, ServiceData, AdditionalServiceData, AvailabilityOptionData, DwellingAdjustmentData } from '../interfaces/apiInterfaces.js';
