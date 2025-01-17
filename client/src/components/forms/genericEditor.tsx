@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { AdminContext, AdminContextType } from '../../context/AdminContext';
-import { ADMIN_ROUTES } from '../../api/internalAPI/apiRoutes';
+import { ADMIN_ROUTES } from '../../api/internalAPI/routesConstants';
 import { AppointmentBlock } from '../../interfaces/appointmentInterfaces';
 import useFetch from '../../hooks/useFetch';
 import ErrorBoundary from '../errorBoundary';
