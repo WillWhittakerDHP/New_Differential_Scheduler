@@ -1,6 +1,6 @@
 import React, { createContext, useState, ReactNode } from 'react';
 import useFetch from '../hooks/useFetch';
-import { ADMIN_ROUTES } from '../api/internalAPI/routesConstants';
+import { ADMIN_ROUTES } from '../api/internalAPI/apiRoutes';
 import {
   AdditionalServiceData,
   AvailabilityOptionData,

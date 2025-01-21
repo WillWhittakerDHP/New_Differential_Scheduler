@@ -67,11 +67,7 @@ function createDayBits(
 // Helper Function: Find Availabilities
 function findAvailabilities(
   dayBits: JoseTimeSlot[],
-  appointmentData: {
-    onSite: number;
-    formalPresentation?: number;
-    offSite?: number;
-  }
+  onSiteDuration: number
 ): AppointmentTimeSlot[] {
   let availabilities: AppointmentTimeSlot[] = [];
   let contiguousBits: JoseTimeSlot[] = [];
@@ -84,40 +80,20 @@ function findAvailabilities(
       (sum, slot) => sum + slot.duration,
       0
     );
-    if (totalDuration >= appointmentData.onSite) {
+
+    if (totalDuration >= onSiteDuration) {
+      // Create an availability starting at the first slot in contiguousBits
       const onSiteStart = contiguousBits[0].slotStart;
-      const onSiteEnd = addMinutes(onSiteStart, appointmentData.onSite);
+      const onSiteEnd = addMinutes(onSiteStart, onSiteDuration);
 
-      const formalPresentationStart =
-        appointmentData.formalPresentation !== undefined
-          ? onSiteEnd
-          : null;
-      const formalPresentationEnd =
-        formalPresentationStart !== null
-          ? addMinutes(formalPresentationStart, appointmentData.formalPresentation!)
-          : null;
-
-      const offSiteStart = formalPresentationEnd || onSiteEnd;
-      const offSiteEnd =
-        appointmentData.offSite !== undefined
-          ? addMinutes(offSiteStart, appointmentData.offSite)
-          : null;
-
+      // Create an AppointmentTimeSlot
       const availability = new AppointmentTimeSlot(
-        new JoseTimeSlot(totalDuration, onSiteStart, offSiteEnd || onSiteEnd),
-        new JoseTimeSlot(appointmentData.onSite, onSiteStart, onSiteEnd),
-        formalPresentationStart && formalPresentationEnd
-          ? new JoseTimeSlot(
-              appointmentData.formalPresentation!,
-              formalPresentationStart,
-              formalPresentationEnd
-            )
-          : null,
-        offSiteStart && offSiteEnd
-          ? new JoseTimeSlot(appointmentData.offSite!, offSiteStart, offSiteEnd)
-          : null
+        new JoseTimeSlot(totalDuration, onSiteStart, onSiteEnd), // Full appointment
+        new JoseTimeSlot(onSiteDuration, onSiteStart, onSiteEnd), // On-site
+        null, // Placeholder for formalPresentation
+        null // Placeholder for offSite
       );
-      
+
       availabilities.push(availability);
 
       // Remove the first bit to check the next possible start
@@ -129,46 +105,40 @@ function findAvailabilities(
 }
 
 // Main Function: Generate Availabilities
-export default function makeAvailabilities(
+function makeAvailabilities(
   startOfDay: Date,
   endOfDay: Date,
   busyPeriods: { start: Date; end: Date }[],
-  appointmentData: {
-    onSite: number;
-    formalPresentation?: number;
-    offSite?: number;
-  },
+  onSiteDuration: number,
   increment: number = 30
 ): AppointmentTimeSlot[] {
   // Step 1: Create DayBits
   const dayBits = createDayBits(startOfDay, endOfDay, busyPeriods, increment);
 
   // Step 2: Find Availabilities
-  return findAvailabilities(dayBits, appointmentData);
+  const availabilities = findAvailabilities(dayBits, onSiteDuration);
+
+  return availabilities;
 }
 
-// // Example Usage
-// const startOfDay = new Date(2024, 11, 1, 0, 0);
-// const endOfDay = new Date(2024, 11, 1, 23, 59);
-// const busyPeriods = [
-//   { start: new Date(2024, 11, 1, 0, 0), end: new Date(2024, 11, 1, 7, 0) },
-//   { start: new Date(2024, 11, 1, 15, 0), end: new Date(2024, 11, 1, 17, 0) },
-//   { start: new Date(2024, 11, 1, 21, 0), end: new Date(2024, 11, 1, 23, 59) },
-// ];
+// Example Usage
+const startOfDay = new Date(2024, 11, 1, 0, 0);
+const endOfDay = new Date(2024, 11, 1, 23, 59);
+const busyPeriods = [
+  { start: new Date(2024, 11, 1, 0, 0), end: new Date(2024, 11, 1, 7, 0) },
+  { start: new Date(2024, 11, 1, 15, 0), end: new Date(2024, 11, 1, 17, 0) },
+  { start: new Date(2024, 11, 1, 21, 0), end: new Date(2024, 11, 1, 23, 59) },
+];
 
-// const appointmentData = {
-//   onSite: 170, // 2 hours and 50 minutes
-//   formalPresentation: 60, // 1 hour
-//   offSite: 30, // 30 minutes
-// };; // 2 hours and 50 minutes
-// const increment = 30; // 30-minute intervals
+const onSiteDuration = 170; // 2 hours and 50 minutes
+const increment = 30; // 30-minute intervals
 
-// const availabilities = makeAvailabilities(
-//   startOfDay,
-//   endOfDay,
-//   busyPeriods,
-//   appointmentData,
-//   increment
-// );
+const availabilities = makeAvailabilities(
+  startOfDay,
+  endOfDay,
+  busyPeriods,
+  onSiteDuration,
+  increment
+);
 
-// console.log(availabilities);
+console.log(availabilities);
